@@ -4,7 +4,22 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 
 ## [Unreleased]
 
-Milestone M3 (repository migration to Claude Code per MIGRATION.md) — pending approval.
+### Milestone M3 — repository migration (2026-07-07) — engineering complete, tag pending owner parity pass
+
+#### Added
+- Git repository with the full constitution in `docs/`; README and CLAUDE.md at the root (CLAUDE.md carries the repository addendum: git replaces the transcript as recovery source).
+- `legacy/biosphere.artifact.jsx` — v0.3.0-alpha committed verbatim as the parity oracle.
+- Vite + React 18 + TypeScript (strict) scaffold; ESLint 9 + Prettier; Vitest + Testing Library + jsdom; GitHub Actions CI running typecheck / lint / test / build / build:artifact.
+- **StorageAdapter** (`src/storage/`): window.storage for the artifact target, localStorage for local dev, in-memory fallback — semantics identical to the artifact's `store`.
+- **Test suite, 74 tests green**: `dayKey` 4 AM rollover incl. month/year boundaries; schedule resolution at starts, boundaries, pre-dawn, night-overlap, empty day; `calcStreak`/`calcBest`/`habitSeries` incl. deleted-habit entries; storage adapters; AudioEngine graph construction per AUDIO_ENGINE.md recipes against a mock AudioContext (topology, crossfade teardown, chime, node budget); `App.boot` render test (replaces smoke.cjs); per-view fixture render tests.
+- **`npm run build:artifact`** — permanent single-file Claude-artifact target (`dist/biosphere.artifact.jsx`: ESM, react-only imports, default-exported App) with a built-in module-init + SSR boot smoke.
+
+#### Changed
+- The single file split mechanically into modules per the ARCHITECTURE map, names unchanged: `src/domain|storage|audio|scenes|ui|views/` + `App.tsx`. The `sched` memo body moved verbatim to `domain/schedule.ts` for testability. Data shapes (Biosphere, Habit, Journal…) and component props are now typed.
+- Behavior-preserving hardening required by strict TS: SceneCanvas guards a null 2D context; SettingsView guards an impossible delete-reassign target; `createStereoPanner` capability checks use `typeof`.
+
+#### Verified
+- Typecheck, lint, and all 74 tests clean; `vite build` clean; artifact bundle SSR smoke passes; legacy oracle still parses (esbuild). Live dev-server pass: boot → onboarding → Home (correct NOW/passed/next) → Immersion → full Grey Night flow → seal → persistence → Stillness → reload hydration; sound on/off against a real AudioContext; zero console errors.
 
 ## [0.3.0-alpha] — 2026-07-05
 
