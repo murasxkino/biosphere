@@ -36,3 +36,13 @@ Working copy lives at `/home/claude/biosphere.jsx`. Only verified milestones shi
 ## Voice
 
 Product copy follows UX_GUIDELINES.md's style sheet. Chat updates to the project owner are brief, warm, and concrete — like the app itself.
+
+## Repository addendum (M3, 2026-07-07) — supersedes artifact-sandbox specifics above
+
+The project now lives in this repository, migrated per docs/MIGRATION.md.
+
+- **Recovery source is git.** The conversation-transcript path above is obsolete; `legacy/biosphere.artifact.jsx` is the verbatim v0.3.0-alpha parity oracle, and every change since is a commit.
+- **Working copy** is the module tree under `src/` (map in docs/ARCHITECTURE.md and docs/MIGRATION.md §4). The single-file heredoc/str_replace discipline is obsolete; edit modules normally, in reviewed diffs.
+- **Verification floor** is now `npm run check` (typecheck + lint + tests) plus `npm run build` and `npm run build:artifact`; the manual checklist in docs/ENGINEERING_GUIDE.md still applies before a milestone closes.
+- **Delivery**: `npm run build:artifact` re-emits the permanent single-file Claude-artifact build (`dist/biosphere.artifact.jsx`); dual-target delivery is a standing requirement.
+- **Unchanged**: the milestone → verify → self-review → document → stop-and-await-approval process, the prime directives, and one-fact-one-home documentation. The constitution lives in `docs/`.
