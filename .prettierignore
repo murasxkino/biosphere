@@ -1,0 +1,6 @@
+node_modules/
+dist/
+coverage/
+legacy/
+docs/
+package-lock.json
