@@ -1,0 +1,156 @@
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { ARCH, iconOf } from "../domain/constants";
+import { fmtTime, msFmt } from "../domain/time";
+import type { Biosphere, Habit } from "../domain/types";
+import { AUDIO } from "../audio/engine";
+import { SceneCanvas } from "../scenes/SceneCanvas";
+import { Ic } from "../ui/Ic";
+
+/* ========================================================================== */
+/*  IMMERSION — inside a biosphere. The interface dissolves; the world stays. */
+/* ========================================================================== */
+
+export function ImmersionView({ bio, end, isNow, habits, soundOn, onToggleSound, onExit }: {
+  bio: Biosphere;
+  end: string;
+  isNow: boolean;
+  habits: Habit[];
+  soundOn: boolean;
+  onToggleSound: () => void;
+  onExit: () => void;
+}) {
+  const A = ARCH[bio.archetype] || ARCH.night;
+  const [ui, setUi] = useState(true);
+  const hideT = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const poke = useCallback(() => {
+    setUi(true);
+    clearTimeout(hideT.current);
+    hideT.current = setTimeout(() => setUi(false), 6500);
+  }, []);
+  useEffect(() => {
+    poke();
+    return () => clearTimeout(hideT.current);
+  }, [poke]);
+
+  // optional per-habit focus timers (a quiet aid; completion is judged at night)
+  const [runs, setRuns] = useState<Record<string, { end: number; total: number }>>({});
+  const [doneT, setDoneT] = useState<Record<string, boolean>>({});
+  const [, setTick] = useState(0);
+  const running = Object.keys(runs).length > 0;
+  useEffect(() => {
+    if (!running) return;
+    const iv = setInterval(() => setTick((x) => x + 1), 500);
+    return () => clearInterval(iv);
+  }, [running]);
+  useEffect(() => {
+    const t = Date.now();
+    const finished = Object.keys(runs).filter((id) => t >= runs[id].end);
+    if (finished.length) {
+      AUDIO.chime();
+      setRuns((r) => {
+        const nr = { ...r };
+        finished.forEach((id) => delete nr[id]);
+        return nr;
+      });
+      setDoneT((d) => {
+        const nd = { ...d };
+        finished.forEach((id) => { nd[id] = true; });
+        return nd;
+      });
+    }
+  });
+
+  const toggleTimer = (h: Habit) => {
+    if (!h.timer) return;
+    setRuns((r) => {
+      const nr = { ...r };
+      if (nr[h.id]) delete nr[h.id];
+      else nr[h.id] = { end: Date.now() + h.timer! * 60000, total: h.timer! * 60000 };
+      return nr;
+    });
+    setDoneT((d) => {
+      if (!d[h.id]) return d;
+      const nd = { ...d };
+      delete nd[h.id];
+      return nd;
+    });
+    poke();
+  };
+
+  return (
+    <div className="bsRoot enterScene" onPointerDown={poke} onPointerMove={poke}>
+      <SceneCanvas kind={bio.archetype} />
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(circle at 50% 42%, transparent 45%, rgba(3,5,9,0.35))" }} />
+
+      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", opacity: ui ? 1 : 0.05, transition: "opacity 1.6s ease" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: 18, gap: 10 }}>
+          <button className="bsIcon" onClick={(e) => { e.stopPropagation(); onExit(); }} title="Leave" aria-label="Leave biosphere">
+            <Ic name="back" size={18} />
+          </button>
+          <div style={{ textAlign: "center", marginTop: 2, minWidth: 0 }}>
+            <div style={{ fontSize: 11, letterSpacing: "0.32em", color: A.accent, textTransform: "uppercase" }}>
+              {isNow ? "now" : "biosphere"}
+            </div>
+            <div className="serif" style={{ fontSize: 38, fontWeight: 500, letterSpacing: "0.05em", textShadow: "0 2px 26px rgba(0,0,0,0.55)" }}>
+              {bio.name}
+            </div>
+            <div className="serif" style={{ fontStyle: "italic", fontSize: 15, color: "rgba(255,255,255,0.78)" }}>
+              {(bio.purpose || A.tagline) + "  ·  " + fmtTime(bio.start) + " – " + fmtTime(end)}
+            </div>
+          </div>
+          <button className="bsIcon" onClick={(e) => { e.stopPropagation(); onToggleSound(); }} title="Ambient sound" aria-label="Toggle sound">
+            <Ic name={soundOn ? "sound" : "mute"} size={18} />
+          </button>
+        </div>
+
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 27, padding: "0 30px 40px", overflowY: "auto" }}>
+          {habits.length === 0 && (
+            <div className="serif" style={{ fontStyle: "italic", fontSize: 17, color: "rgba(255,255,255,0.7)", textAlign: "center" }}>
+              This biosphere is open.<br />Give it a habit in settings, or simply be here.
+            </div>
+          )}
+          {habits.map((h, i) => {
+            const run = runs[h.id];
+            const left = run ? Math.max(0, run.end - Date.now()) : 0;
+            return (
+              <div
+                key={h.id}
+                onClick={(e) => { e.stopPropagation(); toggleTimer(h); }}
+                style={{ textAlign: "center", cursor: h.timer ? "pointer" : "default", animation: "bsFloat " + (7 + i * 1.7) + "s ease-in-out " + (i * 1.2) + "s infinite", maxWidth: 440 }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                  <span style={{ color: A.accent, opacity: 0.9, display: "inline-flex" }}>
+                    <Ic name={iconOf(bio.archetype)} size={13} />
+                  </span>
+                  <span style={{ fontSize: 18, fontWeight: 300, letterSpacing: "0.02em", color: "rgba(255,255,255,0.94)", textShadow: "0 1px 18px rgba(0,0,0,0.55)" }}>
+                    {h.name}
+                  </span>
+                </div>
+                {h.timer && !run && !doneT[h.id] && (
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 11, letterSpacing: "0.18em", marginTop: 6, color: "rgba(255,255,255,0.55)" }}>
+                    <Ic name="clock" size={11} /> {h.timer} MIN — TAP TO BEGIN
+                  </div>
+                )}
+                {run && (
+                  <div style={{ marginTop: 7 }}>
+                    <div style={{ fontSize: 15, fontVariantNumeric: "tabular-nums", color: A.soft, letterSpacing: "0.12em" }}>{msFmt(left)}</div>
+                    <div style={{ height: 2, width: 150, margin: "6px auto 0", background: "rgba(255,255,255,0.15)", borderRadius: 2 }}>
+                      <div style={{ height: "100%", width: (100 * (1 - left / run.total)) + "%", background: A.accent, borderRadius: 2, transition: "width .5s linear" }} />
+                    </div>
+                  </div>
+                )}
+                {doneT[h.id] && (
+                  <div style={{ fontSize: 11.5, letterSpacing: "0.24em", marginTop: 6, color: A.accent }}>COMPLETE ✦</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ textAlign: "center", paddingBottom: 22, fontSize: 11, letterSpacing: "0.26em", color: "rgba(255,255,255,0.45)" }}>
+          {isNow ? "UNTIL " + fmtTime(end).toUpperCase() : "A QUIET WINDOW"}
+        </div>
+      </div>
+    </div>
+  );
+}
