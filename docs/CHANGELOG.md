@@ -2,6 +2,13 @@
 
 Format follows Keep a Changelog; versions follow SemVer once released. Dates are UTC-local project dates.
 
+## [Unreleased]
+
+### M4 entry (2026-07-12)
+
+- First full Prettier pass over the repo — the chore deferred through M3 so the split stayed byte-close to the oracle; `legacy/` and `docs/` remain excluded via `.prettierignore`. Verification floor green after.
+- Private GitHub remote connected (`murasxkino/biosphere`); Actions CI activated on first push — run green end to end.
+
 ## [0.3.0] — 2026-07-12
 
 ### Milestone M3 — repository migration (engineering 2026-07-07 · closed 2026-07-12)

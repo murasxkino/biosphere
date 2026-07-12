@@ -23,15 +23,14 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 
 ## Remaining work
 
-1. **M4 (QA & tuning)** per TODO.md — by-ear soundscape tuning (owner listening live), passage feel check, device profiling, full manual matrix.
-2. Connect the private GitHub remote — see the machine note under Known issues.
+**M4 (QA & tuning)** per TODO.md — by-ear soundscape tuning (owner listening live), passage feel check, device profiling, full manual matrix.
 
 ## Known issues & notes
 
 - Audio parameters remain first-pass analytical values; M4 tunes by ear.
 - Prettier's first full pass landed at M4 entry (2026-07-12); verification floor re-run green after it. `.prettierignore` keeps `legacy/` (the verbatim oracle) and `docs/` permanently out of scope.
 - ESLint carries one deliberate warning (ImmersionView timer-completion effect runs every render — verbatim artifact behavior).
-- No GitHub remote yet: the GitHub CLI (`gh`) is **not installed** on this machine. Install it (e.g. `winget install --id GitHub.cli`), then `gh auth login` + `gh repo create biosphere --private --source=. --remote=origin`; or create the private repo on github.com and `git remote add origin <url>`. CI activates on first push.
+- Remote connected 2026-07-12: private GitHub repo `murasxkino/biosphere` (`origin`, HTTPS via the `gh` CLI). Actions CI is active — first run green across all five steps. Minor CI chore for later: GitHub flags `actions/checkout@v4` + `actions/setup-node@v4` as targeting deprecated Node 20; bump the action majors when convenient.
 - **License** and **repo visibility** are now decided: proprietary — all rights reserved (see `LICENSE`) — and private, on GitHub. The remote itself is not yet connected (see the `gh` note above).
 - Carried caveats unchanged: focus timers ephemeral by design; night-overlap warned, not blocked.
 
