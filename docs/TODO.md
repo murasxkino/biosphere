@@ -4,7 +4,7 @@
 
 Owner critiques delivered: automatic **passage between biospheres** (10 s countdown, portal crossing, Remain here — FEATURE_SPEC §3.9) and the **nature-first soundscape overhaul** (AUDIO_ENGINE.md). Also shipped: Grey Night overlap warning; deleted-habit stats decision (journal-only, by design); copy pass (clean); mobile input sizing confirmed.
 
-## Milestone M3 — Repository migration to Claude Code (engineering ✅ 2026-07-07 — awaiting owner parity pass + approval)
+## Milestone M3 — Repository migration to Claude Code — ✅ shipped 2026-07-12 (v0.3.0)
 
 - [x] Owner: open Claude Code in the handoff folder; repo initialized in place (git history begins at the verbatim handoff).
 - [x] Bootstrap per MIGRATION.md: Vite + React 18 + TypeScript strict, ESLint + Prettier, Vitest + Testing Library, CI workflow.
@@ -12,7 +12,7 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [x] Introduce `StorageAdapter` (window.storage for artifact builds; localStorage for local dev; memory fallback).
 - [x] Tests for the correctness core — 74 green: `dayKey` 4 AM rollover, schedule resolution (pre-dawn, boundaries, night-overlap), `calcStreak`/`calcBest`/`habitSeries` incl. deleted-habit entries; AudioEngine graph construction against a mock AudioContext; boot render test replacing smoke.cjs; per-view render tests.
 - [x] Add `build:artifact` single-file bundle target (with built-in SSR boot smoke) for shipping back to Claude artifacts.
-- [ ] **Owner:** manual parity pass against v0.3.0-alpha (ENGINEERING_GUIDE checklist) via `npm run dev`; then tag `v0.3.0`.
+- [x] **Owner:** manual parity pass against v0.3.0-alpha (ENGINEERING_GUIDE checklist) via `npm run dev` — approved 2026-07-12; `v0.3.0` tagged.
 - [ ] Owner, when ready: connect a GitHub remote (`gh auth login` + `gh repo create`, or `git remote add origin …`) — CI activates on first push. _(License decided: proprietary, all rights reserved — see `LICENSE`. Visibility: private.)_
 - [ ] M4-entry chore: first `npm run format` over `src/` (deferred so the split stays byte-close to the oracle during review).
 

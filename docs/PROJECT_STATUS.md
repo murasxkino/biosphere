@@ -1,6 +1,6 @@
 # PROJECT STATUS
 
-**Updated:** 2026-07-07 · **Version:** 0.3.0 (untagged — tag lands after the owner parity pass) · **Current milestone:** M3 engineering complete — awaiting owner approval before the tag and M4.
+**Updated:** 2026-07-12 · **Version:** 0.3.0 (tagged `v0.3.0`) · **Current milestone:** M3 closed 2026-07-12 — M4 (QA & tuning) is open.
 
 ## Code state (verified this session)
 
@@ -10,6 +10,7 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 - `src/` — the module split per the ARCHITECTURE map, TypeScript strict, names kept identical to the oracle: `domain/` (constants, types, time, stats, schedule, uid), `storage/` (StorageAdapter: window.storage → localStorage dev → memory), `audio/engine.ts`, `scenes/`, `ui/`, `views/`, `App.tsx`.
 - **Verification:** typecheck clean · lint clean (one documented warning: ImmersionView's deliberate every-render timer effect) · **74/74 tests green** (Vitest) · `vite build` clean · `npm run build:artifact` emits `dist/biosphere.artifact.jsx` (react-only imports, default-exported App) and its SSR boot smoke passes.
 - **Live browser pass (Vite dev server):** boot → onboarding → Enter → Home (correct NOW/passed/next for the wall clock) → Immersion → full Grey Night flow → seal (journal persisted immediately, snapshot entries + trimmed note correct) → Stillness (streak 1, best 1) → reload hydrates straight to Home with the sealed tile reading *reflected — 4 of 5 fulfilled*. Sound toggled on/off against a real AudioContext. Zero console errors or warnings.
+- **Owner parity pass (ENGINEERING_GUIDE checklist): approved 2026-07-12.** Assisted re-verification 2026-07-11 was green end to end: verification floor (74/74 tests, both builds, artifact SSR smoke) plus a full live in-browser pass at parity — reflect/seal/amend, persistence, streaks, settings live-edit, keyboard a11y — with zero console errors.
 
 ## Completed this milestone (M3, per MIGRATION.md)
 
@@ -22,9 +23,8 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 
 ## Remaining work
 
-1. **Owner:** manual parity pass against v0.3.0-alpha (ENGINEERING_GUIDE checklist) in the browser — `npm run dev`. Then approve.
-2. Tag `v0.3.0` (MIGRATION DoD step 6) once the parity pass is clean.
-3. **M4 (QA & tuning)** per TODO.md — by-ear soundscape tuning, device profiling, full manual matrix.
+1. **M4 (QA & tuning)** per TODO.md — by-ear soundscape tuning (owner listening live), passage feel check, device profiling, full manual matrix.
+2. Connect the private GitHub remote — see the machine note under Known issues.
 
 ## Known issues & notes
 
@@ -41,4 +41,4 @@ Git replaces the conversation transcript. The verbatim v0.3.0-alpha oracle is `l
 
 ## Next recommended milestone
 
-Owner parity pass → tag `v0.3.0` → **M4 — QA & tuning**, beginning with the by-ear soundscape session (recommended live, with you listening).
+**M4 — QA & tuning**, beginning with the by-ear soundscape session (live, with you listening).

@@ -2,9 +2,9 @@
 
 Format follows Keep a Changelog; versions follow SemVer once released. Dates are UTC-local project dates.
 
-## [Unreleased]
+## [0.3.0] — 2026-07-12
 
-### Milestone M3 — repository migration (2026-07-07) — engineering complete, tag pending owner parity pass
+### Milestone M3 — repository migration (engineering 2026-07-07 · closed 2026-07-12)
 
 #### Added
 - Git repository with the full constitution in `docs/`; README and CLAUDE.md at the root (CLAUDE.md carries the repository addendum: git replaces the transcript as recovery source).
@@ -21,6 +21,7 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 
 #### Verified
 - Typecheck, lint, and all 74 tests clean; `vite build` clean; artifact bundle SSR smoke passes; legacy oracle still parses (esbuild). Live dev-server pass: boot → onboarding → Home (correct NOW/passed/next) → Immersion → full Grey Night flow → seal → persistence → Stillness → reload hydration; sound on/off against a real AudioContext; zero console errors.
+- Assisted parity re-run 2026-07-11: verification floor green again; full live in-browser pass at parity, zero console errors. **Owner manual parity pass (ENGINEERING_GUIDE checklist): approved 2026-07-12 — tagged `v0.3.0`** (MIGRATION DoD step 6).
 
 ## [0.3.0-alpha] — 2026-07-05
 
