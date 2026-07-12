@@ -3,7 +3,13 @@ import { SceneCanvas } from "../scenes/SceneCanvas";
 import { Ic } from "./Ic";
 
 /* shared scaffold for the quiet inner pages (journal / stillness / settings) */
-export function Shell({ kind, title, sub, onBack, children }: {
+export function Shell({
+  kind,
+  title,
+  sub,
+  onBack,
+  children,
+}: {
   kind: string;
   title: string;
   sub?: string;
@@ -23,9 +29,19 @@ export function Shell({ kind, title, sub, onBack, children }: {
               <Ic name="back" size={18} />
             </button>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div className="serif" style={{ fontSize: 30, fontWeight: 500, fontStyle: "italic" }}>{title}</div>
+              <div className="serif" style={{ fontSize: 30, fontWeight: 500, fontStyle: "italic" }}>
+                {title}
+              </div>
               {sub && (
-                <div style={{ fontSize: 11.5, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginTop: 2 }}>
+                <div
+                  style={{
+                    fontSize: 11.5,
+                    letterSpacing: "0.22em",
+                    textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.5)",
+                    marginTop: 2,
+                  }}
+                >
                   {sub}
                 </div>
               )}

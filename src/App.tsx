@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { ARCH, DEFAULT_BIOS, DEFAULT_HABITS, DEFAULT_NIGHT_START, CONFIG_KEY, JOURNAL_KEY } from "./domain/constants";
+import {
+  ARCH,
+  DEFAULT_BIOS,
+  DEFAULT_HABITS,
+  DEFAULT_NIGHT_START,
+  CONFIG_KEY,
+  JOURNAL_KEY,
+} from "./domain/constants";
 import { t2m, dayKey } from "./domain/time";
 import { computeSched } from "./domain/schedule";
 import type { Biosphere, Habit, Journal, JournalEntry, ViewState } from "./domain/types";
@@ -33,7 +40,12 @@ export default function App() {
   const [now, setNow] = useState(() => new Date());
   const [toast, setToast] = useState<string | null>(null);
   const [pendingSound, setPendingSound] = useState(false);
-  const [handoff, setHandoff] = useState<{ toId: string; toName: string; accent: string; until: number } | null>(null);
+  const [handoff, setHandoff] = useState<{
+    toId: string;
+    toName: string;
+    accent: string;
+    until: number;
+  } | null>(null);
   const [veil, setVeil] = useState<null | "in" | "out">(null);
   const portalT = useRef<Array<ReturnType<typeof setTimeout>>>([]);
 
@@ -67,7 +79,9 @@ export default function App() {
         setPhase(cfg && cfg.onboarded ? "app" : "onboard");
       }, wait);
     });
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, []);
 
   /* -- persist config, debounced ------------------------------------------ */
@@ -101,7 +115,9 @@ export default function App() {
     AUDIO.play(desiredArch);
   }, [desiredArch]);
 
-  useEffect(() => { AUDIO.setVolume(volume); }, [volume]);
+  useEffect(() => {
+    AUDIO.setVolume(volume);
+  }, [volume]);
 
   useEffect(() => () => AUDIO.stop(), []);
 
@@ -121,7 +137,10 @@ export default function App() {
   /* -- announce phase changes gently; offer passage when immersed ----------- */
   useEffect(() => {
     if (phase !== "app") return;
-    if (prevCur.current === null) { prevCur.current = sched.currentId; return; }
+    if (prevCur.current === null) {
+      prevCur.current = sched.currentId;
+      return;
+    }
     if (prevCur.current === sched.currentId) return;
     const fromId = prevCur.current;
     prevCur.current = sched.currentId;
@@ -142,11 +161,13 @@ export default function App() {
     portalT.current.forEach((id) => clearTimeout(id));
     portalT.current = [];
     setVeil("in");
-    portalT.current.push(setTimeout(() => {
-      setView(toId === "night" ? { name: "night" } : { name: "immersion", id: toId });
-      setVeil("out");
-      portalT.current.push(setTimeout(() => setVeil(null), 1250));
-    }, 950));
+    portalT.current.push(
+      setTimeout(() => {
+        setView(toId === "night" ? { name: "night" } : { name: "immersion", id: toId });
+        setVeil("out");
+        portalT.current.push(setTimeout(() => setVeil(null), 1250));
+      }, 950)
+    );
   }, []);
 
   // the countdown completes the passage on its own
@@ -157,13 +178,23 @@ export default function App() {
   }, [handoff, crossInto]);
 
   // navigating anywhere cancels a pending passage
-  useEffect(() => { setHandoff(null); }, [view]);
+  useEffect(() => {
+    setHandoff(null);
+  }, [view]);
 
-  useEffect(() => () => { portalT.current.forEach((id) => clearTimeout(id)); }, []);
+  useEffect(
+    () => () => {
+      portalT.current.forEach((id) => clearTimeout(id));
+    },
+    []
+  );
 
   /* -- handlers ------------------------------------------------------------ */
   const toggleSound = useCallback(() => {
-    if (!AUDIO.supported()) { say("Audio isn't available in this browser"); return; }
+    if (!AUDIO.supported()) {
+      say("Audio isn't available in this browser");
+      return;
+    }
     setPendingSound(false);
     const nv = !soundOn;
     setSoundOn(nv);
@@ -171,15 +202,18 @@ export default function App() {
     if (nv) AUDIO.play(archRef.current);
   }, [soundOn, say]);
 
-  const sealDay = useCallback((entries: Record<string, JournalEntry>) => {
-    const k = dayKey(now);
-    setJournal((j) => {
-      const nj = { ...j, [k]: { sealedAt: Date.now(), entries: entries } };
-      store.set(JOURNAL_KEY, nj);
-      return nj;
-    });
-    say("Day sealed ✦");
-  }, [now, say]);
+  const sealDay = useCallback(
+    (entries: Record<string, JournalEntry>) => {
+      const k = dayKey(now);
+      setJournal((j) => {
+        const nj = { ...j, [k]: { sealedAt: Date.now(), entries: entries } };
+        store.set(JOURNAL_KEY, nj);
+        return nj;
+      });
+      say("Day sealed ✦");
+    },
+    [now, say]
+  );
 
   const enterApp = useCallback((withSound: boolean) => {
     if (withSound && AUDIO.supported()) {
@@ -227,9 +261,14 @@ export default function App() {
     } else if (view.name === "night") {
       body = (
         <NightView
-          bios={bios} habits={habits} journal={journal} now={now}
-          soundOn={soundOn} onToggleSound={toggleSound}
-          onSeal={sealDay} onExit={() => setView({ name: "home" })}
+          bios={bios}
+          habits={habits}
+          journal={journal}
+          now={now}
+          soundOn={soundOn}
+          onToggleSound={toggleSound}
+          onSeal={sealDay}
+          onExit={() => setView({ name: "home" })}
         />
       );
     } else if (view.name === "journal") {
@@ -237,29 +276,46 @@ export default function App() {
     } else if (view.name === "stats") {
       body = (
         <StatsView
-          habits={habits} bios={bios} journal={journal} now={now}
-          currentArch={currentArch} onBack={() => setView({ name: "home" })}
+          habits={habits}
+          bios={bios}
+          journal={journal}
+          now={now}
+          currentArch={currentArch}
+          onBack={() => setView({ name: "home" })}
         />
       );
     } else if (view.name === "settings") {
       body = (
         <SettingsView
-          bios={bios} setBios={setBios}
-          habits={habits} setHabits={setHabits}
-          nightStart={nightStart} setNightStart={setNightStart}
-          soundOn={soundOn} onToggleSound={toggleSound}
-          volume={volume} onVolume={setVolume}
-          notify={say} onReset={doReset}
-          currentArch={currentArch} onBack={() => setView({ name: "home" })}
+          bios={bios}
+          setBios={setBios}
+          habits={habits}
+          setHabits={setHabits}
+          nightStart={nightStart}
+          setNightStart={setNightStart}
+          soundOn={soundOn}
+          onToggleSound={toggleSound}
+          volume={volume}
+          onVolume={setVolume}
+          notify={say}
+          onReset={doReset}
+          currentArch={currentArch}
+          onBack={() => setView({ name: "home" })}
         />
       );
     } else {
       body = (
         <HomeView
-          sorted={sorted} habits={habits} journal={journal} now={now}
-          sched={sched} nightStart={nightStart}
-          soundOn={soundOn} onToggleSound={toggleSound}
-          onOpen={setView} currentArch={currentArch}
+          sorted={sorted}
+          habits={habits}
+          journal={journal}
+          now={now}
+          sched={sched}
+          nightStart={nightStart}
+          soundOn={soundOn}
+          onToggleSound={toggleSound}
+          onOpen={setView}
+          currentArch={currentArch}
         />
       );
     }
@@ -278,14 +334,20 @@ export default function App() {
           until={handoff.until}
           total={10000}
           onCross={() => crossInto(handoff.toId)}
-          onRemain={() => { setHandoff(null); say("Staying a while"); }}
+          onRemain={() => {
+            setHandoff(null);
+            say("Staying a while");
+          }}
         />
       )}
       {veil && (
         <div
           aria-hidden="true"
           style={{
-            position: "fixed", inset: 0, background: "#04060a", zIndex: 58,
+            position: "fixed",
+            inset: 0,
+            background: "#04060a",
+            zIndex: 58,
             pointerEvents: veil === "in" ? "auto" : "none",
             animation: veil === "in" ? "bsVeilIn .95s ease both" : "bsVeilOut 1.25s ease both",
           }}

@@ -1,6 +1,11 @@
 import React from "react";
 
-export function Pill({ on, accent, onClick, children }: {
+export function Pill({
+  on,
+  accent,
+  onClick,
+  children,
+}: {
   on?: boolean | null;
   accent?: string;
   onClick?: () => void;

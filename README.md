@@ -1,6 +1,6 @@
 # BIOSPHERE
 
-*One day, lived in nature.*
+_One day, lived in nature._
 
 BIOSPHERE is not a habit tracker. It is an immersive digital environment designed to make intentional living emotionally engaging. Your day unfolds through timed **Biospheres** — Tundra, Volcanic, Seaside, Forest, Mountain — each a full-screen living landscape with its own procedurally generated soundscape. Habits rest quietly inside each biosphere. Nothing counts itself during the day. When the **Grey Night** falls, you reflect on each habit once, honestly, in a typed journal — and seal the day.
 
@@ -25,24 +25,24 @@ Single-file React application (`biosphere.jsx`, ~2,000+ lines) for the Claude ar
 
 These documents are the project's constitution. Read before changing anything.
 
-| File | Purpose |
-|---|---|
-| VISION.md | Why BIOSPHERE exists; the feeling being engineered |
+| File                    | Purpose                                                 |
+| ----------------------- | ------------------------------------------------------- |
+| VISION.md               | Why BIOSPHERE exists; the feeling being engineered      |
 | PRODUCT_REQUIREMENTS.md | Functional and non-functional requirements; constraints |
-| FEATURE_SPEC.md | Canonical behavior of every screen and system |
-| DESIGN_PHILOSOPHY.md | The values behind every decision |
-| IMMERSION_PRINCIPLES.md | Operable rules that protect immersion |
-| UX_GUIDELINES.md | Interaction, layout, accessibility standards |
-| ART_DIRECTION.md | Palettes, typography, glass, scene bibles |
-| AUDIO_ENGINE.md | The procedural sound system, scene by scene |
-| ARCHITECTURE.md | System structure, state, data flow, ADRs |
-| ENGINEERING_GUIDE.md | Conventions, workflows, verification, testing |
-| ROADMAP.md | Milestones from here to v1.0 |
-| PROJECT_STATUS.md | Live status — always current |
-| TODO.md | The active work queue |
-| CHANGELOG.md | Professional change history |
-| BACKLOG.md | Deferred ideas and permanent refusals |
-| CLAUDE.md | Operating rules for AI-assisted development |
+| FEATURE_SPEC.md         | Canonical behavior of every screen and system           |
+| DESIGN_PHILOSOPHY.md    | The values behind every decision                        |
+| IMMERSION_PRINCIPLES.md | Operable rules that protect immersion                   |
+| UX_GUIDELINES.md        | Interaction, layout, accessibility standards            |
+| ART_DIRECTION.md        | Palettes, typography, glass, scene bibles               |
+| AUDIO_ENGINE.md         | The procedural sound system, scene by scene             |
+| ARCHITECTURE.md         | System structure, state, data flow, ADRs                |
+| ENGINEERING_GUIDE.md    | Conventions, workflows, verification, testing           |
+| ROADMAP.md              | Milestones from here to v1.0                            |
+| PROJECT_STATUS.md       | Live status — always current                            |
+| TODO.md                 | The active work queue                                   |
+| CHANGELOG.md            | Professional change history                             |
+| BACKLOG.md              | Deferred ideas and permanent refusals                   |
+| CLAUDE.md               | Operating rules for AI-assisted development             |
 
 ## Status
 

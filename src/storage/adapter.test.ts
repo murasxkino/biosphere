@@ -29,7 +29,9 @@ describe("store over window.storage (artifact target)", () => {
     const kv: Record<string, string> = {};
     (window as any).storage = {
       get: vi.fn(async (k: string) => (k in kv ? { value: kv[k] } : null)),
-      set: vi.fn(async (k: string, v: string) => { kv[k] = v; }),
+      set: vi.fn(async (k: string, v: string) => {
+        kv[k] = v;
+      }),
     };
     await store.set("cfg", { onboarded: true });
     expect(await store.get("cfg")).toEqual({ onboarded: true });
@@ -42,8 +44,12 @@ describe("store over window.storage (artifact target)", () => {
 describe("memory fallback", () => {
   it("keeps the session coherent when the backend throws", async () => {
     (window as any).storage = {
-      get: vi.fn(async () => { throw new Error("storage down"); }),
-      set: vi.fn(async () => { throw new Error("storage down"); }),
+      get: vi.fn(async () => {
+        throw new Error("storage down");
+      }),
+      set: vi.fn(async () => {
+        throw new Error("storage down");
+      }),
     };
     await store.set("k2", { kept: true });
     expect(await store.get("k2")).toEqual({ kept: true });

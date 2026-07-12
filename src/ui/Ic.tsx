@@ -1,7 +1,13 @@
 import React from "react";
 
 export function Ic({ name, size = 20, style }: { name: string; size?: number; style?: React.CSSProperties }) {
-  const P = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round" } as const;
+  const P = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.5,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+  } as const;
   const icons: Record<string, React.ReactElement> = {
     back: <path d="M15 5l-7 7 7 7" {...P} />,
     chev: <path d="M9 5l7 7-7 7" {...P} />,

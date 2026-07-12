@@ -10,10 +10,19 @@ export function SceneCanvas({ kind }: { kind: string }) {
     const ctx = cv.getContext("2d");
     if (!ctx) return; // no 2D surface (headless env) — the veil alone stands
     const scene = makeScene(kind);
-    const reduced = typeof window !== "undefined" && window.matchMedia &&
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let W = 0, H = 0, raf = 0, last = 0;
-    const frame = (t: number, dt: number) => { try { scene.draw(ctx, W, H, t, dt); } catch (e) {} };
+    let W = 0,
+      H = 0,
+      raf = 0,
+      last = 0;
+    const frame = (t: number, dt: number) => {
+      try {
+        scene.draw(ctx, W, H, t, dt);
+      } catch (e) {}
+    };
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = cv.clientWidth || window.innerWidth;
@@ -26,8 +35,10 @@ export function SceneCanvas({ kind }: { kind: string }) {
     };
     resize();
     let ro: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== "undefined") { ro = new ResizeObserver(resize); ro.observe(cv); }
-    else window.addEventListener("resize", resize);
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(resize);
+      ro.observe(cv);
+    } else window.addEventListener("resize", resize);
     if (!reduced) {
       const loop = (ms: number) => {
         const t = ms / 1000;
@@ -40,8 +51,14 @@ export function SceneCanvas({ kind }: { kind: string }) {
     }
     return () => {
       cancelAnimationFrame(raf);
-      if (ro) ro.disconnect(); else window.removeEventListener("resize", resize);
+      if (ro) ro.disconnect();
+      else window.removeEventListener("resize", resize);
     };
   }, [kind]);
-  return <canvas ref={ref} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />;
+  return (
+    <canvas
+      ref={ref}
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
+    />
+  );
 }

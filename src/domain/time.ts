@@ -16,7 +16,11 @@ export const fmtDate = (d: Date) =>
   d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
 
 const localKey = (x: Date) =>
-  x.getFullYear() + "-" + String(x.getMonth() + 1).padStart(2, "0") + "-" + String(x.getDate()).padStart(2, "0");
+  x.getFullYear() +
+  "-" +
+  String(x.getMonth() + 1).padStart(2, "0") +
+  "-" +
+  String(x.getDate()).padStart(2, "0");
 
 // A "day" rolls over at 4 AM, so a reflection finished after midnight
 // still belongs to the day you actually lived.
@@ -36,7 +40,9 @@ export const prevKey = (k: string) => {
 export const fmtDayKey = (k: string) => {
   const p = k.split("-").map(Number);
   return new Date(p[0], p[1] - 1, p[2]).toLocaleDateString(undefined, {
-    weekday: "long", month: "long", day: "numeric",
+    weekday: "long",
+    month: "long",
+    day: "numeric",
   });
 };
 

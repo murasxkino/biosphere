@@ -72,9 +72,12 @@ describe("calcStreak", () => {
 describe("calcBest", () => {
   it("finds the longest historical run of done days", () => {
     const series = {
-      "2026-06-01": true, "2026-06-02": true, "2026-06-03": true, // 3
+      "2026-06-01": true,
+      "2026-06-02": true,
+      "2026-06-03": true, // 3
       "2026-06-05": true, // 1
-      "2026-07-01": true, "2026-07-02": true, // 2
+      "2026-07-01": true,
+      "2026-07-02": true, // 2
     };
     expect(calcBest(series)).toBe(3);
   });

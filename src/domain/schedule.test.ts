@@ -6,10 +6,10 @@ import type { Biosphere } from "./types";
 
 /* Defaults, pre-sorted by start (computeSched's contract). */
 const sorted: Biosphere[] = [
-  { id: "b_tundra",   name: "Tundra",   archetype: "tundra",   start: "09:00", purpose: "" },
+  { id: "b_tundra", name: "Tundra", archetype: "tundra", start: "09:00", purpose: "" },
   { id: "b_volcanic", name: "Volcanic", archetype: "volcanic", start: "11:30", purpose: "" },
-  { id: "b_seaside",  name: "Seaside",  archetype: "seaside",  start: "13:00", purpose: "" },
-  { id: "b_forest",   name: "Forest",   archetype: "forest",   start: "15:30", purpose: "" },
+  { id: "b_seaside", name: "Seaside", archetype: "seaside", start: "13:00", purpose: "" },
+  { id: "b_forest", name: "Forest", archetype: "forest", start: "15:30", purpose: "" },
   { id: "b_mountain", name: "Mountain", archetype: "mountain", start: "19:00", purpose: "" },
 ];
 
@@ -46,10 +46,16 @@ describe("computeSched — currentId (FEATURE_SPEC §2)", () => {
   });
 
   it("night-overlap: a biosphere starting at or after nightStart never appears as now", () => {
-    const bios = [...sorted, { id: "b_late", name: "Late", archetype: "forest", start: "22:00", purpose: "" }];
+    const bios = [
+      ...sorted,
+      { id: "b_late", name: "Late", archetype: "forest", start: "22:00", purpose: "" },
+    ];
     expect(currentAt("22:30", DEFAULT_NIGHT_START, bios)).toBe("night");
     // and one starting exactly at nightStart
-    const bios2 = [...sorted, { id: "b_edge", name: "Edge", archetype: "forest", start: "21:30", purpose: "" }];
+    const bios2 = [
+      ...sorted,
+      { id: "b_edge", name: "Edge", archetype: "forest", start: "21:30", purpose: "" },
+    ];
     expect(currentAt("21:30", DEFAULT_NIGHT_START, bios2)).toBe("night");
   });
 

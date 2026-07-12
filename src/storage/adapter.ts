@@ -37,6 +37,8 @@ export const store = {
       memFallback[k] = v;
       const b = backend();
       if (b) await b.set(k, v);
-    } catch (e) { /* keep in-memory copy */ }
+    } catch (e) {
+      /* keep in-memory copy */
+    }
   },
 };

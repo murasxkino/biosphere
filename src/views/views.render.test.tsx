@@ -37,8 +37,16 @@ describe("HomeView", () => {
   it("renders the day: now-block, tiles, night tile, footer", () => {
     render(
       <HomeView
-        sorted={sorted} habits={habits} journal={{}} now={now} sched={sched}
-        nightStart="21:30" soundOn={false} onToggleSound={noop} onOpen={noop} currentArch="tundra"
+        sorted={sorted}
+        habits={habits}
+        journal={{}}
+        now={now}
+        sched={sched}
+        nightStart="21:30"
+        soundOn={false}
+        onToggleSound={noop}
+        onOpen={noop}
+        currentArch="tundra"
       />
     );
     expect(screen.getAllByText("Tundra").length).toBeGreaterThanOrEqual(2); // now-block + tile
@@ -52,8 +60,16 @@ describe("HomeView", () => {
     const onOpen = vi.fn();
     render(
       <HomeView
-        sorted={sorted} habits={habits} journal={{}} now={now} sched={sched}
-        nightStart="21:30" soundOn={false} onToggleSound={noop} onOpen={onOpen} currentArch="tundra"
+        sorted={sorted}
+        habits={habits}
+        journal={{}}
+        now={now}
+        sched={sched}
+        nightStart="21:30"
+        soundOn={false}
+        onToggleSound={noop}
+        onOpen={onOpen}
+        currentArch="tundra"
       />
     );
     fireEvent.click(screen.getByText("Seaside"));
@@ -64,9 +80,16 @@ describe("HomeView", () => {
     const dawn = new Date(2026, 6, 7, 5, 0);
     render(
       <HomeView
-        sorted={sorted} habits={habits} journal={{}} now={dawn}
+        sorted={sorted}
+        habits={habits}
+        journal={{}}
+        now={dawn}
         sched={computeSched(sorted, "21:30", dawn)}
-        nightStart="21:30" soundOn={false} onToggleSound={noop} onOpen={noop} currentArch="night"
+        nightStart="21:30"
+        soundOn={false}
+        onToggleSound={noop}
+        onOpen={noop}
+        currentArch="night"
       />
     );
     expect(screen.getByText("Before the day")).toBeTruthy();
@@ -78,9 +101,13 @@ describe("ImmersionView", () => {
   it("renders the biosphere, its habits, and timer affordances", () => {
     render(
       <ImmersionView
-        bio={bios[0]} end="11:30" isNow={true}
+        bio={bios[0]}
+        end="11:30"
+        isNow={true}
         habits={habits.filter((h) => h.biosphereId === "b_tundra")}
-        soundOn={false} onToggleSound={noop} onExit={noop}
+        soundOn={false}
+        onToggleSound={noop}
+        onExit={noop}
       />
     );
     expect(screen.getByText("Tundra")).toBeTruthy();
@@ -92,8 +119,13 @@ describe("ImmersionView", () => {
   it("offers open-window copy when the biosphere has no habits", () => {
     render(
       <ImmersionView
-        bio={bios[3]} end="19:00" isNow={false} habits={[]}
-        soundOn={false} onToggleSound={noop} onExit={noop}
+        bio={bios[3]}
+        end="19:00"
+        isNow={false}
+        habits={[]}
+        soundOn={false}
+        onToggleSound={noop}
+        onExit={noop}
       />
     );
     expect(screen.getByText(/This biosphere is open/)).toBeTruthy();
@@ -105,8 +137,14 @@ describe("NightView", () => {
   it("opens the flow on an unsealed night and walks to the first habit", () => {
     render(
       <NightView
-        bios={bios} habits={habits} journal={{}} now={now}
-        soundOn={false} onToggleSound={noop} onSeal={noop} onExit={noop}
+        bios={bios}
+        habits={habits}
+        journal={{}}
+        now={now}
+        soundOn={false}
+        onToggleSound={noop}
+        onSeal={noop}
+        onExit={noop}
       />
     );
     expect(screen.getByText(/reflections await/)).toBeTruthy();
@@ -124,8 +162,14 @@ describe("NightView", () => {
     const journal: Journal = { [key]: journalFixture["2026-07-06"] };
     render(
       <NightView
-        bios={bios} habits={habits} journal={journal} now={now}
-        soundOn={false} onToggleSound={noop} onSeal={noop} onExit={noop}
+        bios={bios}
+        habits={habits}
+        journal={journal}
+        now={now}
+        soundOn={false}
+        onToggleSound={noop}
+        onSeal={noop}
+        onExit={noop}
       />
     );
     expect(screen.getByText("Reflected")).toBeTruthy();
@@ -139,8 +183,14 @@ describe("NightView", () => {
     const oneHabit = [habits[0]];
     render(
       <NightView
-        bios={bios} habits={oneHabit} journal={{}} now={now}
-        soundOn={false} onToggleSound={noop} onSeal={onSeal} onExit={noop}
+        bios={bios}
+        habits={oneHabit}
+        journal={{}}
+        now={now}
+        soundOn={false}
+        onToggleSound={noop}
+        onSeal={onSeal}
+        onExit={noop}
       />
     );
     fireEvent.click(screen.getByText("Begin"));
@@ -171,8 +221,12 @@ describe("StatsView", () => {
   it("shows summary cards and per-habit streaks", () => {
     render(
       <StatsView
-        habits={habits} bios={bios} journal={journalFixture} now={now}
-        currentArch="tundra" onBack={noop}
+        habits={habits}
+        bios={bios}
+        journal={journalFixture}
+        now={now}
+        currentArch="tundra"
+        onBack={noop}
       />
     );
     expect(screen.getByText("nights reflected")).toBeTruthy();
@@ -185,10 +239,20 @@ describe("StatsView", () => {
 
 describe("SettingsView", () => {
   const props = {
-    bios, setBios: vi.fn(), habits, setHabits: vi.fn(),
-    nightStart: "21:30", setNightStart: vi.fn(),
-    soundOn: false, onToggleSound: noop, volume: 0.7, onVolume: vi.fn(),
-    notify: vi.fn(), onReset: vi.fn(), currentArch: "tundra", onBack: noop,
+    bios,
+    setBios: vi.fn(),
+    habits,
+    setHabits: vi.fn(),
+    nightStart: "21:30",
+    setNightStart: vi.fn(),
+    soundOn: false,
+    onToggleSound: noop,
+    volume: 0.7,
+    onVolume: vi.fn(),
+    notify: vi.fn(),
+    onReset: vi.fn(),
+    currentArch: "tundra",
+    onBack: noop,
   };
 
   it("renders every section", () => {

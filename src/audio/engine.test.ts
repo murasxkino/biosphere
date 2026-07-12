@@ -8,12 +8,24 @@ import { AudioEngine } from "./engine";
 class MockParam {
   value = 0;
   calls: Array<{ fn: string; args: any[] }> = [];
-  _rec(fn: string, args: any[]) { this.calls.push({ fn, args }); }
-  setValueAtTime(...a: any[]) { this._rec("setValueAtTime", a); }
-  linearRampToValueAtTime(...a: any[]) { this._rec("linearRampToValueAtTime", a); }
-  exponentialRampToValueAtTime(...a: any[]) { this._rec("exponentialRampToValueAtTime", a); }
-  setTargetAtTime(...a: any[]) { this._rec("setTargetAtTime", a); }
-  cancelScheduledValues(...a: any[]) { this._rec("cancelScheduledValues", a); }
+  _rec(fn: string, args: any[]) {
+    this.calls.push({ fn, args });
+  }
+  setValueAtTime(...a: any[]) {
+    this._rec("setValueAtTime", a);
+  }
+  linearRampToValueAtTime(...a: any[]) {
+    this._rec("linearRampToValueAtTime", a);
+  }
+  exponentialRampToValueAtTime(...a: any[]) {
+    this._rec("exponentialRampToValueAtTime", a);
+  }
+  setTargetAtTime(...a: any[]) {
+    this._rec("setTargetAtTime", a);
+  }
+  cancelScheduledValues(...a: any[]) {
+    this._rec("cancelScheduledValues", a);
+  }
 }
 
 class MockNode {
@@ -26,7 +38,9 @@ class MockNode {
     ctx.created[kind] = ctx.created[kind] || [];
     ctx.created[kind].push(this);
   }
-  connect(to: any) { this.outputs.push(to); }
+  connect(to: any) {
+    this.outputs.push(to);
+  }
   disconnect() {}
 }
 
@@ -147,7 +161,9 @@ describe("master chain and lifecycle", () => {
     const old = engine.current!;
     expect(old.timers.length).toBeGreaterThan(0);
     engine.play("night");
-    const fade = (old.gain.gain as unknown as MockParam).calls.filter((c) => c.fn === "setTargetAtTime").pop()!;
+    const fade = (old.gain.gain as unknown as MockParam).calls
+      .filter((c) => c.fn === "setTargetAtTime")
+      .pop()!;
     expect(fade.args[0]).toBe(0);
     expect(old.timers).toHaveLength(0);
     expect(engine.current!.name).toBe("night");
