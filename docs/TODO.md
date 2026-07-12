@@ -13,7 +13,7 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [x] Tests for the correctness core — 74 green: `dayKey` 4 AM rollover, schedule resolution (pre-dawn, boundaries, night-overlap), `calcStreak`/`calcBest`/`habitSeries` incl. deleted-habit entries; AudioEngine graph construction against a mock AudioContext; boot render test replacing smoke.cjs; per-view render tests.
 - [x] Add `build:artifact` single-file bundle target (with built-in SSR boot smoke) for shipping back to Claude artifacts.
 - [ ] **Owner:** manual parity pass against v0.3.0-alpha (ENGINEERING_GUIDE checklist) via `npm run dev`; then tag `v0.3.0`.
-- [ ] Owner, when ready: connect a GitHub remote (`gh auth login` + `gh repo create`, or `git remote add origin …`) — CI activates on first push. Decide license.
+- [ ] Owner, when ready: connect a GitHub remote (`gh auth login` + `gh repo create`, or `git remote add origin …`) — CI activates on first push. _(License decided: proprietary, all rights reserved — see `LICENSE`. Visibility: private.)_
 - [ ] M4-entry chore: first `npm run format` over `src/` (deferred so the split stays byte-close to the oracle during review).
 
 ## Milestone M4 — QA & tuning (post-migration)

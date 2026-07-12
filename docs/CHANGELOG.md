@@ -13,6 +13,7 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 - **StorageAdapter** (`src/storage/`): window.storage for the artifact target, localStorage for local dev, in-memory fallback — semantics identical to the artifact's `store`.
 - **Test suite, 74 tests green**: `dayKey` 4 AM rollover incl. month/year boundaries; schedule resolution at starts, boundaries, pre-dawn, night-overlap, empty day; `calcStreak`/`calcBest`/`habitSeries` incl. deleted-habit entries; storage adapters; AudioEngine graph construction per AUDIO_ENGINE.md recipes against a mock AudioContext (topology, crossfade teardown, chime, node budget); `App.boot` render test (replaces smoke.cjs); per-view fixture render tests.
 - **`npm run build:artifact`** — permanent single-file Claude-artifact target (`dist/biosphere.artifact.jsx`: ESM, react-only imports, default-exported App) with a built-in module-init + SSR boot smoke.
+- **LICENSE** — proprietary, all rights reserved; repo visibility resolved to private (MIGRATION.md §6 choices settled).
 
 #### Changed
 - The single file split mechanically into modules per the ARCHITECTURE map, names unchanged: `src/domain|storage|audio|scenes|ui|views/` + `App.tsx`. The `sched` memo body moved verbatim to `domain/schedule.ts` for testability. Data shapes (Biosphere, Habit, Journal…) and component props are now typed.

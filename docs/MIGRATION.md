@@ -85,6 +85,8 @@ Done in this session precisely to make the handover clean: shipped both owner cr
 
 Remaining choices that belong to you, flagged rather than assumed: **license**, **repo visibility/host**, and whether M4's by-ear tuning happens with you listening live (recommended — it's your product's soul, and it's an hour well spent).
 
+> **Resolved (2026-07-11):** license → proprietary, all rights reserved (`LICENSE`); repo → private, hosted on GitHub. M4's by-ear tuning is to be done live with the owner.
+
 One thing I would *not* change: the constraints. Zero assets, procedural everything, `window.storage` for the artifact target — these are now identity, and the repo must preserve the ability to honor them via `build:artifact`.
 
 ---

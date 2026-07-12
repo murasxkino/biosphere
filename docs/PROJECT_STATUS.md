@@ -32,7 +32,7 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 - Prettier is configured but has not yet been run over `src/` — deferred until after the parity pass so the split stays byte-close to the oracle for review. First `npm run format` is an M4-entry chore.
 - ESLint carries one deliberate warning (ImmersionView timer-completion effect runs every render — verbatim artifact behavior).
 - No GitHub remote yet: `gh` is not authenticated on this machine. `git remote add origin <url>` (or `gh auth login` + `gh repo create`) whenever ready; CI activates on first push.
-- **License** and repo visibility/host remain the owner's call (flagged in MIGRATION.md §6, still undecided).
+- **License** and **repo visibility** are now decided: proprietary — all rights reserved (see `LICENSE`) — and private, on GitHub. The remote itself is not yet connected (see the `gh` note above).
 - Carried caveats unchanged: focus timers ephemeral by design; night-overlap warned, not blocked.
 
 ## Recovery
