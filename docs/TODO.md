@@ -16,12 +16,14 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [x] Connect a GitHub remote — done 2026-07-12: private `murasxkino/biosphere` via `gh repo create`; CI activated on first push and ran green. _(License: proprietary, all rights reserved — see `LICENSE`.)_
 - [x] M4-entry chore: first `npm run format` (2026-07-12) — `src/`, root markdown & html; `legacy/` and `docs/` excluded by `.prettierignore`. Check + builds green after.
 
-## Milestone M4 — QA & tuning (post-migration)
+## Milestone M4 — QA, tuning & the soundtrack layer (post-migration)
 
-- [ ] By-ear soundscape tuning session per scene (levels, gust character, event rates) — current values are first-pass.
-- [ ] Passage feel check in-browser (countdown pacing, veil timing, cancel paths).
+- [x] **Soundtrack layer** (owner-approved 2026-07-12; FEATURE_SPEC §3.10, ADR-8): engine buses, MusicPlayer with audio-clock seam crossfade, manifest, immersion + Settings toggles, `musicPref`, artifact absence, 18 new tests. Tundra & forest tracks landed.
+- [ ] Owner: deliver volcanic, seaside, mountain tracks into `music-handoff/` — wiring each is a file drop + one manifest line (AUDIO_ENGINE § The soundtrack layer).
+- [ ] By-ear tuning session per scene — soundscape levels/gusts/event rates **and** soundtrack level trims vs the beds (a per-scene music gain does not exist yet; add during the session if wanted).
+- [ ] Passage feel check in-browser (countdown pacing, veil timing, cancel paths) — now incl. the music crossfade through the portal.
 - [ ] Device profiling of the scene loop; adjust particle ceilings if needed.
-- [ ] Full manual matrix (ENGINEERING_GUIDE) incl. reduced-motion, storage-absent, no-WebAudio.
+- [ ] Full manual matrix (ENGINEERING_GUIDE) incl. reduced-motion, storage-absent, no-WebAudio — plus scored/unscored worlds and music-only mode.
 - [ ] Fold in owner playthrough findings.
 
 ## Parking

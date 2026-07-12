@@ -4,8 +4,13 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 
 ## [Unreleased]
 
-### M4 entry (2026-07-12)
+### Milestone M4 (in progress)
 
+#### Added
+- **The soundtrack layer** (owner-requested, approved 2026-07-12; FEATURE_SPEC §3.10, ADR-8): one recorded musical piece per archetype, looped inside immersion. Engine gained per-layer buses (scenes → sceneBus, music → musicBus, master carries only volume); the chime now sounds when either layer is open. `MusicPlayer` (`src/audio/music.ts`) fetches and decodes on first entry, caches ≤ 2 tracks, joins passes with an equal-power seam crossfade chained on the audio clock (`onended` — immune to background-tab timer throttling), and fails silent. Manifest `src/audio/tracks.ts` — swap a track by dropping a file in `public/music/` and editing one line. Immersion header gained a soundtrack toggle (scored worlds only) beside the ambient toggle; Settings gained a Soundtrack switch; `musicPref` persists additively (absent = on). Artifact builds detect the sandbox and omit the layer entirely. Tundra and forest tracks landed (owner recordings, WAV); volcanic, seaside, mountain await delivery; Grey Night stays unscored by design.
+- Tests: 92 green (was 74) — MusicPlayer availability/graph/seam-chain/crossfade/failure/supersession/cache, engine bus topology + chime dual-gating, view toggle tests.
+
+#### M4 entry chores (2026-07-12)
 - First full Prettier pass over the repo — the chore deferred through M3 so the split stayed byte-close to the oracle; `legacy/` and `docs/` remain excluded via `.prettierignore`. Verification floor green after.
 - Private GitHub remote connected (`murasxkino/biosphere`); Actions CI activated on first push — run green end to end.
 

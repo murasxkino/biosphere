@@ -1,6 +1,6 @@
 # PROJECT STATUS
 
-**Updated:** 2026-07-12 · **Version:** 0.3.0 (tagged `v0.3.0`) · **Current milestone:** M3 closed 2026-07-12 — M4 (QA & tuning) is open.
+**Updated:** 2026-07-12 · **Version:** 0.3.0 (tagged `v0.3.0`) · **Current milestone:** M4 — soundtrack layer shipped (2026-07-12, owner-approved); by-ear tuning session and QA matrix remain.
 
 ## Code state (verified this session)
 
@@ -23,11 +23,12 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 
 ## Remaining work
 
-**M4 (QA & tuning)** per TODO.md — by-ear soundscape tuning (owner listening live), passage feel check, device profiling, full manual matrix.
+1. **Owner:** deliver the volcanic, seaside, and mountain tracks (each lands with a file drop + one manifest line).
+2. **M4 (QA & tuning)** per TODO.md — the live by-ear session (soundscape levels **and** soundtrack trims), passage feel check, device profiling, full manual matrix.
 
 ## Known issues & notes
 
-- Audio parameters remain first-pass analytical values; M4 tunes by ear.
+- Audio parameters remain first-pass analytical values; M4 tunes by ear. The soundtrack layer (shipped 2026-07-12: FEATURE_SPEC §3.10, ADR-8, AUDIO_ENGINE § The soundtrack layer) is untrimmed against the beds — no per-scene music gain exists yet; three worlds (volcanic, seaside, mountain) await their tracks; Grey Night is unscored by design. Verification: 92/92 tests, both builds, artifact SSR smoke, live browser pass (fetch/graph/toggles/persistence/independence) — zero console errors.
 - Prettier's first full pass landed at M4 entry (2026-07-12); verification floor re-run green after it. `.prettierignore` keeps `legacy/` (the verbatim oracle) and `docs/` permanently out of scope.
 - ESLint carries one deliberate warning (ImmersionView timer-completion effect runs every render — verbatim artifact behavior).
 - Remote connected 2026-07-12: private GitHub repo `murasxkino/biosphere` (`origin`, HTTPS via the `gh` CLI). Actions CI is active — first run green across all five steps. Minor CI chore for later: GitHub flags `actions/checkout@v4` + `actions/setup-node@v4` as targeting deprecated Node 20; bump the action majors when convenient.

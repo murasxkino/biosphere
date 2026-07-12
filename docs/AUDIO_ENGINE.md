@@ -1,6 +1,6 @@
 # AUDIO ENGINE
 
-The procedural audio engine is a first-class feature. Every sound is synthesized live with raw Web Audio — nothing recorded, fetched, or bundled.
+The procedural audio engine is a first-class feature. Every **soundscape** is synthesized live with raw Web Audio — nothing recorded, fetched, or bundled. Since M4 the app carries one sanctioned exception: the **soundtrack layer** (owner-approved, ADR-8) — one recorded musical piece per archetype, looped inside immersion. The two are independent layers under one master; everything else in this document describes the synthesized world.
 
 ## Realism principles (v0.3 overhaul)
 
@@ -13,7 +13,9 @@ The v0.1 soundscapes leaned on oscillators and periodic LFOs and earned the owne
 
 ## Architecture
 
-`class AudioEngine`, one singleton `AUDIO`. Unchanged core: lazy context via `ensure()` (the autoplay seam; saved preference restored on the session's first pointerdown), master gain gliding via `setTargetAtTime` (volume τ 0.15 s, enable τ 0.3 s, default 0.7), scenes as `{ name, gain, stops[], timers[] }`, crossfade on `play()` (out τ 0.5 s, teardown at 1.8 s; in τ 0.9 s), cached 2 s noise buffers (white / pink via Paul Kellet filter / brown leaky integrator), scheduler `_every(minS, maxS, fn)`, random event pan `_pan`.
+`class AudioEngine`, one singleton `AUDIO`. Unchanged core: lazy context via `ensure()` (the autoplay seam; saved preference restored on the session's first pointerdown), gain glides via `setTargetAtTime` (volume τ 0.15 s, enable τ 0.3 s, default 0.7), scenes as `{ name, gain, stops[], timers[] }`, crossfade on `play()` (out τ 0.5 s, teardown at 1.8 s; in τ 0.9 s), cached 2 s noise buffers (white / pink via Paul Kellet filter / brown leaky integrator), scheduler `_every(minS, maxS, fn)`, random event pan `_pan`.
+
+**Bus topology (M4):** scenes → `sceneBus` and music → `musicBus`, both into `master` → destination. `master` carries only the volume; each layer is gated by its own bus (`setEnabled` glides sceneBus, `setMusicEnabled` glides musicBus). The chime connects to `master` above both gates and sounds when **either** layer is open — it is interface, not nature.
 
 New helpers: `_panTo(scene, v)` fixed-position bed panning · `_walk(scene, param, base, spread, minS, maxS, τ)` random parameter walk · `_gusts(scene, targets[], gapRange, riseRange, fallRange)` coherent multi-param swells · `_grain(out, when, noiseType, {f0, f1, q, lp, hp, dur, peak})` enveloped noise event with optional bandpass sweep and looped-buffer random offset/rate · `_hoot(scene, f, peak, echoSend)` two-note owl (sine with 7 % pitch droop + parallel breath grain).
 
@@ -34,6 +36,17 @@ New helpers: `_panTo(scene, v)` fixed-position bed panning · `_walk(scene, para
 **Grey Night** — the 52 Hz sine floor and 311 Hz tone are gone. The dark: brown → lowpass 130, gain walked. Night breeze: pink → bandpass (walks 600 ± 240) with rare soft gusts. **Cricket chorus**: two continuous trill voices — white noise through Q 26 bandpasses at 4.3 / 4.65 kHz, amplitude-modulated at 31 / 26 Hz (crickets genuinely trill near-sinusoidally), panned ±0.25/−0.3 — plus a nearer cricket calling three-pip phrases every 1.1–2.6 s. A distant owl (300 Hz region, no echo) every 40–90 s.
 
 Loudness discipline: beds sum ≤ ~0.45; events ≤ 0.05 except waves and knocks; everything mixed to sit behind thought.
+
+## The soundtrack layer (M4, ADR-8)
+
+`class MusicPlayer` (`src/audio/music.ts`), one singleton `MUSIC`, sharing the engine's context through `musicBus`. One recorded piece per archetype, declared in the manifest `src/audio/tracks.ts`; files live in `public/music/` (served in dev, copied into web builds, absent from the artifact — detected by the `window.storage` signal, so the toggle never renders there).
+
+- **Playback**: fetch + `decodeAudioData` on first entry into a scored world; decoded buffers cached, at most two (current + previous). Track gain fades in like a scene (τ 0.9 s), out on leave (τ 0.5 s, teardown 1.8 s).
+- **The loop**: the pieces are not authored as perfect loops, so each pass is joined to the next by an **equal-power crossfade** over a seam of `min(3 s, duration/8)`. One future pass is always pre-scheduled, and the chain advances on the audio clock itself (`onended`), never a JS timer — background-tab throttling cannot misalign a join.
+- **Independence**: `musicPref` persists beside `soundPref` (absent = on); either layer plays without the other; master volume governs both.
+- **Failure is silent**: a missing or unfetchable track leaves the world unscored (retry by toggling); no toast, no console noise — the storage-fallback precedent.
+
+**Swapping a track** (the owner's knob): drop the new file in `public/music/`, point the archetype's entry in `src/audio/tracks.ts` at it, and bump the `?v=` query so cached listeners hear the new piece. `null` = unscored (no toggle shown). Prefer lossless WAV/FLAC, loop-authored, 1–5 min; per-scene level trims are by-ear M4 work.
 
 ## Known state & tuning
 

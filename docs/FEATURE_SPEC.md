@@ -22,7 +22,7 @@ Canonical behavior. Where code and this document disagree, one of them is wrong 
 
 **Journal** — `{ [dayKey]: { sealedAt: epochMs, entries: { [habitId]: { name, biosphere, done: boolean, note: string } } } }`. Entries are **snapshots**: they keep the habit's name and biosphere name as they were on that day, so later edits never rewrite history.
 
-**Persistence keys** — `biosphere-config-v1` = `{ onboarded, bios, habits, nightStart, volume, soundPref }`; `biosphere-journal-v1` = journal map. Values are JSON strings in `window.storage`.
+**Persistence keys** — `biosphere-config-v1` = `{ onboarded, bios, habits, nightStart, volume, soundPref, musicPref }`; `biosphere-journal-v1` = journal map. Values are JSON strings in `window.storage`. `musicPref` is additive (absent reads as on).
 
 ## 2. Time model
 
@@ -52,7 +52,7 @@ Grey Night tile follows, always last: shows nightStart; NOW treatment when night
 ### 3.4 Immersion (inside a biosphere)
 Enter animation: 1 s scale-settle fade (`enterScene`). Full-bleed scene + soundscape of the biosphere's archetype. All chrome sits in one layer that fades to opacity 0.05 over 1.6 s after **6.5 s** without pointer activity; any touch/move restores it instantly.
 
-Header: back (top-left), centered `NOW`/`BIOSPHERE` eyebrow + name (serif 38) + *purpose · start – end*, sound toggle (top-right). Center: habits as floating text rows (archetype glyph + name), each drifting on a slow vertical float. Timed habits show `⏱ N MIN — TAP TO BEGIN`; tapping starts the countdown (`m:ss`, thin accent progress bar, 500 ms cadence); tapping again cancels; on completion a two-note chime sounds and the row reads `COMPLETE ✦`. Timer state is **ephemeral by design** — it exists to hold a session, not to score it, and resets on leaving. Untimed habits are inert text. Empty biosphere copy: *This biosphere is open. Give it a habit in settings, or simply be here.* Footer: `UNTIL {END}` when current, else `A QUIET WINDOW`.
+Header: back (top-left), centered `NOW`/`BIOSPHERE` eyebrow + name (serif 38) + *purpose · start – end*, and top-right the sound controls: a soundtrack toggle (only in scored worlds — §3.10) beside the ambient-sound toggle. Center: habits as floating text rows (archetype glyph + name), each drifting on a slow vertical float. Timed habits show `⏱ N MIN — TAP TO BEGIN`; tapping starts the countdown (`m:ss`, thin accent progress bar, 500 ms cadence); tapping again cancels; on completion a two-note chime sounds and the row reads `COMPLETE ✦`. Timer state is **ephemeral by design** — it exists to hold a session, not to score it, and resets on leaving. Untimed habits are inert text. Empty biosphere copy: *This biosphere is open. Give it a habit in settings, or simply be here.* Footer: `UNTIL {END}` when current, else `A QUIET WINDOW`.
 
 ### 3.5 Grey Night
 Night scene, no UI fade (this view is conversation, not ambience). Habits ordered by their biosphere's start time.
@@ -70,7 +70,7 @@ Shell over the current archetype titled *Stillness — streaks & rhythm*. Two su
 ### 3.8 Settings
 Shell over the current archetype. Sections:
 
-**SOUND** — enable switch; volume slider (0–1, default 0.7); caption *"Every soundscape is generated live in your browser — nothing recorded, nothing downloaded."*
+**SOUND** — ambient-sound switch; soundtrack switch (sub-caption *one recorded piece per biosphere*); volume slider (0–1, default 0.7) governing both layers; caption *"Soundscapes are synthesized live in your browser — the soundtrack is the one recorded voice."*
 
 **BIOSPHERES** — one row per biosphere: accent dot, name input, time input, purpose input, archetype select (five options), delete. Delete guard: refuse the last biosphere (*Keep at least one biosphere*); otherwise reassign its habits to the first remaining biosphere and toast *N habit(s) moved to {name}* / *Biosphere removed*. **Add Biosphere** appends `{ name: "New Biosphere", start: "17:00", archetype: "forest", purpose: "" }`. A quieter row for **Grey Night** exposes only its time, captioned *Grey Night should fall after your last biosphere.* When it doesn't, the caption gains a soft amber warning naming the consequence.
 
@@ -81,11 +81,17 @@ Shell over the current archetype. Sections:
 ### 3.9 Passage between biospheres
 When the clock moves the day forward while the user is immersed in the biosphere that just ended, BIOSPHERE offers passage rather than yanking or stranding them. The chime sounds and a quiet capsule rises at the bottom of the world: *{Name} begins* in the new biosphere's accent, a thin ten-second draining line, and a **Remain here** pill. Doing nothing completes the passage: the world dims to black over about a second — a breath between worlds — the view crosses into the new biosphere (or the Grey Night's threshold), and the new scene settles beneath the lifting dark while the soundscapes crossfade. Tapping the capsule crosses immediately; **Remain here** dismisses it (*Staying a while*); navigating anywhere else cancels it. In every other context the transition stays a toast — Home's backdrop already follows the day on its own.
 
+### 3.10 The soundtrack layer
+
+Each archetype may carry one recorded musical piece (the manifest in `src/audio/tracks.ts`; ADR-8). The soundtrack plays **only inside immersion**: entering a scored world fades its piece in, leaving fades it out, and a passage crossing crossfades the old piece into the new world's (or into silence if the next world is unscored). The piece loops seamlessly — passes are joined by an equal-power crossfade at the seam, scheduled on the audio clock so background-tab throttling cannot misalign a join.
+
+Ambience and soundtrack are **independent layers**: each has its own toggle (immersion header + Settings switch) and persisted preference; the master volume governs both; the chime sounds when either layer is open. The soundtrack preference is global, defaults to on, and worlds without a track show no music toggle at all. In artifact builds the layer is absent entirely. A failed track load is silent — the world simply stays unscored (retry by toggling).
+
 ## 4. System behaviors
 
-- **Sound toggle** (everywhere): flips the engine inside the user gesture; if Web Audio is unsupported, toast *Audio isn't available in this browser*.
-- **Soundscape selection**: immersion → that biosphere's archetype; Grey Night → night; otherwise the current phase's archetype. Changes crossfade (see AUDIO_ENGINE.md).
-- **Autoplay restore**: if `soundPref` was saved on, the app arms a one-time pointerdown listener and starts audio on the first tap of the session.
+- **Sound toggle** (everywhere): flips the ambience layer inside the user gesture; if Web Audio is unsupported, toast *Audio isn't available in this browser*. The **soundtrack toggle** does the same for the music layer (§3.10).
+- **Soundscape selection**: immersion → that biosphere's archetype; Grey Night → night; otherwise the current phase's archetype. Changes crossfade (see AUDIO_ENGINE.md). The soundtrack follows immersion only (§3.10).
+- **Autoplay restore**: if `soundPref` was saved on, the app arms a one-time pointerdown listener and starts audio on the first tap of the session. The soundtrack needs no restore step — it can only begin inside an immersion entered by a tap.
 - **Phase transitions**: when `sched.currentId` changes during use the chime sounds; if the user is immersed in the biosphere that just ended, the passage capsule appears instead of a toast (§3.9); otherwise toast *{name} begins*. Suppressed on initial load.
 - **Persistence cadence**: config saves are debounced 700 ms after any change (post-load, in-app only); the journal is written immediately on seal. Storage calls are try/caught; failure falls back to memory silently.
 - **Toasts**: single, bottom-center glass pill, auto-dismiss ~2.6 s, never stacked, never blocking.

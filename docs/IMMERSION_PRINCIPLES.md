@@ -12,7 +12,7 @@ The working rules that turn the philosophy into engineering decisions. Each is t
 
 **5. Entering is crossing a threshold.** Tapping a tile scales the world gently into place over one second. Leaving is a single quiet back action. Transitions are cinematic, not snappy.
 
-**6. Sound is alive, sparse, and honest.** Each archetype has one sonic identity, synthesized live: broad beds with slow (≤ 0.1 Hz) movement plus rare events (a bird, a bell, a cricket). Crossfades, never cuts. Silence is scored deliberately — gaps between events are part of the composition. One chime (E5→A5) serves every completion and transition; no other UI sounds.
+**6. Sound is alive, sparse, and honest.** Each archetype has one sonic identity, synthesized live: broad beds with slow (≤ 0.1 Hz) movement plus rare events (a bird, a bell, a cricket). Inside immersion a world may also carry its one recorded voice — a looped soundtrack (ADR-8), independent of the ambience and equally subject to this principle. Crossfades, never cuts — including the loop's own seam. Silence is scored deliberately — gaps between events are part of the composition, and the Grey Night stays unscored. One chime (E5→A5) serves every completion and transition; no other UI sounds.
 
 **7. Numbers whisper.** Streaks and counts render in the serif voice, small labels, muted dots. No number is ever red, animated on change, or accompanied by celebration.
 

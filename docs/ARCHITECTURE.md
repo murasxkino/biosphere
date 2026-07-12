@@ -9,7 +9,7 @@ One React file (`biosphere.jsx`), default-exported `App`, running in the Claude 
 1. **Constants** — `ARCH` (archetype identities), `ARCH_KEYS`, defaults (`DEFAULT_BIOS`, `DEFAULT_HABITS`, `DEFAULT_NIGHT_START`), storage keys.
 2. **Utils** — pure functions only: time (`t2m`, `fmtTime`, `dayKey` 4 AM rollover, `prevKey`, `fmtDayKey`, `msFmt`), stats (`lastNDays`, `habitSeries`, `calcStreak`, `calcBest`), `uid`.
 3. **Store** — `store.get/set`: JSON over `window.storage`, try/caught, in-memory fallback map.
-4. **AudioEngine** + `AUDIO` singleton (AUDIO_ENGINE.md).
+4. **AudioEngine** + `AUDIO` singleton (AUDIO_ENGINE.md); beside it the M4 soundtrack layer — `MusicPlayer` + `MUSIC` singleton (`audio/music.ts`) and the track manifest (`audio/tracks.ts`), playing recorded pieces through the engine's music bus (ADR-8).
 5. **Scenes** — `vgrad/vignette/ridge` helpers, `makeScene(kind)` factories, `SceneCanvas` (rAF loop, DPR ≤ 2, ResizeObserver, reduced-motion → single still frame, draw try/caught).
 6. **UI kit** — `Ic` icon set, `STYLE` global CSS, `glassCard`, `Pill`, `SectionLabel`, `Shell`, `ToastBar`, `Splash`.
 7. **Views** — `BioTile`+`HomeView`, `ImmersionView`, `NightView`, `JournalView`, `StatsView`, `SettingsView`, `Onboard`.
@@ -21,7 +21,7 @@ Dependency direction is strictly downward; views never touch `store` or `AUDIO` 
 
 | State | Owner | Persistence |
 |---|---|---|
-| `bios`, `habits`, `nightStart`, `volume`, `soundOn`(→`soundPref`), `onboarded` | App | config key, debounced 700 ms |
+| `bios`, `habits`, `nightStart`, `volume`, `soundOn`(→`soundPref`), `musicOn`(→`musicPref`), `onboarded` | App | config key, debounced 700 ms |
 | `journal` | App | journal key, immediately on seal |
 | `view` `{name,id?}`, `phase` boot/onboard/app, `now`, `toast`, `pendingSound` | App | session only |
 | UI fade, timers (`runs`/`doneT`), night `ans`/`step`/`mode`, journal `open` | owning view | ephemeral by design |
@@ -48,7 +48,8 @@ Effects & handlers, exactly:
 3. **Clock**: `setInterval(setNow, 20 000)`.
 4. **Audio scene**: on `desiredArch` change → `archRef.current = desiredArch; AUDIO.play(desiredArch)`.
 5. **Volume**: `AUDIO.setVolume(volume)`.
-6. **Unmount**: `AUDIO.stop()`.
+6. **Unmount**: `AUDIO.stop()` + `MUSIC.stop()`.
+6a. **Soundtrack** (M4): `AUDIO.setMusicEnabled(musicOn)` on change; `musicArch` (the immersion bio's archetype, else null) drives `MUSIC.play(musicArch)` / `MUSIC.stop()`; `toggleMusic` mirrors `toggleSound` (supported-guard + toast, ensure inside the gesture).
 7. **Pending sound**: one-time `pointerdown` → enable + play `archRef.current`, clear flag.
 8. **Phase announce**: track `prevCurrentId` in a ref (null-initialized; first pass records only); on change while `phase==="app"` → toast *{name} begins* + `AUDIO.chime()`.
 9. `toggleSound` (guards `AUDIO.supported()`, toasts if not), `sealDay(entries)` (write journal + immediate persist + toast), `enterApp(withSound)` (from Onboard, starts audio inside the gesture), `doReset` (defaults, persist `{onboarded:false}` + `{}`, silence, `phase="onboard"`, toast), `say(msg)` (2.6 s single-toast helper with timeout ref).
@@ -68,6 +69,7 @@ Storage: every call try/caught; memory fallback keeps the session coherent. Scen
 - **ADR-5 Inline styles + one stylesheet** — Tailwind arbitrary values unavailable; a tokens-in-JS approach (`ARCH`, `glassCard`) keeps theming programmatic.
 - **ADR-6 4 AM day rollover** — matches lived days; a midnight reflection belongs to the evening it ends.
 - **ADR-7 No router / no state library** — one object of view state; the app is a shallow star around Home.
+- **ADR-8 Recorded music assets (M4, owner-approved 2026-07-12)** — the soundtrack layer is the one sanctioned exception to "zero assets, procedural everything": one recorded piece per archetype in `public/music/`, manifest-declared, played through a dedicated engine bus only inside immersion. Soundscapes and scenes remain 100 % procedural forever. Artifact builds cannot carry the files, so the layer is absent there (dual-target divergence, accepted by the owner); the `build:artifact` requirement stands unchanged.
 
 ## Future path (out of v1 scope)
 
