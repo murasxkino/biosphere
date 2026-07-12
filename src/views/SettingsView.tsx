@@ -21,6 +21,8 @@ export function SettingsView({
   setNightStart,
   soundOn,
   onToggleSound,
+  musicOn,
+  onToggleMusic,
   volume,
   onVolume,
   notify,
@@ -36,6 +38,8 @@ export function SettingsView({
   setNightStart: (t: string) => void;
   soundOn: boolean;
   onToggleSound: () => void;
+  musicOn: boolean;
+  onToggleMusic: () => void;
   volume: number;
   onVolume: (v: number) => void;
   notify: (msg: string) => void;
@@ -144,6 +148,44 @@ export function SettingsView({
           </button>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 16 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 15 }}>Soundtrack</div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>
+              one recorded piece per biosphere
+            </div>
+          </div>
+          <button
+            onClick={onToggleMusic}
+            aria-pressed={musicOn}
+            aria-label="Toggle soundtrack"
+            style={{
+              width: 46,
+              height: 26,
+              borderRadius: 999,
+              flex: "none",
+              padding: 0,
+              cursor: "pointer",
+              border: "1px solid rgba(255,255,255,0.25)",
+              position: "relative",
+              background: musicOn ? "rgba(159,216,232,0.85)" : "rgba(255,255,255,0.08)",
+              transition: "background .25s",
+            }}
+          >
+            <span
+              style={{
+                position: "absolute",
+                top: 2,
+                left: musicOn ? 22 : 2,
+                width: 20,
+                height: 20,
+                borderRadius: "50%",
+                background: "#f2f4f7",
+                transition: "left .25s",
+              }}
+            />
+          </button>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 16 }}>
           <Ic name="mute" size={15} style={{ opacity: 0.5, flex: "none" }} />
           <input
             type="range"
@@ -160,7 +202,7 @@ export function SettingsView({
         </div>
       </div>
       <div style={cap}>
-        Every soundscape is generated live in your browser — nothing recorded, nothing downloaded.
+        Soundscapes are synthesized live in your browser — the soundtrack is the one recorded voice.
       </div>
 
       <SectionLabel>biospheres</SectionLabel>

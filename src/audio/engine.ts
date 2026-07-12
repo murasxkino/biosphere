@@ -1,7 +1,12 @@
 /* ========================================================================== */
 /*  PROCEDURAL SOUND ENGINE — every soundscape is synthesized live            */
-/*  (filtered noise, oscillators, envelopes). Nothing recorded or fetched.    */
-/*  Canonical recipes: docs/AUDIO_ENGINE.md.                                  */
+/*  (filtered noise, oscillators, envelopes). The one sanctioned recorded     */
+/*  voice is the soundtrack layer (music.ts, ADR-8), which plays through      */
+/*  its own bus here. Canonical recipes: docs/AUDIO_ENGINE.md.                */
+/*                                                                            */
+/*  Graph: scenes → sceneBus ─┐                                               */
+/*         music  → musicBus ─┼→ master (volume) → destination                */
+/*  Each layer is gated by its own bus; master carries only the volume.       */
 /* ========================================================================== */
 
 export interface SceneHandle {
@@ -31,7 +36,10 @@ interface GustTarget {
 export class AudioEngine {
   ctx: AudioContext | null;
   master: GainNode | null;
+  sceneBus: GainNode | null;
+  musicBus: GainNode | null;
   enabled: boolean;
+  musicEnabled: boolean;
   volume: number;
   sceneName: string | null;
   current: SceneHandle | null;
@@ -40,7 +48,10 @@ export class AudioEngine {
   constructor() {
     this.ctx = null;
     this.master = null;
+    this.sceneBus = null;
+    this.musicBus = null;
     this.enabled = false;
+    this.musicEnabled = false;
     this.volume = 0.7;
     this.sceneName = null;
     this.current = null;
@@ -57,8 +68,14 @@ export class AudioEngine {
       const AC = window.AudioContext || (window as any).webkitAudioContext;
       this.ctx = new AC();
       this.master = this.ctx!.createGain();
-      this.master.gain.value = this.enabled ? this.volume : 0;
+      this.master.gain.value = this.volume;
       this.master.connect(this.ctx!.destination);
+      this.sceneBus = this.ctx!.createGain();
+      this.sceneBus.gain.value = this.enabled ? 1 : 0;
+      this.sceneBus.connect(this.master);
+      this.musicBus = this.ctx!.createGain();
+      this.musicBus.gain.value = this.musicEnabled ? 1 : 0;
+      this.musicBus.connect(this.master);
     }
     if (this.ctx!.state === "suspended") {
       try {
@@ -110,15 +127,15 @@ export class AudioEngine {
 
   setVolume(v: number) {
     this.volume = v;
-    if (this.ctx && this.enabled) this.master!.gain.setTargetAtTime(v, this.ctx.currentTime, 0.15);
+    if (this.ctx) this.master!.gain.setTargetAtTime(v, this.ctx.currentTime, 0.15);
   }
 
   setEnabled(on: boolean) {
     this.enabled = on;
     if (!this.ensure()) return;
     const t = this.ctx!.currentTime;
-    this.master!.gain.cancelScheduledValues(t);
-    this.master!.gain.setTargetAtTime(on ? this.volume : 0, t, 0.3);
+    this.sceneBus!.gain.cancelScheduledValues(t);
+    this.sceneBus!.gain.setTargetAtTime(on ? 1 : 0, t, 0.3);
     if (on) {
       if (this.sceneName && (!this.current || this.current.name !== this.sceneName)) {
         this._fadeOut(this.current);
@@ -139,6 +156,15 @@ export class AudioEngine {
     this.current = this._build(name);
   }
 
+  // gate the soundtrack bus; track scheduling itself lives in music.ts
+  setMusicEnabled(on: boolean) {
+    this.musicEnabled = on;
+    if (!this.ctx) return; // the flag is applied when the context is born
+    const t = this.ctx.currentTime;
+    this.musicBus!.gain.cancelScheduledValues(t);
+    this.musicBus!.gain.setTargetAtTime(on ? 1 : 0, t, 0.3);
+  }
+
   stop() {
     this.sceneName = null;
     this._fadeOut(this.current);
@@ -146,7 +172,8 @@ export class AudioEngine {
   }
 
   chime() {
-    if (!this.enabled || !this.ensure()) return;
+    // the chime is interface, not nature — it sounds if either layer is open
+    if ((!this.enabled && !this.musicEnabled) || !this.ensure()) return;
     const ctx = this.ctx!;
     const t = ctx.currentTime + 0.02;
     const notes: Array<[number, number]> = [
@@ -197,7 +224,7 @@ export class AudioEngine {
     const ctx = this.ctx!;
     const g = ctx.createGain();
     g.gain.value = 0;
-    g.connect(this.master!);
+    g.connect(this.sceneBus!);
     const scene: SceneHandle = { name: name, gain: g, stops: [], timers: [] };
     const fn = (this as any)["_" + name] as ((scene: SceneHandle) => void) | undefined;
     (fn || this._night).call(this, scene);

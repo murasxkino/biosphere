@@ -24,6 +24,21 @@ export function Ic({ name, size = 20, style }: { name: string; size?: number; st
         <path d="M16 9.5l5 5M21 9.5l-5 5" />
       </g>
     ),
+    music: (
+      <g {...P}>
+        <path d="M9.5 18.3V6.2l9.5-1.9v12.1" />
+        <circle cx="7.1" cy="18.3" r="2.4" />
+        <circle cx="16.6" cy="16.4" r="2.4" />
+      </g>
+    ),
+    musicOff: (
+      <g {...P}>
+        <path d="M9.5 18.3V6.2l9.5-1.9v12.1" />
+        <circle cx="7.1" cy="18.3" r="2.4" />
+        <circle cx="16.6" cy="16.4" r="2.4" />
+        <path d="M4.5 4.5l16 16" />
+      </g>
+    ),
     gear: (
       <g {...P}>
         <circle cx="12" cy="12" r="3.2" />

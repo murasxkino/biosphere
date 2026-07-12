@@ -12,6 +12,7 @@ import { computeSched } from "./domain/schedule";
 import type { Biosphere, Habit, Journal, JournalEntry, ViewState } from "./domain/types";
 import { store } from "./storage/adapter";
 import { AUDIO } from "./audio/engine";
+import { MUSIC } from "./audio/music";
 import { STYLE } from "./ui/style";
 import { Splash } from "./ui/Splash";
 import { ToastBar } from "./ui/ToastBar";
@@ -36,6 +37,7 @@ export default function App() {
   const [nightStart, setNightStart] = useState(DEFAULT_NIGHT_START);
   const [journal, setJournal] = useState<Journal>({});
   const [soundOn, setSoundOn] = useState(false);
+  const [musicOn, setMusicOn] = useState(true);
   const [volume, setVolume] = useState(0.7);
   const [now, setNow] = useState(() => new Date());
   const [toast, setToast] = useState<string | null>(null);
@@ -74,6 +76,7 @@ export default function App() {
         if (cfg && cfg.nightStart) setNightStart(cfg.nightStart);
         if (cfg && typeof cfg.volume === "number") setVolume(cfg.volume);
         if (cfg && cfg.soundPref) setPendingSound(true);
+        if (cfg && cfg.musicPref === false) setMusicOn(false); // absent means on
         if (jr && typeof jr === "object") setJournal(jr);
         loaded.current = true;
         setPhase(cfg && cfg.onboarded ? "app" : "onboard");
@@ -88,10 +91,18 @@ export default function App() {
   useEffect(() => {
     if (!loaded.current || phase !== "app") return;
     const id = setTimeout(() => {
-      store.set(CONFIG_KEY, { onboarded: true, bios, habits, nightStart, volume, soundPref: soundOn });
+      store.set(CONFIG_KEY, {
+        onboarded: true,
+        bios,
+        habits,
+        nightStart,
+        volume,
+        soundPref: soundOn,
+        musicPref: musicOn,
+      });
     }, 700);
     return () => clearTimeout(id);
-  }, [bios, habits, nightStart, volume, soundOn, phase]);
+  }, [bios, habits, nightStart, volume, soundOn, musicOn, phase]);
 
   /* -- the wall clock ------------------------------------------------------ */
   useEffect(() => {
@@ -119,7 +130,23 @@ export default function App() {
     AUDIO.setVolume(volume);
   }, [volume]);
 
-  useEffect(() => () => AUDIO.stop(), []);
+  /* -- the soundtrack lives only inside immersion (FEATURE_SPEC §3.10) ------ */
+  const musicArch = view.name === "immersion" && viewBio ? viewBio.archetype : null;
+  useEffect(() => {
+    AUDIO.setMusicEnabled(musicOn);
+  }, [musicOn]);
+  useEffect(() => {
+    if (musicArch && musicOn) MUSIC.play(musicArch);
+    else MUSIC.stop();
+  }, [musicArch, musicOn]);
+
+  useEffect(
+    () => () => {
+      AUDIO.stop();
+      MUSIC.stop();
+    },
+    []
+  );
 
   /* -- restore saved sound preference on the first touch ------------------- */
   useEffect(() => {
@@ -202,6 +229,15 @@ export default function App() {
     if (nv) AUDIO.play(archRef.current);
   }, [soundOn, say]);
 
+  const toggleMusic = useCallback(() => {
+    if (!AUDIO.supported()) {
+      say("Audio isn't available in this browser");
+      return;
+    }
+    AUDIO.ensure(); // the context is born inside the tap, autoplay-safe
+    setMusicOn((v) => !v);
+  }, [say]);
+
   const sealDay = useCallback(
     (entries: Record<string, JournalEntry>) => {
       const k = dayKey(now);
@@ -232,6 +268,7 @@ export default function App() {
     setJournal({});
     setVolume(0.7);
     setSoundOn(false);
+    setMusicOn(true);
     setPendingSound(false);
     AUDIO.setEnabled(false);
     store.set(CONFIG_KEY, { onboarded: false });
@@ -255,6 +292,9 @@ export default function App() {
           habits={habits.filter((h) => h.biosphereId === viewBio.id)}
           soundOn={soundOn}
           onToggleSound={toggleSound}
+          musicOn={musicOn}
+          onToggleMusic={toggleMusic}
+          musicAvailable={MUSIC.available(viewBio.archetype)}
           onExit={() => setView({ name: "home" })}
         />
       );
@@ -295,6 +335,8 @@ export default function App() {
           setNightStart={setNightStart}
           soundOn={soundOn}
           onToggleSound={toggleSound}
+          musicOn={musicOn}
+          onToggleMusic={toggleMusic}
           volume={volume}
           onVolume={setVolume}
           notify={say}

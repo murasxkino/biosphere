@@ -17,6 +17,9 @@ export function ImmersionView({
   habits,
   soundOn,
   onToggleSound,
+  musicOn,
+  onToggleMusic,
+  musicAvailable,
   onExit,
 }: {
   bio: Biosphere;
@@ -25,6 +28,9 @@ export function ImmersionView({
   habits: Habit[];
   soundOn: boolean;
   onToggleSound: () => void;
+  musicOn: boolean;
+  onToggleMusic: () => void;
+  musicAvailable: boolean;
   onExit: () => void;
 }) {
   const A = ARCH[bio.archetype] || ARCH.night;
@@ -153,17 +159,34 @@ export function ImmersionView({
               {(bio.purpose || A.tagline) + "  ·  " + fmtTime(bio.start) + " – " + fmtTime(end)}
             </div>
           </div>
-          <button
-            className="bsIcon"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleSound();
-            }}
-            title="Ambient sound"
-            aria-label="Toggle sound"
-          >
-            <Ic name={soundOn ? "sound" : "mute"} size={18} />
-          </button>
+          <div style={{ display: "flex", gap: 10, flex: "none" }}>
+            {musicAvailable && (
+              <button
+                className="bsIcon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleMusic();
+                }}
+                title="Soundtrack"
+                aria-label="Toggle soundtrack"
+                aria-pressed={musicOn}
+              >
+                <Ic name={musicOn ? "music" : "musicOff"} size={18} />
+              </button>
+            )}
+            <button
+              className="bsIcon"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleSound();
+              }}
+              title="Ambient sound"
+              aria-label="Toggle sound"
+              aria-pressed={soundOn}
+            >
+              <Ic name={soundOn ? "sound" : "mute"} size={18} />
+            </button>
+          </div>
         </div>
 
         <div

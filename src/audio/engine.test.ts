@@ -132,12 +132,16 @@ describe("capability gating", () => {
 });
 
 describe("master chain and lifecycle", () => {
-  it("lazily creates ctx + master (gain 0 while disabled) wired to destination", () => {
+  it("lazily creates master (volume) + per-layer buses (gated 0 while off) wired to destination", () => {
     engine.ensure();
     const ctx = ctxOf(engine);
-    expect(ctx.created.gain).toHaveLength(1);
-    expect((engine.master as any).gain.value).toBe(0);
+    expect(ctx.created.gain).toHaveLength(3); // master + sceneBus + musicBus
+    expect((engine.master as any).gain.value).toBe(0.7); // master carries only the volume
     expect((engine.master as any).outputs).toContain(ctx.destination);
+    expect((engine.sceneBus as any).gain.value).toBe(0); // each layer gated by its own bus
+    expect((engine.musicBus as any).gain.value).toBe(0);
+    expect((engine.sceneBus as any).outputs).toContain(engine.master);
+    expect((engine.musicBus as any).outputs).toContain(engine.master);
   });
 
   it("play() before enable stores the scene name but builds nothing", () => {
@@ -146,13 +150,32 @@ describe("master chain and lifecycle", () => {
     expect(engine.current).toBeNull();
   });
 
-  it("setEnabled(true) glides master toward volume and builds the pending scene", () => {
+  it("setEnabled(true) glides the scene bus open and builds the pending scene", () => {
     engine.play("forest");
     engine.setEnabled(true);
-    const master: any = engine.master;
-    const glide = master.gain.calls.find((c: any) => c.fn === "setTargetAtTime");
-    expect(glide.args[0]).toBe(0.7);
+    const bus: any = engine.sceneBus;
+    const glide = bus.gain.calls.find((c: any) => c.fn === "setTargetAtTime");
+    expect(glide.args[0]).toBe(1);
     expect(engine.current!.name).toBe("forest");
+  });
+
+  it("setMusicEnabled gates only the music bus; scenes are untouched", () => {
+    engine.ensure();
+    engine.setMusicEnabled(true);
+    const bus: any = engine.musicBus;
+    const glide = bus.gain.calls.find((c: any) => c.fn === "setTargetAtTime");
+    expect(glide.args[0]).toBe(1);
+    expect(engine.current).toBeNull();
+    engine.setMusicEnabled(false);
+    const last = bus.gain.calls.filter((c: any) => c.fn === "setTargetAtTime").pop();
+    expect(last.args[0]).toBe(0);
+  });
+
+  it("setMusicEnabled before any context only records the flag, applied at birth", () => {
+    engine.setMusicEnabled(true);
+    expect(engine.ctx).toBeNull();
+    engine.ensure();
+    expect((engine.musicBus as any).gain.value).toBe(1);
   });
 
   it("crossfades on scene change: old gain fades to 0, its timers clear, new scene builds", () => {
@@ -196,7 +219,7 @@ describe("master chain and lifecycle", () => {
   });
 });
 
-describe("chime — the one intentionally musical voice", () => {
+describe("chime — the app's one interface voice", () => {
   it("builds two enveloped sine oscillators into the master", () => {
     engine.setEnabled(true);
     const ctx = ctxOf(engine);
@@ -207,6 +230,17 @@ describe("chime — the one intentionally musical voice", () => {
     expect((oscs[0] as any).frequency.value).toBeCloseTo(659.25); // E5
     expect((oscs[1] as any).frequency.value).toBe(880); // A5
     oscs.forEach((o: any) => expect(o.start).toHaveBeenCalled());
+  });
+
+  it("sounds if either layer is open, and stays silent when both are closed", () => {
+    engine.setMusicEnabled(true); // music only — the chime still speaks
+    engine.ensure();
+    const ctx = ctxOf(engine);
+    engine.chime();
+    expect((ctx.created.osc || []).length).toBe(2);
+    engine.setMusicEnabled(false);
+    engine.chime(); // both layers closed — silence
+    expect((ctx.created.osc || []).length).toBe(2);
   });
 });
 

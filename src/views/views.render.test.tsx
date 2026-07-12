@@ -98,16 +98,23 @@ describe("HomeView", () => {
 });
 
 describe("ImmersionView", () => {
+  const base = {
+    end: "11:30",
+    isNow: true,
+    soundOn: false,
+    onToggleSound: noop,
+    musicOn: true,
+    onToggleMusic: noop,
+    musicAvailable: true,
+    onExit: noop,
+  };
+
   it("renders the biosphere, its habits, and timer affordances", () => {
     render(
       <ImmersionView
+        {...base}
         bio={bios[0]}
-        end="11:30"
-        isNow={true}
         habits={habits.filter((h) => h.biosphereId === "b_tundra")}
-        soundOn={false}
-        onToggleSound={noop}
-        onExit={noop}
       />
     );
     expect(screen.getByText("Tundra")).toBeTruthy();
@@ -117,19 +124,29 @@ describe("ImmersionView", () => {
   });
 
   it("offers open-window copy when the biosphere has no habits", () => {
-    render(
-      <ImmersionView
-        bio={bios[3]}
-        end="19:00"
-        isNow={false}
-        habits={[]}
-        soundOn={false}
-        onToggleSound={noop}
-        onExit={noop}
-      />
-    );
+    render(<ImmersionView {...base} bio={bios[3]} end="19:00" isNow={false} habits={[]} />);
     expect(screen.getByText(/This biosphere is open/)).toBeTruthy();
     expect(screen.getByText("A QUIET WINDOW")).toBeTruthy();
+  });
+
+  it("offers the soundtrack toggle only in scored worlds, and it fires", () => {
+    const onToggleMusic = vi.fn();
+    const { rerender } = render(
+      <ImmersionView {...base} bio={bios[0]} habits={[]} onToggleMusic={onToggleMusic} />
+    );
+    fireEvent.click(screen.getByLabelText("Toggle soundtrack"));
+    expect(onToggleMusic).toHaveBeenCalledTimes(1);
+    rerender(
+      <ImmersionView
+        {...base}
+        bio={bios[0]}
+        habits={[]}
+        onToggleMusic={onToggleMusic}
+        musicAvailable={false}
+      />
+    );
+    expect(screen.queryByLabelText("Toggle soundtrack")).toBeNull(); // unscored — no dead control
+    expect(screen.getByLabelText("Toggle sound")).toBeTruthy(); // ambience is always offered
   });
 });
 
@@ -247,6 +264,8 @@ describe("SettingsView", () => {
     setNightStart: vi.fn(),
     soundOn: false,
     onToggleSound: noop,
+    musicOn: true,
+    onToggleMusic: vi.fn(),
     volume: 0.7,
     onVolume: vi.fn(),
     notify: vi.fn(),
@@ -258,9 +277,17 @@ describe("SettingsView", () => {
   it("renders every section", () => {
     render(<SettingsView {...props} />);
     expect(screen.getByText("Ambient sound")).toBeTruthy();
+    expect(screen.getByText("Soundtrack")).toBeTruthy();
     expect(screen.getByText("Add Biosphere")).toBeTruthy();
     expect(screen.getByText("Add Habit")).toBeTruthy();
     expect(screen.getByText("Reset everything")).toBeTruthy();
+  });
+
+  it("the soundtrack switch fires its own toggle", () => {
+    const onToggleMusic = vi.fn();
+    render(<SettingsView {...props} onToggleMusic={onToggleMusic} />);
+    fireEvent.click(screen.getByLabelText("Toggle soundtrack"));
+    expect(onToggleMusic).toHaveBeenCalledTimes(1);
   });
 
   it("warns inline when Grey Night overlaps a biosphere start", () => {
