@@ -75,10 +75,10 @@ class MockCtx {
   }
 }
 
-const TRACKS: Record<string, string | null> = {
-  tundra: "/music/tundra.wav?v=1",
-  forest: "/music/forest.wav?v=1",
-  seaside: "/music/seaside.wav?v=1",
+const TRACKS: Record<string, { url: string; level: number } | null> = {
+  tundra: { url: "/music/tundra.wav?v=1", level: 0.4 },
+  forest: { url: "/music/forest.wav?v=1", level: 0.55 },
+  seaside: { url: "/music/seaside.wav?v=1", level: 0.4 },
   volcanic: null,
 };
 
@@ -134,7 +134,15 @@ describe("playback", () => {
     const glide = (player.current!.gain as any).gain.calls.find(
       (c: any) => c.fn === "setTargetAtTime"
     );
-    expect(glide.args[0]).toBe(1); // the world-entry fade
+    expect(glide.args[0]).toBe(0.4); // the world-entry fade lands on the manifest trim
+  });
+
+  it("each world's piece enters at its own by-ear level", async () => {
+    await player.play("forest");
+    const glide = (player.current!.gain as any).gain.calls.find(
+      (c: any) => c.fn === "setTargetAtTime"
+    );
+    expect(glide.args[0]).toBe(0.55);
   });
 
   it("replaying the same archetype is a no-op", async () => {

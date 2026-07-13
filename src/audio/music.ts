@@ -8,6 +8,7 @@
 
 import { AUDIO, AudioEngine } from "./engine";
 import { MUSIC_TRACKS } from "./tracks";
+import type { Track } from "./tracks";
 
 const SEAM_MAX_S = 3; // seconds of tail/head overlap hiding the loop seam
 const CACHE_MAX = 2; // decoded tracks held in memory (current + previous)
@@ -35,12 +36,12 @@ const inArtifact = () =>
 
 export class MusicPlayer {
   engine: AudioEngine;
-  tracks: Record<string, string | null>;
+  tracks: Record<string, Track | null>;
   cache: Map<string, AudioBuffer>;
   current: TrackHandle | null;
   seq: number;
 
-  constructor(engine: AudioEngine, tracks: Record<string, string | null> = MUSIC_TRACKS) {
+  constructor(engine: AudioEngine, tracks: Record<string, Track | null> = MUSIC_TRACKS) {
     this.engine = engine;
     this.tracks = tracks;
     this.cache = new Map();
@@ -58,6 +59,7 @@ export class MusicPlayer {
       return;
     }
     if (this.current && this.current.arch === arch) return;
+    const entry = this.tracks[arch]!;
     const token = ++this.seq;
     if (!this.engine.ensure()) return;
     let buf = this.cache.get(arch);
@@ -66,7 +68,7 @@ export class MusicPlayer {
       this.cache.set(arch, buf);
     } else {
       try {
-        const res = await fetch(this.tracks[arch]!);
+        const res = await fetch(entry.url);
         if (!res.ok) return;
         const bytes = await res.arrayBuffer();
         buf = await this.engine.ctx!.decodeAudioData(bytes);
@@ -82,7 +84,7 @@ export class MusicPlayer {
     }
     if (token !== this.seq) return;
     this._fadeOut(this.current);
-    this.current = this._start(arch, buf);
+    this.current = this._start(arch, buf, entry.level);
   }
 
   stop() {
@@ -97,12 +99,12 @@ export class MusicPlayer {
   // previous fades out. One future pass is always pre-scheduled, and the
   // chain advances on the audio clock itself (a finished source's onended),
   // so background-tab timer throttling can never misalign a join.
-  _start(arch: string, buf: AudioBuffer): TrackHandle {
+  _start(arch: string, buf: AudioBuffer, level: number): TrackHandle {
     const ctx = this.engine.ctx!;
     const gain = ctx.createGain();
     gain.gain.value = 0;
     gain.connect(this.engine.musicBus!);
-    gain.gain.setTargetAtTime(1, ctx.currentTime + 0.05, 0.9); // world-entry fade, like scenes
+    gain.gain.setTargetAtTime(level, ctx.currentTime + 0.05, 0.9); // world-entry fade to the by-ear trim
     const handle: TrackHandle = { arch: arch, gain: gain, sources: [] };
     const seam = Math.min(SEAM_MAX_S, Math.max(0.5, buf.duration / 8));
     const cycle = Math.max(1, buf.duration - seam);

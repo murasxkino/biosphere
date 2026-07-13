@@ -46,7 +46,7 @@ Loudness discipline: beds sum ≤ ~0.45; events ≤ 0.05 except waves and knocks
 - **Independence**: `musicPref` persists beside `soundPref` (absent = on); either layer plays without the other; master volume governs both.
 - **Failure is silent**: a missing or unfetchable track leaves the world unscored (retry by toggling); no toast, no console noise — the storage-fallback precedent.
 
-**Swapping a track** (the owner's knob): drop the new file in `public/music/`, point the archetype's entry in `src/audio/tracks.ts` at it, and bump the `?v=` query so cached listeners hear the new piece. `null` = unscored (no toggle shown). Prefer lossless WAV/FLAC, loop-authored, 1–5 min; per-scene level trims are by-ear M4 work.
+**Swapping a track** (the owner's knob): drop the new file in `public/music/`, point the archetype's entry in `src/audio/tracks.ts` at it, and bump the `?v=` query so cached listeners hear the new piece. `null` = unscored (no toggle shown). Prefer lossless WAV/FLAC, loop-authored, 1–5 min. Each entry's **`level`** is the piece's by-ear trim against the scene's beds — the M4 tuning knob (first-pass 0.4 everywhere until the listening session says otherwise).
 
 ## Known state & tuning
 

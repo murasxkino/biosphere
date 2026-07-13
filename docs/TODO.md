@@ -19,8 +19,8 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 ## Milestone M4 — QA, tuning & the soundtrack layer (post-migration)
 
 - [x] **Soundtrack layer** (owner-approved 2026-07-12; FEATURE_SPEC §3.10, ADR-8): engine buses, MusicPlayer with audio-clock seam crossfade, manifest, immersion + Settings toggles, `musicPref`, artifact absence, 18 new tests. Tundra & forest tracks landed.
-- [ ] Owner: deliver volcanic, seaside, mountain tracks into `music-handoff/` — wiring each is a file drop + one manifest line (AUDIO_ENGINE § The soundtrack layer).
-- [ ] By-ear tuning session per scene — soundscape levels/gusts/event rates **and** soundtrack level trims vs the beds (a per-scene music gain does not exist yet; add during the session if wanted).
+- [x] Owner: deliver volcanic, seaside, mountain tracks — landed 2026-07-12; all five worlds scored. Manifest gained the per-track `level` trim (first-pass 0.4 everywhere).
+- [ ] By-ear tuning session per scene — soundscape levels/gusts/event rates **and** soundtrack `level` trims vs the beds (the knob lives in `src/audio/tracks.ts`).
 - [ ] Passage feel check in-browser (countdown pacing, veil timing, cancel paths) — now incl. the music crossfade through the portal.
 - [ ] Device profiling of the scene loop; adjust particle ceilings if needed.
 - [ ] Full manual matrix (ENGINEERING_GUIDE) incl. reduced-motion, storage-absent, no-WebAudio — plus scored/unscored worlds and music-only mode.
