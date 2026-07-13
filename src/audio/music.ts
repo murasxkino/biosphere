@@ -31,8 +31,7 @@ for (let i = 0; i < CURVE_N; i++) {
 
 // the artifact sandbox cannot serve files, so the soundtrack quietly does not
 // exist there — detected by the same signal storage/adapter.ts prefers
-const inArtifact = () =>
-  typeof window !== "undefined" && typeof (window as any).storage !== "undefined";
+const inArtifact = () => typeof window !== "undefined" && typeof (window as any).storage !== "undefined";
 
 export class MusicPlayer {
   engine: AudioEngine;

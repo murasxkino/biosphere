@@ -22,7 +22,7 @@ Canonical behavior. Where code and this document disagree, one of them is wrong 
 
 **Journal** — `{ [dayKey]: { sealedAt: epochMs, entries: { [habitId]: { name, biosphere, done: boolean, note: string } } } }`. Entries are **snapshots**: they keep the habit's name and biosphere name as they were on that day, so later edits never rewrite history.
 
-**Persistence keys** — `biosphere-config-v1` = `{ onboarded, bios, habits, nightStart, volume, soundPref, musicPref }`; `biosphere-journal-v1` = journal map. Values are JSON strings in `window.storage`. `musicPref` is additive (absent reads as on).
+**Persistence keys** — `biosphere-config-v1` = `{ onboarded, bios, habits, nightStart, volume, soundLevel, musicLevel, soundPref, musicPref }`; `biosphere-journal-v1` = journal map. Values are JSON strings in `window.storage`. `musicPref` is additive (absent reads as on); `soundLevel`/`musicLevel` are additive (absent reads as 1).
 
 ## 2. Time model
 
@@ -86,6 +86,8 @@ When the clock moves the day forward while the user is immersed in the biosphere
 Each archetype may carry one recorded musical piece (the manifest in `src/audio/tracks.ts`; ADR-8). The soundtrack plays **only inside immersion**: entering a scored world fades its piece in, leaving fades it out, and a passage crossing crossfades the old piece into the new world's (or into silence if the next world is unscored). The piece loops seamlessly — passes are joined by an equal-power crossfade at the seam, scheduled on the audio clock so background-tab throttling cannot misalign a join.
 
 Ambience and soundtrack are **independent layers**: each has its own toggle (immersion header + Settings switch) and persisted preference; the master volume governs both; the chime sounds when either layer is open. The soundtrack preference is global, defaults to on, and worlds without a track show no music toggle at all. In artifact builds the layer is absent entirely. A failed track load is silent — the world simply stays unscored (retry by toggling).
+
+**Layer level sliders** — hovering (or keyboard-focusing into) either immersion toggle reveals a vertical slider beneath it in a small glass panel: the layer's listening level (0–1, step 0.05, default 1), persisted globally (`soundLevel`/`musicLevel`). The toggle stays the hard gate; the slider sets where "open" sits, gliding live (τ 0.15 s). The panels live inside the dissolving chrome and are invisible until sought. On touch devices hover does not exist, so the sliders stay tucked away — Settings' master volume remains the touch-side level control.
 
 ## 4. System behaviors
 

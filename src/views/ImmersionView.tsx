@@ -17,8 +17,12 @@ export function ImmersionView({
   habits,
   soundOn,
   onToggleSound,
+  soundLevel,
+  onSoundLevel,
   musicOn,
   onToggleMusic,
+  musicLevel,
+  onMusicLevel,
   musicAvailable,
   onExit,
 }: {
@@ -28,8 +32,12 @@ export function ImmersionView({
   habits: Habit[];
   soundOn: boolean;
   onToggleSound: () => void;
+  soundLevel: number;
+  onSoundLevel: (v: number) => void;
   musicOn: boolean;
   onToggleMusic: () => void;
+  musicLevel: number;
+  onMusicLevel: (v: number) => void;
   musicAvailable: boolean;
   onExit: () => void;
 }) {
@@ -161,31 +169,63 @@ export function ImmersionView({
           </div>
           <div style={{ display: "flex", gap: 10, flex: "none" }}>
             {musicAvailable && (
+              <div className="bsLayer">
+                <button
+                  className="bsIcon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleMusic();
+                  }}
+                  title="Soundtrack"
+                  aria-label="Toggle soundtrack"
+                  aria-pressed={musicOn}
+                >
+                  <Ic name={musicOn ? "music" : "musicOff"} size={18} />
+                </button>
+                <div className="bsLayerSlider">
+                  <input
+                    type="range"
+                    className="bsRange"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={musicLevel}
+                    onChange={(e) => onMusicLevel(parseFloat(e.target.value))}
+                    onClick={(e) => e.stopPropagation()}
+                    aria-label="Soundtrack level"
+                    aria-orientation="vertical"
+                  />
+                </div>
+              </div>
+            )}
+            <div className="bsLayer">
               <button
                 className="bsIcon"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onToggleMusic();
+                  onToggleSound();
                 }}
-                title="Soundtrack"
-                aria-label="Toggle soundtrack"
-                aria-pressed={musicOn}
+                title="Ambient sound"
+                aria-label="Toggle sound"
+                aria-pressed={soundOn}
               >
-                <Ic name={musicOn ? "music" : "musicOff"} size={18} />
+                <Ic name={soundOn ? "sound" : "mute"} size={18} />
               </button>
-            )}
-            <button
-              className="bsIcon"
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleSound();
-              }}
-              title="Ambient sound"
-              aria-label="Toggle sound"
-              aria-pressed={soundOn}
-            >
-              <Ic name={soundOn ? "sound" : "mute"} size={18} />
-            </button>
+              <div className="bsLayerSlider">
+                <input
+                  type="range"
+                  className="bsRange"
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  value={soundLevel}
+                  onChange={(e) => onSoundLevel(parseFloat(e.target.value))}
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label="Ambient sound level"
+                  aria-orientation="vertical"
+                />
+              </div>
+            </div>
           </div>
         </div>
 

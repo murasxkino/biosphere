@@ -178,6 +178,35 @@ describe("master chain and lifecycle", () => {
     expect((engine.musicBus as any).gain.value).toBe(1);
   });
 
+  it("layer levels: the gates open to the set level, not to 1", () => {
+    engine.setSceneLevel(0.6);
+    engine.setMusicLevel(0.3);
+    engine.setEnabled(true);
+    engine.setMusicEnabled(true);
+    const sceneGlide = (engine.sceneBus as any).gain.calls
+      .filter((c: any) => c.fn === "setTargetAtTime")
+      .pop();
+    const musicGlide = (engine.musicBus as any).gain.calls
+      .filter((c: any) => c.fn === "setTargetAtTime")
+      .pop();
+    expect(sceneGlide.args[0]).toBe(0.6);
+    expect(musicGlide.args[0]).toBe(0.3);
+  });
+
+  it("re-leveling an open layer glides it live; a closed layer only remembers", () => {
+    engine.setEnabled(true);
+    engine.setSceneLevel(0.4);
+    const live = (engine.sceneBus as any).gain.calls.filter((c: any) => c.fn === "setTargetAtTime").pop();
+    expect(live.args[0]).toBe(0.4);
+    const before = (engine.musicBus as any).gain.calls.length;
+    engine.setMusicLevel(0.2); // music layer is closed — no glide, just the field
+    expect((engine.musicBus as any).gain.calls.length).toBe(before);
+    expect(engine.musicLevel).toBe(0.2);
+    engine.setMusicEnabled(true); // opening it lands on the remembered level
+    const open = (engine.musicBus as any).gain.calls.filter((c: any) => c.fn === "setTargetAtTime").pop();
+    expect(open.args[0]).toBe(0.2);
+  });
+
   it("crossfades on scene change: old gain fades to 0, its timers clear, new scene builds", () => {
     engine.setEnabled(true);
     engine.play("tundra");

@@ -39,6 +39,8 @@ export default function App() {
   const [soundOn, setSoundOn] = useState(false);
   const [musicOn, setMusicOn] = useState(true);
   const [volume, setVolume] = useState(0.7);
+  const [soundLevel, setSoundLevel] = useState(1);
+  const [musicLevel, setMusicLevel] = useState(1);
   const [now, setNow] = useState(() => new Date());
   const [toast, setToast] = useState<string | null>(null);
   const [pendingSound, setPendingSound] = useState(false);
@@ -75,6 +77,8 @@ export default function App() {
         if (cfg && Array.isArray(cfg.habits)) setHabits(cfg.habits);
         if (cfg && cfg.nightStart) setNightStart(cfg.nightStart);
         if (cfg && typeof cfg.volume === "number") setVolume(cfg.volume);
+        if (cfg && typeof cfg.soundLevel === "number") setSoundLevel(cfg.soundLevel);
+        if (cfg && typeof cfg.musicLevel === "number") setMusicLevel(cfg.musicLevel);
         if (cfg && cfg.soundPref) setPendingSound(true);
         if (cfg && cfg.musicPref === false) setMusicOn(false); // absent means on
         if (jr && typeof jr === "object") setJournal(jr);
@@ -97,12 +101,14 @@ export default function App() {
         habits,
         nightStart,
         volume,
+        soundLevel,
+        musicLevel,
         soundPref: soundOn,
         musicPref: musicOn,
       });
     }, 700);
     return () => clearTimeout(id);
-  }, [bios, habits, nightStart, volume, soundOn, musicOn, phase]);
+  }, [bios, habits, nightStart, volume, soundLevel, musicLevel, soundOn, musicOn, phase]);
 
   /* -- the wall clock ------------------------------------------------------ */
   useEffect(() => {
@@ -129,6 +135,14 @@ export default function App() {
   useEffect(() => {
     AUDIO.setVolume(volume);
   }, [volume]);
+
+  useEffect(() => {
+    AUDIO.setSceneLevel(soundLevel);
+  }, [soundLevel]);
+
+  useEffect(() => {
+    AUDIO.setMusicLevel(musicLevel);
+  }, [musicLevel]);
 
   /* -- the soundtrack lives only inside immersion (FEATURE_SPEC §3.10) ------ */
   const musicArch = view.name === "immersion" && viewBio ? viewBio.archetype : null;
@@ -267,6 +281,8 @@ export default function App() {
     setNightStart(DEFAULT_NIGHT_START);
     setJournal({});
     setVolume(0.7);
+    setSoundLevel(1);
+    setMusicLevel(1);
     setSoundOn(false);
     setMusicOn(true);
     setPendingSound(false);
@@ -292,8 +308,12 @@ export default function App() {
           habits={habits.filter((h) => h.biosphereId === viewBio.id)}
           soundOn={soundOn}
           onToggleSound={toggleSound}
+          soundLevel={soundLevel}
+          onSoundLevel={setSoundLevel}
           musicOn={musicOn}
           onToggleMusic={toggleMusic}
+          musicLevel={musicLevel}
+          onMusicLevel={setMusicLevel}
           musicAvailable={MUSIC.available(viewBio.archetype)}
           onExit={() => setView({ name: "home" })}
         />

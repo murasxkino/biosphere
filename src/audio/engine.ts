@@ -41,6 +41,8 @@ export class AudioEngine {
   enabled: boolean;
   musicEnabled: boolean;
   volume: number;
+  sceneLevel: number;
+  musicLevel: number;
   sceneName: string | null;
   current: SceneHandle | null;
   buffers: Record<string, AudioBuffer>;
@@ -53,6 +55,8 @@ export class AudioEngine {
     this.enabled = false;
     this.musicEnabled = false;
     this.volume = 0.7;
+    this.sceneLevel = 1;
+    this.musicLevel = 1;
     this.sceneName = null;
     this.current = null;
     this.buffers = {};
@@ -71,10 +75,10 @@ export class AudioEngine {
       this.master.gain.value = this.volume;
       this.master.connect(this.ctx!.destination);
       this.sceneBus = this.ctx!.createGain();
-      this.sceneBus.gain.value = this.enabled ? 1 : 0;
+      this.sceneBus.gain.value = this.enabled ? this.sceneLevel : 0;
       this.sceneBus.connect(this.master);
       this.musicBus = this.ctx!.createGain();
-      this.musicBus.gain.value = this.musicEnabled ? 1 : 0;
+      this.musicBus.gain.value = this.musicEnabled ? this.musicLevel : 0;
       this.musicBus.connect(this.master);
     }
     if (this.ctx!.state === "suspended") {
@@ -135,7 +139,7 @@ export class AudioEngine {
     if (!this.ensure()) return;
     const t = this.ctx!.currentTime;
     this.sceneBus!.gain.cancelScheduledValues(t);
-    this.sceneBus!.gain.setTargetAtTime(on ? 1 : 0, t, 0.3);
+    this.sceneBus!.gain.setTargetAtTime(on ? this.sceneLevel : 0, t, 0.3);
     if (on) {
       if (this.sceneName && (!this.current || this.current.name !== this.sceneName)) {
         this._fadeOut(this.current);
@@ -162,7 +166,19 @@ export class AudioEngine {
     if (!this.ctx) return; // the flag is applied when the context is born
     const t = this.ctx.currentTime;
     this.musicBus!.gain.cancelScheduledValues(t);
-    this.musicBus!.gain.setTargetAtTime(on ? 1 : 0, t, 0.3);
+    this.musicBus!.gain.setTargetAtTime(on ? this.musicLevel : 0, t, 0.3);
+  }
+
+  // per-layer listening levels (the hover sliders) — the toggles gate,
+  // these set where "open" sits; both persist like the master volume
+  setSceneLevel(v: number) {
+    this.sceneLevel = v;
+    if (this.ctx && this.enabled) this.sceneBus!.gain.setTargetAtTime(v, this.ctx.currentTime, 0.15);
+  }
+
+  setMusicLevel(v: number) {
+    this.musicLevel = v;
+    if (this.ctx && this.musicEnabled) this.musicBus!.gain.setTargetAtTime(v, this.ctx.currentTime, 0.15);
   }
 
   stop() {

@@ -76,6 +76,19 @@ textarea.bsInput { resize: vertical; min-height: 88px; line-height: 1.55; width:
   width: 16px; height: 16px; border-radius: 50%;
   background: #e8eef5; border: none; cursor: pointer;
 }
+.bsLayer { position: relative; display: inline-flex; }
+.bsLayerSlider {
+  position: absolute; top: 46px; left: 50%; transform: translateX(-50%);
+  width: 40px; height: 112px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10,14,20,0.55); border: 1px solid rgba(255,255,255,0.13);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.bsLayer:hover .bsLayerSlider, .bsLayer:focus-within .bsLayerSlider {
+  opacity: 1; pointer-events: auto;
+}
+.bsLayerSlider .bsRange { width: 86px; transform: rotate(-90deg); flex: none; }
 @keyframes bsFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes bsRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes bsEnter { from { opacity: 0; transform: scale(1.045); } to { opacity: 1; transform: scale(1); } }

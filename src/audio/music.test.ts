@@ -131,17 +131,13 @@ describe("playback", () => {
     expect(srcGain.kind).toBe("gain");
     expect(srcGain.outputs).toContain(player.current!.gain);
     expect((player.current!.gain as any).outputs).toContain(engine.musicBus);
-    const glide = (player.current!.gain as any).gain.calls.find(
-      (c: any) => c.fn === "setTargetAtTime"
-    );
+    const glide = (player.current!.gain as any).gain.calls.find((c: any) => c.fn === "setTargetAtTime");
     expect(glide.args[0]).toBe(0.4); // the world-entry fade lands on the manifest trim
   });
 
   it("each world's piece enters at its own by-ear level", async () => {
     await player.play("forest");
-    const glide = (player.current!.gain as any).gain.calls.find(
-      (c: any) => c.fn === "setTargetAtTime"
-    );
+    const glide = (player.current!.gain as any).gain.calls.find((c: any) => c.fn === "setTargetAtTime");
     expect(glide.args[0]).toBe(0.55);
   });
 

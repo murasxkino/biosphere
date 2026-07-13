@@ -103,19 +103,19 @@ describe("ImmersionView", () => {
     isNow: true,
     soundOn: false,
     onToggleSound: noop,
+    soundLevel: 1,
+    onSoundLevel: noop,
     musicOn: true,
     onToggleMusic: noop,
+    musicLevel: 1,
+    onMusicLevel: noop,
     musicAvailable: true,
     onExit: noop,
   };
 
   it("renders the biosphere, its habits, and timer affordances", () => {
     render(
-      <ImmersionView
-        {...base}
-        bio={bios[0]}
-        habits={habits.filter((h) => h.biosphereId === "b_tundra")}
-      />
+      <ImmersionView {...base} bio={bios[0]} habits={habits.filter((h) => h.biosphereId === "b_tundra")} />
     );
     expect(screen.getByText("Tundra")).toBeTruthy();
     expect(screen.getByText("One deep work block")).toBeTruthy();
@@ -147,6 +147,26 @@ describe("ImmersionView", () => {
     );
     expect(screen.queryByLabelText("Toggle soundtrack")).toBeNull(); // unscored — no dead control
     expect(screen.getByLabelText("Toggle sound")).toBeTruthy(); // ambience is always offered
+  });
+
+  it("each layer carries its hover slider, and sliding reports the new level", () => {
+    const onSoundLevel = vi.fn();
+    const onMusicLevel = vi.fn();
+    const { rerender } = render(
+      <ImmersionView
+        {...base}
+        bio={bios[0]}
+        habits={[]}
+        onSoundLevel={onSoundLevel}
+        onMusicLevel={onMusicLevel}
+      />
+    );
+    fireEvent.change(screen.getByLabelText("Ambient sound level"), { target: { value: "0.5" } });
+    expect(onSoundLevel).toHaveBeenCalledWith(0.5);
+    fireEvent.change(screen.getByLabelText("Soundtrack level"), { target: { value: "0.3" } });
+    expect(onMusicLevel).toHaveBeenCalledWith(0.3);
+    rerender(<ImmersionView {...base} bio={bios[0]} habits={[]} musicAvailable={false} />);
+    expect(screen.queryByLabelText("Soundtrack level")).toBeNull(); // slider travels with its toggle
   });
 });
 
