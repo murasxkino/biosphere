@@ -486,7 +486,7 @@ export class AudioEngine {
     n2.connect(f2);
     f2.connect(g2);
     g2.connect(this._panTo(scene, 0.3));
-    this._walk(scene, g2.gain, 0.006, 0.004, 1.5, 4, 1.2);
+    this._walk(scene, g2.gain, 0.004, 0.0025, 1.5, 4, 1.2); // trimmed by ear (M4): steam sat too hot
     // deep resonant knocks from below — rock, not tone
     this._every(scene, 9, 21, () => {
       const t = ctx.currentTime + 0.03;
@@ -513,7 +513,7 @@ export class AudioEngine {
           self._grain(out, t, "white", {
             hp: 2600 + Math.random() * 2600,
             dur: 0.01 + Math.random() * 0.035,
-            peak: 0.006 + Math.random() * 0.014,
+            peak: 0.004 + Math.random() * 0.009, // trimmed by ear (M4) with the steam
           });
       }
     });
