@@ -83,10 +83,14 @@ textarea.bsInput { resize: vertical; min-height: 88px; line-height: 1.55; width:
   display: flex; align-items: center; justify-content: center;
   background: rgba(10,14,20,0.55); border: 1px solid rgba(255,255,255,0.13);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  opacity: 0; pointer-events: none; transition: opacity .3s ease;
+  opacity: 0; pointer-events: none; transition: opacity .25s ease .18s;
 }
-.bsLayer:hover .bsLayerSlider, .bsLayer:focus-within .bsLayerSlider {
-  opacity: 1; pointer-events: auto;
+/* invisible bridge over the 6px gap so the cursor never leaves hover mid-travel */
+.bsLayerSlider::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; }
+.bsLayer:hover .bsLayerSlider,
+.bsLayer:active .bsLayerSlider,
+.bsLayer:has(:focus-visible) .bsLayerSlider {
+  opacity: 1; pointer-events: auto; transition-delay: 0s;
 }
 .bsLayerSlider .bsRange { width: 86px; transform: rotate(-90deg); flex: none; }
 @keyframes bsFade { from { opacity: 0; } to { opacity: 1; } }
