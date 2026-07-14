@@ -52,7 +52,16 @@ Loudness discipline: beds sum ≤ ~0.45; events ≤ 0.05 except waves and knocks
 
 ## Known state & tuning
 
-All parameters above are first-pass values chosen analytically. Final tuning is **by ear** — level trims, event-rate feel, gust character — and is scheduled for Milestone M4 in the repository, where a live reload loop makes listening-driven iteration practical.
+**The M4 by-ear session happened 2026-07-12/13, owner listening live.** Outcomes, now the canonical values in `engine.ts`:
+
+- **Tundra, Mountain, Grey Night** — approved exactly as first-passed; no changes.
+- **Volcanic** — the sizzle sat too hot: steam-vent walk base 0.006→0.004 (spread →0.0025); highpassed crackle grains →0.004–0.013 peaks. Knocks and low pops untouched.
+- **Forest** — the birds sang too shyly: near phrases →0.028–0.046 peaks, the distant singer →0.01.
+- **Seaside** — resolved with no recipe change: the owner set their global layer blend via the immersion sliders instead (their session baseline: ambience 0.45, music 1.0 — a datapoint for any future default-blend decision, still open).
+- **Soundtrack trims** — all five pieces remain at manifest `level` 0.4 under the owner's slider blend.
+- **The passage** — reworked mid-session to lead with the ear (dusk τ 3.5 s from the chime, bloom τ 2.5 s in, swell-back τ 0.8 s); approved on the second staged crossing.
+
+Still open by ear: the *Remain here* swell-back has not been heard live (staged crossings auto-completed) — spot-check it during the manual matrix.
 
 ## ADR: raw Web Audio over Tone.js (upheld)
 

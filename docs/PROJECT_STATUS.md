@@ -1,6 +1,6 @@
 # PROJECT STATUS
 
-**Updated:** 2026-07-12 · **Version:** 0.3.0 (tagged `v0.3.0`) · **Current milestone:** M4 — soundtrack layer shipped (2026-07-12, owner-approved); by-ear tuning session and QA matrix remain.
+**Updated:** 2026-07-13 · **Version:** 0.3.0 (tagged `v0.3.0`) · **Current milestone:** M4 — soundtrack layer, level sliders, and the by-ear tuning session are done (owner live, all six worlds + passage); device profiling and the manual matrix remain.
 
 ## Code state (verified this session)
 
@@ -23,11 +23,11 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 
 ## Remaining work
 
-**M4 (QA & tuning)** per TODO.md — the live by-ear session (soundscape levels **and** soundtrack `level` trims; all five worlds are scored as of 2026-07-12), passage feel check, device profiling, full manual matrix.
+**M4 (QA & tuning)** per TODO.md — device profiling of the scene loop; the full manual matrix (now incl. scored/unscored worlds, music-only mode, and the *Remain here* swell-back, which was never heard live); owner playthrough findings. One open product decision: the default out-of-box layer blend (the owner's session baseline was ambience 0.45 / music 1.0 — current defaults are 1.0/1.0).
 
 ## Known issues & notes
 
-- Audio parameters remain first-pass analytical values; M4 tunes by ear. The soundtrack layer (shipped 2026-07-12: FEATURE_SPEC §3.10, ADR-8, AUDIO_ENGINE § The soundtrack layer) now scores all five worlds, each at a first-pass `level` trim of 0.4 (`src/audio/tracks.ts`); Grey Night is unscored by design. Verification: 92/92 tests, both builds, artifact SSR smoke, live browser pass (fetch/graph/toggles/persistence/independence) — zero console errors.
+- **Audio is tuned by ear as of 2026-07-13** (owner live; outcomes canonical in AUDIO_ENGINE § Known state & tuning): tundra/mountain/night approved as first-passed, volcanic sizzle trimmed, forest birds lifted, seaside settled via the owner's slider blend, and the passage reworked to dusk-and-bloom (approved on re-listen). The soundtrack layer (FEATURE_SPEC §3.10, ADR-8) scores all five worlds at manifest `level` 0.4; Grey Night is unscored by design. Suite: 100/100 tests, both builds, artifact SSR smoke — zero console errors throughout the session.
 - Prettier's first full pass landed at M4 entry (2026-07-12); verification floor re-run green after it. `.prettierignore` keeps `legacy/` (the verbatim oracle) and `docs/` permanently out of scope.
 - ESLint carries one deliberate warning (ImmersionView timer-completion effect runs every render — verbatim artifact behavior).
 - Remote connected 2026-07-12: private GitHub repo `murasxkino/biosphere` (`origin`, HTTPS via the `gh` CLI). Actions CI is active — first run green across all five steps. Minor CI chore for later: GitHub flags `actions/checkout@v4` + `actions/setup-node@v4` as targeting deprecated Node 20; bump the action majors when convenient.

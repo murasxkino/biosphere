@@ -20,9 +20,9 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 
 - [x] **Soundtrack layer** (owner-approved 2026-07-12; FEATURE_SPEC §3.10, ADR-8): engine buses, MusicPlayer with audio-clock seam crossfade, manifest, immersion + Settings toggles, `musicPref`, artifact absence, 18 new tests. Tundra & forest tracks landed.
 - [x] Owner: deliver volcanic, seaside, mountain tracks — landed 2026-07-12; all five worlds scored. Manifest gained the per-track `level` trim (first-pass 0.4 everywhere).
-- [ ] By-ear tuning session per scene — soundscape levels/gusts/event rates **and** soundtrack `level` trims vs the beds (the knob lives in `src/audio/tracks.ts`). In progress 2026-07-12: tundra approved as-is; volcanic sizzle trimmed; seaside → owner mixes via the new sliders.
+- [x] By-ear tuning session, all six worlds + passage (2026-07-12/13, owner live) — outcomes canonical in AUDIO_ENGINE § Known state & tuning: tundra/mountain/night as-is, volcanic sizzle trimmed, forest birds lifted, seaside via the owner's slider blend, passage reworked to dusk-and-bloom. Open: the *Remain here* swell-back unheard (fold into the manual matrix); the default out-of-box blend decision (owner baseline was ambience 0.45 / music 1.0).
 - [x] Layer level sliders (owner-requested mid-session, 2026-07-12): hover-revealed vertical sliders under the immersion toggles; persisted `soundLevel`/`musicLevel`; FEATURE_SPEC §3.10.
-- [ ] Passage feel check in-browser (countdown pacing, veil timing, cancel paths) — in progress 2026-07-13: owner heard the first staged crossing; transition audio made gradual on their note (dusk from the chime, slow bloom in — FEATURE_SPEC §3.9). Re-listen + Remain-here path pending.
+- [x] Passage feel check (2026-07-13): two staged crossings — countdown pacing and veil approved; transition audio reworked on the owner's note (dusk from the chime, slow bloom in — FEATURE_SPEC §3.9) and approved on the re-listen. Remaining cancel-path spot-check (*Remain here* swell-back) folds into the manual matrix below.
 - [ ] Device profiling of the scene loop; adjust particle ceilings if needed.
 - [ ] Full manual matrix (ENGINEERING_GUIDE) incl. reduced-motion, storage-absent, no-WebAudio — plus scored/unscored worlds and music-only mode.
 - [ ] Fold in owner playthrough findings.
