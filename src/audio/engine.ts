@@ -678,7 +678,7 @@ export class AudioEngine {
           f1: up ? fj * 1.22 : fj * 0.8,
           q: 16,
           dur: sp === 0 ? 0.08 + Math.random() * 0.05 : 0.05,
-          peak: far ? 0.007 : 0.02 + Math.random() * 0.013,
+          peak: far ? 0.01 : 0.028 + Math.random() * 0.018, // lifted by ear (M4): the birds sang too shyly
           lp: far ? 2600 : 0,
         });
       }
