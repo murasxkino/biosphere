@@ -210,6 +210,40 @@ describe("playback", () => {
   });
 });
 
+describe("the passage dusk", () => {
+  it("passageOut recedes the piece; the next piece blooms in slowly, once", async () => {
+    await player.play("tundra");
+    player.passageOut();
+    const fade = (player.current!.gain as any).gain.calls
+      .filter((c: any) => c.fn === "setTargetAtTime")
+      .pop();
+    expect(fade.args[0]).toBe(0);
+    expect(fade.args[2]).toBe(3.5);
+    await player.play("forest");
+    const entry = (player.current!.gain as any).gain.calls
+      .filter((c: any) => c.fn === "setTargetAtTime")
+      .pop();
+    expect(entry.args[0]).toBe(0.55); // forest's by-ear trim
+    expect(entry.args[2]).toBe(2.5); // the slow bloom
+    await player.play("seaside");
+    const next = (player.current!.gain as any).gain.calls
+      .filter((c: any) => c.fn === "setTargetAtTime")
+      .pop();
+    expect(next.args[2]).toBe(0.9); // consumed — ordinary pace resumes
+  });
+
+  it("passageCancel returns the piece to its by-ear level", async () => {
+    await player.play("forest");
+    player.passageOut();
+    player.passageCancel();
+    const swell = (player.current!.gain as any).gain.calls
+      .filter((c: any) => c.fn === "setTargetAtTime")
+      .pop();
+    expect(swell.args[0]).toBe(0.55);
+    expect(swell.args[2]).toBe(0.8);
+  });
+});
+
 describe("resilience & memory", () => {
   it("a failed fetch stays silent — no throw, nothing playing", async () => {
     fetchMock.mockRejectedValueOnce(new Error("offline"));

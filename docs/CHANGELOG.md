@@ -11,6 +11,9 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 - **Layer level sliders** (owner-requested mid-session 2026-07-12; FEATURE_SPEC §3.10): hovering or focus-tabbing into either immersion toggle reveals a vertical glass slider — the layer's listening level (0–1, default 1, persisted as `soundLevel`/`musicLevel`). The buses now open to the set level rather than to 1 (`setSceneLevel`/`setMusicLevel`); toggles remain the hard gates. Hover-capable devices only; Settings' master volume stays the touch path.
 - Tests: 96 green (was 74) — MusicPlayer availability/graph/seam-chain/crossfade/failure/supersession/cache/level-trim, engine bus topology + chime dual-gating + layer-level gating, view toggle and slider tests.
 
+#### Changed
+- **The passage now leads with the ear** (owner feel-check, 2026-07-13; FEATURE_SPEC §3.9): from the chime, both layers of the departing world begin a τ 3.5 s dusk — receding but alive through the countdown — and the arriving world's soundscape and piece bloom in at τ 2.5 s instead of the ordinary 0.9. *Remain here* swells the world back (τ 0.8 s). Previously the old world held full level until the portal, then crossfaded at the standard pace.
+
 #### Fixed
 - Slider hover ergonomics (owner-reported in the tuning session): the 6px gap between toggle and panel dropped hover mid-travel, randomly hiding the slider before the cursor arrived — bridged by an invisible hit-extender, plus a 0.18 s closing grace and a mid-drag hold (`:active`). Clicking a toggle no longer pins its panel open: the keyboard-access rule moved from `:focus-within` to `:has(:focus-visible)`, so pointer clicks don't latch focus visibility.
 

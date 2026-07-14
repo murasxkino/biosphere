@@ -16,6 +16,7 @@ const CACHE_MAX = 2; // decoded tracks held in memory (current + previous)
 interface TrackHandle {
   arch: string;
   gain: GainNode;
+  level: number;
   sources: AudioBufferSourceNode[];
 }
 
@@ -39,6 +40,7 @@ export class MusicPlayer {
   cache: Map<string, AudioBuffer>;
   current: TrackHandle | null;
   seq: number;
+  passagePending: boolean;
 
   constructor(engine: AudioEngine, tracks: Record<string, Track | null> = MUSIC_TRACKS) {
     this.engine = engine;
@@ -46,6 +48,7 @@ export class MusicPlayer {
     this.cache = new Map();
     this.current = null;
     this.seq = 0;
+    this.passagePending = false;
   }
 
   available(arch: string) {
@@ -88,8 +91,28 @@ export class MusicPlayer {
 
   stop() {
     this.seq++;
+    this.passagePending = false;
     this._fadeOut(this.current);
     this.current = null;
+  }
+
+  // the passage dusk (FEATURE_SPEC §3.9): the departing piece recedes while
+  // the countdown runs; the next world's piece will bloom in slowly
+  passageOut() {
+    this.passagePending = true;
+    if (!this.current || !this.engine.ctx) return;
+    const t = this.engine.ctx.currentTime;
+    this.current.gain.gain.cancelScheduledValues(t);
+    this.current.gain.gain.setTargetAtTime(0, t, 3.5);
+  }
+
+  // Remain here: the piece returns to its by-ear level
+  passageCancel() {
+    this.passagePending = false;
+    if (!this.current || !this.engine.ctx) return;
+    const t = this.engine.ctx.currentTime;
+    this.current.gain.gain.cancelScheduledValues(t);
+    this.current.gain.gain.setTargetAtTime(this.current.level, t, 0.8);
   }
 
   /* ------------------------------ internals ------------------------------ */
@@ -103,8 +126,10 @@ export class MusicPlayer {
     const gain = ctx.createGain();
     gain.gain.value = 0;
     gain.connect(this.engine.musicBus!);
-    gain.gain.setTargetAtTime(level, ctx.currentTime + 0.05, 0.9); // world-entry fade to the by-ear trim
-    const handle: TrackHandle = { arch: arch, gain: gain, sources: [] };
+    // world-entry fade to the by-ear trim — slow bloom when arriving by passage
+    gain.gain.setTargetAtTime(level, ctx.currentTime + 0.05, this.passagePending ? 2.5 : 0.9);
+    this.passagePending = false;
+    const handle: TrackHandle = { arch: arch, gain: gain, level: level, sources: [] };
     const seam = Math.min(SEAM_MAX_S, Math.max(0.5, buf.duration / 8));
     const cycle = Math.max(1, buf.duration - seam);
     const self = this;

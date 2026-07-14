@@ -248,6 +248,48 @@ describe("master chain and lifecycle", () => {
   });
 });
 
+describe("the passage dusk", () => {
+  it("passageOut recedes the living scene without tearing it down; the crossing blooms slowly, once", () => {
+    engine.setEnabled(true);
+    engine.play("tundra");
+    const old = engine.current!;
+    engine.passageOut();
+    const fade = (old.gain.gain as unknown as MockParam).calls
+      .filter((c) => c.fn === "setTargetAtTime")
+      .pop()!;
+    expect(fade.args[0]).toBe(0);
+    expect(fade.args[2]).toBe(3.5); // a drawn-out dusk, not the 0.5 crossfade
+    expect(old.timers.length).toBeGreaterThan(0); // still alive, just receding
+    engine.play("volcanic");
+    const entry = (engine.current!.gain.gain as unknown as MockParam).calls
+      .filter((c) => c.fn === "setTargetAtTime")
+      .pop()!;
+    expect(entry.args[2]).toBe(2.5); // the slow bloom
+    engine.play("night");
+    const next = (engine.current!.gain.gain as unknown as MockParam).calls
+      .filter((c) => c.fn === "setTargetAtTime")
+      .pop()!;
+    expect(next.args[2]).toBe(0.9); // consumed — ordinary pace resumes
+  });
+
+  it("passageCancel swells the world back and clears the pending bloom", () => {
+    engine.setEnabled(true);
+    engine.play("tundra");
+    engine.passageOut();
+    engine.passageCancel();
+    const swell = (engine.current!.gain.gain as unknown as MockParam).calls
+      .filter((c) => c.fn === "setTargetAtTime")
+      .pop()!;
+    expect(swell.args[0]).toBe(1);
+    expect(swell.args[2]).toBe(0.8);
+    engine.play("volcanic");
+    const entry = (engine.current!.gain.gain as unknown as MockParam).calls
+      .filter((c) => c.fn === "setTargetAtTime")
+      .pop()!;
+    expect(entry.args[2]).toBe(0.9);
+  });
+});
+
 describe("chime — the app's one interface voice", () => {
   it("builds two enveloped sine oscillators into the master", () => {
     engine.setEnabled(true);

@@ -22,7 +22,7 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [x] Owner: deliver volcanic, seaside, mountain tracks — landed 2026-07-12; all five worlds scored. Manifest gained the per-track `level` trim (first-pass 0.4 everywhere).
 - [ ] By-ear tuning session per scene — soundscape levels/gusts/event rates **and** soundtrack `level` trims vs the beds (the knob lives in `src/audio/tracks.ts`). In progress 2026-07-12: tundra approved as-is; volcanic sizzle trimmed; seaside → owner mixes via the new sliders.
 - [x] Layer level sliders (owner-requested mid-session, 2026-07-12): hover-revealed vertical sliders under the immersion toggles; persisted `soundLevel`/`musicLevel`; FEATURE_SPEC §3.10.
-- [ ] Passage feel check in-browser (countdown pacing, veil timing, cancel paths) — now incl. the music crossfade through the portal.
+- [ ] Passage feel check in-browser (countdown pacing, veil timing, cancel paths) — in progress 2026-07-13: owner heard the first staged crossing; transition audio made gradual on their note (dusk from the chime, slow bloom in — FEATURE_SPEC §3.9). Re-listen + Remain-here path pending.
 - [ ] Device profiling of the scene loop; adjust particle ceilings if needed.
 - [ ] Full manual matrix (ENGINEERING_GUIDE) incl. reduced-motion, storage-absent, no-WebAudio — plus scored/unscored worlds and music-only mode.
 - [ ] Fold in owner playthrough findings.

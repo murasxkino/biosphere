@@ -190,6 +190,8 @@ export default function App() {
     AUDIO.chime();
     if (view.name === "immersion" && view.id === fromId) {
       const accent = (b ? ARCH[b.archetype] || ARCH.night : ARCH.night).accent;
+      AUDIO.passageOut(); // the world begins receding as the countdown begins
+      MUSIC.passageOut();
       setHandoff({ toId: sched.currentId, toName: toName, accent: accent, until: Date.now() + 10000 });
     } else {
       say(toName + " begins");
@@ -398,6 +400,8 @@ export default function App() {
           onCross={() => crossInto(handoff.toId)}
           onRemain={() => {
             setHandoff(null);
+            AUDIO.passageCancel(); // the world swells back
+            MUSIC.passageCancel();
             say("Staying a while");
           }}
         />

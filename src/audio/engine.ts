@@ -46,6 +46,7 @@ export class AudioEngine {
   sceneName: string | null;
   current: SceneHandle | null;
   buffers: Record<string, AudioBuffer>;
+  passagePending: boolean;
 
   constructor() {
     this.ctx = null;
@@ -60,6 +61,7 @@ export class AudioEngine {
     this.sceneName = null;
     this.current = null;
     this.buffers = {};
+    this.passagePending = false;
   }
 
   supported() {
@@ -183,8 +185,29 @@ export class AudioEngine {
 
   stop() {
     this.sceneName = null;
+    this.passagePending = false;
     this._fadeOut(this.current);
     this.current = null;
+  }
+
+  // the passage dusk (FEATURE_SPEC §3.9): as the countdown begins, the living
+  // scene recedes — still breathing, just farther away — and whatever world
+  // follows blooms in slowly instead of at the usual pace
+  passageOut() {
+    this.passagePending = true;
+    if (!this.current || !this.ctx) return;
+    const t = this.ctx.currentTime;
+    this.current.gain.gain.cancelScheduledValues(t);
+    this.current.gain.gain.setTargetAtTime(0, t, 3.5);
+  }
+
+  // Remain here: the world swells back to full
+  passageCancel() {
+    this.passagePending = false;
+    if (!this.current || !this.ctx) return;
+    const t = this.ctx.currentTime;
+    this.current.gain.gain.cancelScheduledValues(t);
+    this.current.gain.gain.setTargetAtTime(1, t, 0.8);
   }
 
   chime() {
@@ -244,7 +267,8 @@ export class AudioEngine {
     const scene: SceneHandle = { name: name, gain: g, stops: [], timers: [] };
     const fn = (this as any)["_" + name] as ((scene: SceneHandle) => void) | undefined;
     (fn || this._night).call(this, scene);
-    g.gain.setTargetAtTime(1, ctx.currentTime + 0.05, 0.9);
+    g.gain.setTargetAtTime(1, ctx.currentTime + 0.05, this.passagePending ? 2.5 : 0.9);
+    this.passagePending = false;
     return scene;
   }
 
