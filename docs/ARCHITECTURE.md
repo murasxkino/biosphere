@@ -50,7 +50,7 @@ Effects & handlers, exactly:
 5. **Volume**: `AUDIO.setVolume(volume)`.
 6. **Unmount**: `AUDIO.stop()` + `MUSIC.stop()`.
 6a. **Soundtrack** (M4): `AUDIO.setMusicEnabled(musicOn)` on change; `musicArch` (the immersion bio's archetype, else null) drives `MUSIC.play(musicArch)` / `MUSIC.stop()`; `toggleMusic` mirrors `toggleSound` (supported-guard + toast, ensure inside the gesture).
-6b. **Layer levels** (M4): `soundLevel`/`musicLevel` state (default 1, persisted additively in the config) → `AUDIO.setSceneLevel`/`AUDIO.setMusicLevel` effects; set from the immersion hover sliders (FEATURE_SPEC §3.10); reset restores 1.
+6b. **Layer levels** (M4): `soundLevel`/`musicLevel` state (defaults `DEFAULT_SOUND_LEVEL` 0.45 / `DEFAULT_MUSIC_LEVEL` 1 from `domain/constants.ts`, persisted additively in the config) → `AUDIO.setSceneLevel`/`AUDIO.setMusicLevel` effects; set from the immersion hover sliders (FEATURE_SPEC §3.10); reset restores the defaults.
 7. **Pending sound**: one-time `pointerdown` → enable + play `archRef.current`, clear flag.
 8. **Phase announce**: track `prevCurrentId` in a ref (null-initialized; first pass records only); on change while `phase==="app"` → toast *{name} begins* + `AUDIO.chime()`.
 9. `toggleSound` (guards `AUDIO.supported()`, toasts if not), `sealDay(entries)` (write journal + immediate persist + toast), `enterApp(withSound)` (from Onboard, starts audio inside the gesture), `doReset` (defaults, persist `{onboarded:false}` + `{}`, silence, `phase="onboard"`, toast), `say(msg)` (2.6 s single-toast helper with timeout ref).

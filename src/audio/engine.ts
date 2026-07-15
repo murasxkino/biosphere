@@ -9,6 +9,8 @@
 /*  Each layer is gated by its own bus; master carries only the volume.       */
 /* ========================================================================== */
 
+import { DEFAULT_SOUND_LEVEL, DEFAULT_MUSIC_LEVEL } from "../domain/constants";
+
 export interface SceneHandle {
   name: string;
   gain: GainNode;
@@ -56,8 +58,8 @@ export class AudioEngine {
     this.enabled = false;
     this.musicEnabled = false;
     this.volume = 0.7;
-    this.sceneLevel = 1;
-    this.musicLevel = 1;
+    this.sceneLevel = DEFAULT_SOUND_LEVEL;
+    this.musicLevel = DEFAULT_MUSIC_LEVEL;
     this.sceneName = null;
     this.current = null;
     this.buffers = {};

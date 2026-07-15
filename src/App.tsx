@@ -4,6 +4,8 @@ import {
   DEFAULT_BIOS,
   DEFAULT_HABITS,
   DEFAULT_NIGHT_START,
+  DEFAULT_SOUND_LEVEL,
+  DEFAULT_MUSIC_LEVEL,
   CONFIG_KEY,
   JOURNAL_KEY,
 } from "./domain/constants";
@@ -39,8 +41,8 @@ export default function App() {
   const [soundOn, setSoundOn] = useState(false);
   const [musicOn, setMusicOn] = useState(true);
   const [volume, setVolume] = useState(0.7);
-  const [soundLevel, setSoundLevel] = useState(1);
-  const [musicLevel, setMusicLevel] = useState(1);
+  const [soundLevel, setSoundLevel] = useState(DEFAULT_SOUND_LEVEL);
+  const [musicLevel, setMusicLevel] = useState(DEFAULT_MUSIC_LEVEL);
   const [now, setNow] = useState(() => new Date());
   const [toast, setToast] = useState<string | null>(null);
   const [pendingSound, setPendingSound] = useState(false);
@@ -283,8 +285,8 @@ export default function App() {
     setNightStart(DEFAULT_NIGHT_START);
     setJournal({});
     setVolume(0.7);
-    setSoundLevel(1);
-    setMusicLevel(1);
+    setSoundLevel(DEFAULT_SOUND_LEVEL);
+    setMusicLevel(DEFAULT_MUSIC_LEVEL);
     setSoundOn(false);
     setMusicOn(true);
     setPendingSound(false);

@@ -15,7 +15,7 @@ The v0.1 soundscapes leaned on oscillators and periodic LFOs and earned the owne
 
 `class AudioEngine`, one singleton `AUDIO`. Unchanged core: lazy context via `ensure()` (the autoplay seam; saved preference restored on the session's first pointerdown), gain glides via `setTargetAtTime` (volume τ 0.15 s, enable τ 0.3 s, default 0.7), scenes as `{ name, gain, stops[], timers[] }`, crossfade on `play()` (out τ 0.5 s, teardown at 1.8 s; in τ 0.9 s), cached 2 s noise buffers (white / pink via Paul Kellet filter / brown leaky integrator), scheduler `_every(minS, maxS, fn)`, random event pan `_pan`.
 
-**Bus topology (M4):** scenes → `sceneBus` and music → `musicBus`, both into `master` → destination. `master` carries only the volume; each layer is gated by its own bus (`setEnabled` glides sceneBus, `setMusicEnabled` glides musicBus). Each bus opens to its **layer level** (`setSceneLevel`/`setMusicLevel`, default 1 — the immersion hover sliders, persisted as `soundLevel`/`musicLevel`), so the gates return to the listener's chosen blend, not to full. The chime connects to `master` above both gates and sounds when **either** layer is open — it is interface, not nature.
+**Bus topology (M4):** scenes → `sceneBus` and music → `musicBus`, both into `master` → destination. `master` carries only the volume; each layer is gated by its own bus (`setEnabled` glides sceneBus, `setMusicEnabled` glides musicBus). Each bus opens to its **layer level** (`setSceneLevel`/`setMusicLevel` — the immersion hover sliders, persisted as `soundLevel`/`musicLevel`; defaults `DEFAULT_SOUND_LEVEL` 0.45 / `DEFAULT_MUSIC_LEVEL` 1 in `domain/constants.ts`), so the gates return to the listener's chosen blend, not to full. The chime connects to `master` above both gates and sounds when **either** layer is open — it is interface, not nature.
 
 **The passage stretches the crossfade** (owner feel-check, 2026-07-13; FEATURE_SPEC §3.9): `passageOut()` on both engine and MusicPlayer begins a τ 3.5 s dusk of the living layers the moment the countdown starts — the world recedes but keeps breathing (timers stay alive); the next scene/piece then blooms in at τ 2.5 s (a one-shot `passagePending` flag, consumed on the next build); `passageCancel()` (*Remain here*) swells everything back at τ 0.8 s. Ordinary navigation keeps the standard out 0.5 / in 0.9 pace.
 
@@ -57,7 +57,7 @@ Loudness discipline: beds sum ≤ ~0.45; events ≤ 0.05 except waves and knocks
 - **Tundra, Mountain, Grey Night** — approved exactly as first-passed; no changes.
 - **Volcanic** — the sizzle sat too hot: steam-vent walk base 0.006→0.004 (spread →0.0025); highpassed crackle grains →0.004–0.013 peaks. Knocks and low pops untouched.
 - **Forest** — the birds sang too shyly: near phrases →0.028–0.046 peaks, the distant singer →0.01.
-- **Seaside** — resolved with no recipe change: the owner set their global layer blend via the immersion sliders instead (their session baseline: ambience 0.45, music 1.0 — a datapoint for any future default-blend decision, still open).
+- **Seaside** — resolved with no recipe change: the owner set their global layer blend via the immersion sliders instead. That blend (ambience 0.45, music 1.0) **became the shipped default** on 2026-07-14 (`domain/constants.ts`).
 - **Soundtrack trims** — all five pieces remain at manifest `level` 0.4 under the owner's slider blend.
 - **The passage** — reworked mid-session to lead with the ear (dusk τ 3.5 s from the chime, bloom τ 2.5 s in, swell-back τ 0.8 s); approved on the second staged crossing.
 

@@ -23,7 +23,7 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 
 ## Remaining work
 
-**M4 (QA & tuning)** per TODO.md — device profiling of the scene loop; the full manual matrix (now incl. scored/unscored worlds, music-only mode, and the *Remain here* swell-back, which was never heard live); owner playthrough findings. One open product decision: the default out-of-box layer blend (the owner's session baseline was ambience 0.45 / music 1.0 — current defaults are 1.0/1.0).
+**M4 (QA & tuning)** per TODO.md — device profiling of the scene loop; the full manual matrix (now incl. scored/unscored worlds, music-only mode, and the *Remain here* swell-back, which was never heard live); owner playthrough findings. The default-blend decision is settled: the owner's by-ear blend (ambience 0.45 / music 1.0) shipped as the out-of-box default on 2026-07-14.
 
 ## Known issues & notes
 

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { AudioEngine } from "./engine";
+import { DEFAULT_SOUND_LEVEL, DEFAULT_MUSIC_LEVEL } from "../domain/constants";
 
 /* A recording mock of the Web Audio API: graph construction only, no sound.
    Node topology per recipe is what the tests assert (docs/AUDIO_ENGINE.md);
@@ -150,13 +151,20 @@ describe("master chain and lifecycle", () => {
     expect(engine.current).toBeNull();
   });
 
-  it("setEnabled(true) glides the scene bus open and builds the pending scene", () => {
+  it("setEnabled(true) glides the scene bus open to the default blend and builds the pending scene", () => {
     engine.play("forest");
     engine.setEnabled(true);
     const bus: any = engine.sceneBus;
     const glide = bus.gain.calls.find((c: any) => c.fn === "setTargetAtTime");
-    expect(glide.args[0]).toBe(1);
+    expect(glide.args[0]).toBe(DEFAULT_SOUND_LEVEL); // the world sits back under the music by default
     expect(engine.current!.name).toBe("forest");
+  });
+
+  it("ships the owner's by-ear blend as the default levels", () => {
+    expect(engine.sceneLevel).toBe(DEFAULT_SOUND_LEVEL);
+    expect(engine.musicLevel).toBe(DEFAULT_MUSIC_LEVEL);
+    expect(DEFAULT_SOUND_LEVEL).toBe(0.45);
+    expect(DEFAULT_MUSIC_LEVEL).toBe(1);
   });
 
   it("setMusicEnabled gates only the music bus; scenes are untouched", () => {

@@ -95,5 +95,10 @@ export const DEFAULT_HABITS: Habit[] = [
 
 export const DEFAULT_NIGHT_START = "21:30";
 
+// the out-of-the-box layer blend — the owner's by-ear choice from the M4
+// tuning session: the world sits back, the soundtrack carries
+export const DEFAULT_SOUND_LEVEL = 0.45;
+export const DEFAULT_MUSIC_LEVEL = 1;
+
 export const CONFIG_KEY = "biosphere-config-v1";
 export const JOURNAL_KEY = "biosphere-journal-v1";
