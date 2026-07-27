@@ -30,6 +30,9 @@ await build({
   target: "es2020",
   jsx: "transform",
   external: ["react"],
+  // The sandbox cannot serve bundled font files — this target keeps the CDN
+  // import (src/ui/style.ts); the local @font-face block is dropped here.
+  define: { __ARTIFACT_BUILD__: "true" },
   banner: { js: banner },
   legalComments: "none",
   logLevel: "info",
