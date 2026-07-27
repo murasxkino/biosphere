@@ -17,8 +17,21 @@ Move the project into a real repository per **MIGRATION.md**: Vite + React + Typ
 ## M4 — QA & tuning (in the repo)
 By-ear soundscape tuning per scene; device profiling of the scene loop; full manual matrix including passage flows, reduced-motion, storage-absent and no-WebAudio paths; owner playthrough findings.
 
-## M5 — Release v1.0
-Final documentation sync, version stamp, dual delivery (repo release + artifact build).
+## M5 — Release v1.0 (web + artifact)
+Final documentation sync, version stamp, dual delivery (repo release + artifact build). The last milestone of the browser era.
 
-## Post-1.0
-Candidates graduate from BACKLOG.md only through the immersion test and explicit approval — including the native path that unlocks notifications.
+## The iOS era (decided 2026-07-15 — APP_STORE_ROADMAP.md)
+
+The goal is BIOSPHERE on the Apple App Store. Capacitor over WKWebView (ADR-9) keeps one codebase across three targets.
+
+## M6 — Native readiness
+Phase A + B: self-hosted fonts, AAC soundtrack with masters preserved, safe-area layout, durable storage, zero runtime network — then the Capacitor shell, icon, and launch screen. Exit: the app runs on a real iPhone as an installed app.
+
+## M7 — Native platform work
+Phase C: `AVAudioSession` so the soundscape survives the silent switch, background audio, interruption handling, wall-clock timer recovery, local timer-completion notifications, haptics. Exit: audio behaves correctly on hardware in every interruption case.
+
+## M8 — App Store release
+Phases D + E: store assets, privacy policy, listing, TestFlight soak, submission, review. Exit: BIOSPHERE is downloadable.
+
+## Post-launch
+Candidates graduate from BACKLOG.md only through the immersion test and explicit approval.
