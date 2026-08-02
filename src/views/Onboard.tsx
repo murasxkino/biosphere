@@ -31,7 +31,8 @@ export function Onboard({ onEnter }: { onEnter: (withSound: boolean) => void }) 
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            padding: "40px 28px",
+            padding:
+              "calc(40px + var(--sat)) calc(28px + var(--sar)) calc(40px + var(--sab)) calc(28px + var(--sal))",
           }}
         >
           <div style={{ letterSpacing: "0.5em", fontWeight: 200, fontSize: 18, marginLeft: "0.5em" }}>

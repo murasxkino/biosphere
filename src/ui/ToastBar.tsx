@@ -6,7 +6,7 @@ export function ToastBar({ msg }: { msg: string }) {
       style={{
         position: "fixed",
         left: "50%",
-        bottom: 26,
+        bottom: "calc(26px + var(--sab))",
         transform: "translateX(-50%)",
         zIndex: 60,
         pointerEvents: "none",

@@ -63,6 +63,16 @@ const FONTS_LOCAL = `
 /* The one injected stylesheet (ARCHITECTURE ADR-5). */
 export const STYLE = `
 ${ARTIFACT ? FONTS_CDN : FONTS_LOCAL}
+/* Device safe areas (notch, home indicator, rounded corners). index.html sets
+   viewport-fit=cover, so the world reaches the screen edges — these keep the
+   *chrome* clear of them. 0px everywhere the insets don't exist, so the web
+   and artifact targets are unaffected. APP_STORE_ROADMAP §4. */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body, #root { height: 100%; }
 body { margin: 0; background: #05070b; }

@@ -128,7 +128,7 @@ export function ImmersionView({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            padding: 18,
+            padding: "calc(18px + var(--sat)) calc(18px + var(--sar)) 18px calc(18px + var(--sal))",
             gap: 10,
           }}
         >
@@ -351,7 +351,7 @@ export function ImmersionView({
         <div
           style={{
             textAlign: "center",
-            paddingBottom: 22,
+            paddingBottom: "calc(22px + var(--sab))",
             fontSize: 11,
             letterSpacing: "0.26em",
             color: "rgba(255,255,255,0.45)",

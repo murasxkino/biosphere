@@ -4,6 +4,18 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 
 ## [Unreleased]
 
+### Milestone M6 — native readiness (in progress, 2026-07-15)
+
+The project committed to shipping BIOSPHERE on the Apple App Store; `docs/APP_STORE_ROADMAP.md` is the plan of record (ADR-9: Capacitor over WKWebView).
+
+#### Changed
+- **Typefaces ship with the app.** Cormorant Garamond and Outfit are bundled as six variable-font woff2 files (200 KB, latin + latin-ext) instead of loading from the Google Fonts CDN, so the app renders offline. The font source is build-aware via `__ARTIFACT_BUILD__`: the artifact sandbox, which cannot serve bundled files, keeps the CDN import; Rollup drops the unused branch from the web bundle.
+- **Safe-area insets.** `--sat/--sab/--sal/--sar` (from `env(safe-area-inset-*)`, 0px fallbacks) now pad every edge-touching surface — Home, Immersion chrome, Grey Night, Shell pages, Onboard, toasts, and the passage capsule — so nothing collides with a notch or home indicator. Desktop and artifact layouts are byte-identical to before.
+- **Durable storage.** The StorageAdapter prefers **IndexedDB** over localStorage on the web and native targets: asynchronous (the journal is written the instant a day is sealed), and with no 5 MB cliff to grow into. `window.storage` still wins in the artifact. Existing localStorage sessions are **adopted lazily per key** on first read, so upgrading never costs a user their journal.
+
+#### Added
+- `src/storage/indexedDb.ts` and 8 tests covering round-trip, nested journal shapes, adoption of a previous session, refusal to adopt malformed leftovers, never overwriting newer data, and backend preference order. Suite: **109 green** (was 101). `fake-indexeddb` added as a dev dependency.
+
 ### Milestone M4 (in progress)
 
 #### Added

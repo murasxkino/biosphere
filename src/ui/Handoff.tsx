@@ -28,7 +28,7 @@ export function Handoff({
         position: "fixed",
         left: 0,
         right: 0,
-        bottom: 24,
+        bottom: "calc(24px + var(--sab))",
         display: "flex",
         justifyContent: "center",
         zIndex: 55,

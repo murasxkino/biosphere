@@ -216,7 +216,15 @@ export function HomeView({
         }}
       />
       <div className="bsScroll" style={{ position: "relative" }}>
-        <div className="fadeIn" style={{ maxWidth: 560, margin: "0 auto", padding: "26px 20px 64px" }}>
+        <div
+          className="fadeIn"
+          style={{
+            maxWidth: 560,
+            margin: "0 auto",
+            padding:
+              "calc(26px + var(--sat)) calc(20px + var(--sar)) calc(64px + var(--sab)) calc(20px + var(--sal))",
+          }}
+        >
           <div
             style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}
           >

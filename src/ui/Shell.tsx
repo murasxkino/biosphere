@@ -23,7 +23,15 @@ export function Shell({
       </div>
       <div style={{ position: "absolute", inset: 0, background: "rgba(4,7,11,0.78)" }} />
       <div className="bsScroll" style={{ position: "relative" }}>
-        <div className="fadeIn" style={{ maxWidth: 560, margin: "0 auto", padding: "22px 20px 72px" }}>
+        <div
+          className="fadeIn"
+          style={{
+            maxWidth: 560,
+            margin: "0 auto",
+            padding:
+              "calc(22px + var(--sat)) calc(20px + var(--sar)) calc(72px + var(--sab)) calc(20px + var(--sal))",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <button className="bsIcon" onClick={onBack} title="Back" aria-label="Back">
               <Ic name="back" size={18} />

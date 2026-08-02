@@ -110,7 +110,14 @@ export function NightView({
       />
 
       <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 18 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "calc(18px + var(--sat)) calc(18px + var(--sar)) 18px calc(18px + var(--sal))",
+          }}
+        >
           <button className="bsIcon" onClick={onExit} title="Leave" aria-label="Leave Grey Night">
             <Ic name="back" size={18} />
           </button>
@@ -129,7 +136,7 @@ export function NightView({
             style={{
               maxWidth: 480,
               margin: "0 auto",
-              padding: "12px 24px 60px",
+              padding: "12px calc(24px + var(--sar)) calc(60px + var(--sab)) calc(24px + var(--sal))",
               minHeight: "100%",
               display: "flex",
               flexDirection: "column",
