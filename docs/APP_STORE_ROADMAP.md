@@ -24,8 +24,8 @@ Two earlier decisions now pay for themselves: **ADR-2's StorageAdapter** makes t
 
 The owner's judgment, recorded here as a constraint on every phase that follows: **the soundscape and soundtrack layers are the app's best feature, and platform work may not degrade them.** Concretely:
 
-- **The WAV masters are never destroyed.** They are committed in git history permanently, and remain in the repo under `audio-masters/` (excluded from every build). Whatever ships is a *derived* artifact.
-- **Re-encoding is A/B'd by ear before it becomes canonical.** AAC files land *alongside* the WAVs; the manifest keeps pointing at the masters until the owner has listened and approved the encode. No silent substitution.
+- **The WAV masters are never destroyed.** They are committed in git history permanently, and live in the repo under `audio-masters/` (excluded from every build). Whatever ships is a *derived* artifact. ✅ done 2026-07-15.
+- **Re-encoding is A/B'd by ear before it becomes canonical.** ✅ done 2026-07-15: the 256 kbps encode was judged against the masters in a blind, level-matched, gapless A/B (both files decoded and played in parallel; the switch changed only which reached the ear) and found indistinguishable, including at the loop seam. Only then did the manifest move off the masters.
 - **Encode conservatively.** 256 kbps AAC-LC, 44.1 kHz stereo — well above transparency for ambient music, still ~10× smaller than WAV. Bitrate is cheap; the owner's trust is not.
 - **The seam crossfade absorbs encoder padding.** Because passes are joined by an equal-power crossfade rather than butt-joined (AUDIO_ENGINE § The soundtrack layer), AAC's priming samples cannot produce the click a hard loop would. Verify by ear across at least one seam per track anyway.
 - **The by-ear values are frozen.** No platform task may alter a tuned recipe parameter in `engine.ts` or a `level` in `tracks.ts`. Those came from a live listening session and are canonical (AUDIO_ENGINE § Known state & tuning).

@@ -6,7 +6,7 @@
 
 BIOSPHERE is being taken to the **Apple App Store** as an iOS app, via Capacitor (ADR-9). `docs/APP_STORE_ROADMAP.md` holds the phases, the platform gap, the owner's critical path, and the CI-vs-Mac assessment. PRODUCT_REQUIREMENTS.md was amended the same day to stop claiming things the code had outgrown.
 
-**Phase A (web hardening) — 3 of 4 done:** fonts self-hosted ✅ · safe-area insets ✅ · durable IndexedDB storage with lazy adoption of existing sessions ✅ · soundtrack re-encoded to AAC (8.4 MB, down from 47 MB) **awaiting the owner's blind A/B before it becomes canonical**.
+**Phase A (web hardening) — complete 2026-07-15:** fonts self-hosted ✅ · safe-area insets ✅ · durable IndexedDB storage with lazy adoption of existing sessions ✅ · soundtrack shipping as 256 kbps AAC (8.4 MB, down from 47 MB), approved in a blind A/B against the masters, which now live in `audio-masters/` outside every build ✅. **Next: Phase B — the Capacitor shell** (config, icon, launch screen; the native build itself needs macOS or CI).
 
 ## Code state (verified this session)
 

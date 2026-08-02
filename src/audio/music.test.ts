@@ -76,9 +76,9 @@ class MockCtx {
 }
 
 const TRACKS: Record<string, { url: string; level: number } | null> = {
-  tundra: { url: "/music/tundra.wav?v=1", level: 0.4 },
-  forest: { url: "/music/forest.wav?v=1", level: 0.55 },
-  seaside: { url: "/music/seaside.wav?v=1", level: 0.4 },
+  tundra: { url: "/music/tundra.m4a?v=1", level: 0.4 },
+  forest: { url: "/music/forest.m4a?v=1", level: 0.55 },
+  seaside: { url: "/music/seaside.m4a?v=1", level: 0.4 },
   volcanic: null,
 };
 
@@ -122,7 +122,7 @@ describe("availability", () => {
 describe("playback", () => {
   it("fetches the manifest URL, decodes once, and wires source → gain → track → musicBus", async () => {
     await player.play("tundra");
-    expect(fetchMock).toHaveBeenCalledWith("/music/tundra.wav?v=1");
+    expect(fetchMock).toHaveBeenCalledWith("/music/tundra.m4a?v=1");
     const ctx = ctxOf();
     expect(player.current!.arch).toBe("tundra");
     const src: any = ctx.created.source[0];

@@ -48,7 +48,9 @@ Loudness discipline: beds sum ≤ ~0.45; events ≤ 0.05 except waves and knocks
 - **Independence**: `musicPref` persists beside `soundPref` (absent = on); either layer plays without the other; master volume governs both.
 - **Failure is silent**: a missing or unfetchable track leaves the world unscored (retry by toggling); no toast, no console noise — the storage-fallback precedent.
 
-**Swapping a track** (the owner's knob): drop the new file in `public/music/`, point the archetype's entry in `src/audio/tracks.ts` at it, and bump the `?v=` query so cached listeners hear the new piece. `null` = unscored (no toggle shown). Prefer lossless WAV/FLAC, loop-authored, 1–5 min. Each entry's **`level`** is the piece's by-ear trim against the scene's beds — the M4 tuning knob (first-pass 0.4 everywhere until the listening session says otherwise).
+**Masters and encodes.** The owner's lossless WAV masters live in `audio-masters/` (never bundled — Vite copies only `public/`); what ships is a **256 kbps AAC** encode in `public/music/`, ~5.6× smaller (47 MB → 8.4 MB). The encode was approved in a blind, level-matched A/B against the masters on 2026-07-15. AAC's encoder padding cannot click at a loop join here because passes are joined by an equal-power crossfade rather than butt-joined; decoded durations match the masters within 0.6 ms, so the seam maths is unchanged.
+
+**Swapping a track** (the owner's knob): put the new master in `audio-masters/`, encode it (recipe in `audio-masters/README.md`), drop the `.m4a` in `public/music/`, point the archetype's entry in `src/audio/tracks.ts` at it, and bump the `?v=` query so cached listeners hear the new piece. `null` = unscored (no toggle shown). Prefer lossless, loop-authored, 1–5 min masters. Each entry's **`level`** is the piece's by-ear trim against the scene's beds — a new recording needs its own listening pass.
 
 ## Known state & tuning
 
