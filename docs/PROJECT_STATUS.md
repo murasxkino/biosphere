@@ -31,6 +31,20 @@ The project now lives in a git repository (this folder), migrated per MIGRATION.
 
 **M4 (QA & tuning)** per TODO.md — device profiling of the scene loop; the full manual matrix (now incl. scored/unscored worlds, music-only mode, and the *Remain here* swell-back, which was never heard live); owner playthrough findings. The default-blend decision is settled: the owner's by-ear blend (ambience 0.45 / music 1.0) shipped as the out-of-box default on 2026-07-14.
 
+## Manual matrix — browser half (2026-08-08)
+
+Run against the dev server on Windows; the device half waits on the iPhone.
+
+| Path | Result |
+|---|---|
+| **Reduced motion** | `SceneCanvas` schedules 1 rAF normally, **0** when `prefers-reduced-motion` matches — the loop never starts and the scene stands as a single still frame. The global CSS collapse rule is present. |
+| **Storage absent** | With IndexedDB *and* localStorage both throwing, `store.set` does not throw, a sealed journal reads back intact from the in-memory copy, absent keys still return `null`, and the app keeps rendering. |
+| **No Web Audio** | `supported()` false; `setEnabled/play/chime/setVolume/setSceneLevel/passageOut/stop` all no-op without throwing; the UI toasts *Audio isn't available in this browser*. |
+| **Unscored world** | Grey Night offers the ambience toggle and **no** soundtrack toggle — no dead control. Scored worlds offer both. |
+| **Layer combinations** | All four of ambience×soundtrack behave independently; the scene bus opens to the owner's 0.45 default and the music bus to 1. |
+
+Zero console errors across the whole pass.
+
 ## Known issues & notes
 
 - **Audio is tuned by ear as of 2026-07-13** (owner live; outcomes canonical in AUDIO_ENGINE § Known state & tuning): tundra/mountain/night approved as first-passed, volcanic sizzle trimmed, forest birds lifted, seaside settled via the owner's slider blend, and the passage reworked to dusk-and-bloom (approved on re-listen). The soundtrack layer (FEATURE_SPEC §3.10, ADR-8) scores all five worlds at manifest `level` 0.4; Grey Night is unscored by design. Suite: 100/100 tests, both builds, artifact SSR smoke — zero console errors throughout the session.

@@ -24,7 +24,8 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [x] Layer level sliders (owner-requested mid-session, 2026-07-12): hover-revealed vertical sliders under the immersion toggles; persisted `soundLevel`/`musicLevel`; FEATURE_SPEC §3.10.
 - [x] Passage feel check (2026-07-13): two staged crossings — countdown pacing and veil approved; transition audio reworked on the owner's note (dusk from the chime, slow bloom in — FEATURE_SPEC §3.9) and approved on the re-listen. Remaining cancel-path spot-check (*Remain here* swell-back) folds into the manual matrix below.
 - [ ] Device profiling of the scene loop; adjust particle ceilings if needed.
-- [ ] Full manual matrix (ENGINEERING_GUIDE) incl. reduced-motion, storage-absent, no-WebAudio — plus scored/unscored worlds and music-only mode.
+- [x] Manual matrix — **browser-testable half done 2026-08-08** (results in PROJECT_STATUS): reduced-motion (rAF loop never starts; CSS collapse rule present), storage-absent (all backends broken → session stays coherent in memory, app keeps rendering), no-WebAudio (every entry point no-ops, toast shown), scored vs unscored worlds (no dead soundtrack control in Grey Night), and all four ambience×soundtrack combinations. Zero console errors throughout.
+- [ ] Manual matrix — **device half**, needs the iPhone: OS-level reduced-motion, the silent switch, backgrounding and interruptions, `-webkit-touch-callout` (a WebKit property Chrome does not implement), real-hardware scroll and tap feel.
 - [ ] Fold in owner playthrough findings.
 
 ## Parking
