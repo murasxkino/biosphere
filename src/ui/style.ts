@@ -73,10 +73,32 @@ ${ARTIFACT ? FONTS_CDN : FONTS_LOCAL}
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 }
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  /* no long-press magnifier or share sheet over the world (native feel) */
+  -webkit-touch-callout: none;
+}
 html, body, #root { height: 100%; }
-body { margin: 0; background: #05070b; }
+html {
+  /* iOS otherwise inflates text on its own and breaks the type scale */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: #05070b;
+  /* the stage does not bounce; scrolling belongs to .bsScroll */
+  overscroll-behavior: none;
+}
 button { font-family: inherit; }
+/* Chrome is for operating, not for selecting — but never touch the user's own
+   words: journal entries and reflections stay selectable and copyable. */
+.bsIcon, .bsBtn, [role="button"] {
+  -webkit-user-select: none; user-select: none;
+  /* removes the double-tap zoom delay on taps */
+  touch-action: manipulation;
+}
 :focus-visible { outline: 2px solid rgba(255,255,255,0.55); outline-offset: 2px; }
 .bsRoot {
   position: fixed; inset: 0; overflow: hidden;
@@ -87,6 +109,8 @@ button { font-family: inherit; }
 .bsScroll {
   height: 100%; overflow-y: auto; overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  /* a page that has reached its end does not drag the whole app with it */
+  overscroll-behavior: contain;
   scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.16) transparent;
 }
 .bsScroll::-webkit-scrollbar { width: 4px; }

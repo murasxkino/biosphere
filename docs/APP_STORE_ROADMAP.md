@@ -47,6 +47,8 @@ The owner's judgment, recorded here as a constraint on every phase that follows:
 
 **Phase B — Capacitor shell.** Capacitor config and iOS project, app icon and native launch screen pipeline, WKWebView tuning (disable bounce, text-size adjust, tap highlight, long-press callout). *Native build requires macOS or CI.*
 
+> **Portable half done 2026-08-02.** `@capacitor/core|cli|ios` 8.5 installed; `capacitor.config.ts` written (bundle id, `contentInset: never` so the CSS safe areas are not double-counted, `scrollEnabled: false` to kill the whole-page rubber band, matching `#05070b` backgrounds against a launch flash); WKWebView tuning in `ui/style.ts` (no long-press callout, no text auto-sizing, no overscroll chaining, no selection or double-tap zoom on chrome — while the user's own words stay selectable); `ios:add` / `ios:sync` / `ios:open` scripts; `assets/README.md` specifies the icon and launch-screen sources. **Remaining, and it needs a Mac:** `npm run ios:add` to generate the native project, then the icon artwork (owner's approval) and a first device build.
+
 **Phase C — Native platform work.** `AVAudioSession` `playback` category (survives the silent switch) · background-audio mode · interruption handling for calls and other apps · focus timers recomputed from wall clock on resume · **local notification on timer completion** (§6) · haptics on seal and chime. *Requires a real device in the loop.*
 
 **Phase D — Store preparation.** 1024 px icon · screenshots per required device size · privacy policy URL · description, keywords, age rating · privacy nutrition label (truthfully "no data collected" — a genuine selling point).

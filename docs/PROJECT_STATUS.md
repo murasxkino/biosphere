@@ -6,7 +6,7 @@
 
 BIOSPHERE is being taken to the **Apple App Store** as an iOS app, via Capacitor (ADR-9). `docs/APP_STORE_ROADMAP.md` holds the phases, the platform gap, the owner's critical path, and the CI-vs-Mac assessment. PRODUCT_REQUIREMENTS.md was amended the same day to stop claiming things the code had outgrown.
 
-**Phase A (web hardening) — complete 2026-07-15:** fonts self-hosted ✅ · safe-area insets ✅ · durable IndexedDB storage with lazy adoption of existing sessions ✅ · soundtrack shipping as 256 kbps AAC (8.4 MB, down from 47 MB), approved in a blind A/B against the masters, which now live in `audio-masters/` outside every build ✅. **Next: Phase B — the Capacitor shell** (config, icon, launch screen; the native build itself needs macOS or CI).
+**Phase A (web hardening) — complete 2026-07-15:** fonts self-hosted ✅ · safe-area insets ✅ · durable IndexedDB storage with lazy adoption of existing sessions ✅ · soundtrack shipping as 256 kbps AAC (8.4 MB, down from 47 MB), approved in a blind A/B against the masters, which now live in `audio-masters/` outside every build ✅. **Phase B — portable half done 2026-08-02:** Capacitor 8.5 installed and configured, WKWebView tuned so the app stops behaving like a web page, `ios:*` scripts, icon/launch-screen sources specified. The owner is buying a Mac; on day one there it is `npm install` → `npm run ios:add` → first device build. **Open decisions:** the bundle id (`com.murasxkino.biosphere`, provisional — permanent once submitted) and the icon artwork.
 
 ## Code state (verified this session)
 
