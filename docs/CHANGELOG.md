@@ -4,7 +4,13 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 
 ## [Unreleased]
 
-### Milestone M6 — native readiness (in progress, 2026-07-15)
+Nothing yet — the next entries belong to M7 (native platform work).
+
+## [0.4.0] — 2026-08-08
+
+The soundtrack release, and the app's first steps out of the browser. M4 added a recorded musical layer beside the synthesized soundscapes, tuned every world by ear with the owner listening, and gave the listener control of the blend; M6 then made the codebase ready to live inside a native shell. Verification at the tag: **109 tests green**, all three targets building, artifact SSR smoke clean.
+
+### Milestone M6 — native readiness (2026-07-15 → 2026-08-08)
 
 The project committed to shipping BIOSPHERE on the Apple App Store; `docs/APP_STORE_ROADMAP.md` is the plan of record (ADR-9: Capacitor over WKWebView).
 
@@ -16,6 +22,7 @@ The project committed to shipping BIOSPHERE on the Apple App Store; `docs/APP_ST
 - **Durable storage.** The StorageAdapter prefers **IndexedDB** over localStorage on the web and native targets: asynchronous (the journal is written the instant a day is sealed), and with no 5 MB cliff to grow into. `window.storage` still wins in the artifact. Existing localStorage sessions are **adopted lazily per key** on first read, so upgrading never costs a user their journal.
 
 #### Added
+- **The app icon** — the owner's artwork at `assets/icon.png`: a sphere holding a horizon and a single low sun, in the day's own gradient from tundra blue to mountain gold. 1024², sRGB, no alpha, full-bleed square as iOS requires.
 - **The Capacitor shell's portable half** (Phase B): `@capacitor/core|cli|ios` 8.5 and `capacitor.config.ts` — bundle id, `#05070b` backgrounds so nothing flashes at launch, `contentInset: "never"` so WKWebView does not double-count the CSS safe areas, and `scrollEnabled: false` to remove the whole-page rubber band (the app is a fixed stage; scrolling belongs to `.bsScroll`). `npm run ios:add` / `ios:sync` / `ios:open` for the build machine, and `assets/README.md` specifying the icon and launch-screen sources with the design constraints the artwork must answer to.
 - `src/storage/indexedDb.ts` and 8 tests covering round-trip, nested journal shapes, adoption of a previous session, refusal to adopt malformed leftovers, never overwriting newer data, and backend preference order. Suite: **109 green** (was 101). `fake-indexeddb` added as a dev dependency.
 

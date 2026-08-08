@@ -1,6 +1,6 @@
 # PROJECT STATUS
 
-**Updated:** 2026-07-15 · **Version:** 0.3.0 (tagged `v0.3.0`) · **Current milestone:** M6 — native readiness for the App Store (APP_STORE_ROADMAP.md). M4's audio work is complete; its QA remainder (device profiling, manual matrix) carries forward.
+**Updated:** 2026-08-08 · **Version:** 0.4.0 (tagged `v0.4.0` — the soundtrack release and the first steps out of the browser) · **Current milestone:** M6 complete through Phase B's portable half; **M7 (native platform work) begins on the Mac**.
 
 ## The goal changed (2026-07-15)
 
