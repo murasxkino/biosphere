@@ -42,6 +42,7 @@ Run against the dev server on Windows; the device half waits on the iPhone.
 | **No Web Audio** | `supported()` false; `setEnabled/play/chime/setVolume/setSceneLevel/passageOut/stop` all no-op without throwing; the UI toasts *Audio isn't available in this browser*. |
 | **Unscored world** | Grey Night offers the ambience toggle and **no** soundtrack toggle — no dead control. Scored worlds offer both. |
 | **Layer combinations** | All four of ambience×soundtrack behave independently; the scene bus opens to the owner's 0.45 default and the music bus to 1. |
+| **Passage — *Remain here*** | Heard live on a staged boundary 2026-08-08 and approved: dusk from the chime, then the world swelling back at τ 0.8 s on the cancel. The last unheard gesture in the audio system. |
 
 Zero console errors across the whole pass.
 

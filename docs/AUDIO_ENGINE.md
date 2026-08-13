@@ -63,7 +63,7 @@ Loudness discipline: beds sum ≤ ~0.45; events ≤ 0.05 except waves and knocks
 - **Soundtrack trims** — all five pieces remain at manifest `level` 0.4 under the owner's slider blend.
 - **The passage** — reworked mid-session to lead with the ear (dusk τ 3.5 s from the chime, bloom τ 2.5 s in, swell-back τ 0.8 s); approved on the second staged crossing.
 
-Still open by ear: the *Remain here* swell-back has not been heard live (staged crossings auto-completed) — spot-check it during the manual matrix.
+**The passage is fully heard as of 2026-08-08.** The *Remain here* swell-back — the last gesture in the system nobody had listened to, because both earlier staged crossings auto-completed through the portal — was verified on a staged boundary: dusk from the chime, then the world swelling back at τ 0.8 s on the cancel. Approved as-is. Nothing in the audio system is now unheard.
 
 ## ADR: raw Web Audio over Tone.js (upheld)
 
