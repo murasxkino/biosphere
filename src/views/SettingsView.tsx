@@ -202,7 +202,7 @@ export function SettingsView({
         </div>
       </div>
       <div style={cap}>
-        Soundscapes are synthesized live in your browser — the soundtrack is the one recorded voice.
+        Soundscapes are synthesized live on your device — the soundtrack is the one recorded voice.
       </div>
 
       <SectionLabel>biospheres</SectionLabel>

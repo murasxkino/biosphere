@@ -34,7 +34,9 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [ ] `AVAudioSession` playback category (survive the silent switch), background audio, interruption handling — needs Xcode and `ios/`.
 - [ ] `npm run ios:add`, then the first real build and TestFlight — **follow MAC_SETUP.md**, written ahead of the move so day one is spent building.
 - [ ] Device leg of the manual matrix (see PROJECT_STATUS) and scene-loop profiling on hardware.
-- [ ] Privacy policy, store listing copy, screenshots.
+- [x] Privacy policy and store listing copy drafted 2026-08-13 — PRIVACY_POLICY.md and STORE_LISTING.md. Four owner decisions still open at the foot of STORE_LISTING (public support email, price, name availability, effective date).
+- [ ] Screenshots — need a real device; the five shots and capture conditions are specified in STORE_LISTING.
+- [ ] Publish the privacy policy at a public URL (GitHub Pages will not serve a private repo on a free plan — use a separate public repo or a static host; do **not** make the app repo public).
 
 ## Parking
 

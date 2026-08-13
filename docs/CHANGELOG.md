@@ -12,7 +12,12 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 - **Haptics** at the two moments already marked by a chime: light when a timer closes, medium when the day is sealed. Nothing else vibrates.
 - 10 bridge tests (native detection incl. a malformed global, no-op behaviour off native, id stability and range, refusal to schedule in the past). Suite: **119 green**.
 
+#### Fixed
+- Settings' sound caption said soundscapes are synthesized "in your browser" — true of the web build, wrong the moment the app is native. Now "on your device", which is accurate in all three targets.
+
 #### Documentation
+- **`docs/MAC_SETUP.md`** — the day-one script for the build machine: install list, proving the web side green before touching anything native, generating `ios/`, the audio-session work called out as the release blocker it is, a concrete way to verify the blind-written notification and haptics in a minute rather than fifty, and the gotchas worth not rediscovering.
+- **`docs/PRIVACY_POLICY.md`** and **`docs/STORE_LISTING.md`** — publishable policy plus every App Store Connect field with character counts. Claims in the policy were verified against the source: the only `fetch` reads a file from inside the app, and the Google Fonts import survives solely in the artifact branch, which the native build tree-shakes away. The app contacts no server.
 - **`docs/FUTURE_CHANGES.md`** — a sealed post-publication constitution, not to be acted on until v1.0 is live on the App Store; CLAUDE.md carries the seal so it binds every session. It records what changes once real people depend on the app (resets stop being harmless, schema changes become one-way doors, releases are gated, feature requests are not mandates, and we still refuse to measure) and opens the post-launch queue with the **first-run tutorial** — the problem it solves, the conventional answers the constitution forbids, and the constraint that the world must teach rather than the interface.
 
 ## [0.4.0] — 2026-08-08
