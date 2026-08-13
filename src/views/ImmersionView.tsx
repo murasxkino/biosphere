@@ -3,6 +3,7 @@ import { ARCH, iconOf } from "../domain/constants";
 import { fmtTime, msFmt } from "../domain/time";
 import type { Biosphere, Habit } from "../domain/types";
 import { AUDIO } from "../audio/engine";
+import { haptic, scheduleTimerEnd, cancelTimerEnd } from "../native/bridge";
 import { SceneCanvas } from "../scenes/SceneCanvas";
 import { Ic } from "../ui/Ic";
 
@@ -64,11 +65,27 @@ export function ImmersionView({
     const iv = setInterval(() => setTick((x) => x + 1), 500);
     return () => clearInterval(iv);
   }, [running]);
+  // a timer is ephemeral by design: leaving the biosphere abandons it, so any
+  // notification it scheduled must leave with it rather than ring for nothing
+  const pending = useRef<string[]>([]);
+  useEffect(() => {
+    pending.current = Object.keys(runs);
+  }, [runs]);
+  useEffect(
+    () => () => {
+      pending.current.forEach((id) => cancelTimerEnd(id));
+    },
+    []
+  );
+
   useEffect(() => {
     const t = Date.now();
     const finished = Object.keys(runs).filter((id) => t >= runs[id].end);
     if (finished.length) {
       AUDIO.chime();
+      haptic("light");
+      // it closed while we were watching — the scheduled notification is moot
+      finished.forEach((id) => cancelTimerEnd(id));
       setRuns((r) => {
         const nr = { ...r };
         finished.forEach((id) => delete nr[id]);
@@ -86,6 +103,10 @@ export function ImmersionView({
 
   const toggleTimer = (h: Habit) => {
     if (!h.timer) return;
+    // iOS freezes JS timers in the background, so the notification is scheduled
+    // when the timer starts rather than when it would fire (APP_STORE_ROADMAP §6)
+    if (runs[h.id]) cancelTimerEnd(h.id);
+    else scheduleTimerEnd(h.id, h.name, new Date(Date.now() + h.timer * 60000));
     setRuns((r) => {
       const nr = { ...r };
       if (nr[h.id]) delete nr[h.id];

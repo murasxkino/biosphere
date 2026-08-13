@@ -1,6 +1,6 @@
 # PROJECT STATUS
 
-**Updated:** 2026-08-08 · **Version:** 0.4.0 (tagged `v0.4.0` — the soundtrack release and the first steps out of the browser) · **Current milestone:** M6 complete through Phase B's portable half; **M7 (native platform work) begins on the Mac**.
+**Updated:** 2026-08-08 · **Version:** 0.4.0 (tagged `v0.4.0`) · **Current milestone:** **M7 — native platform work, portable half done.** The bridge, the timer notification, and haptics are written and tested; what remains needs the Mac and a device: `AVAudioSession`, background audio, interruptions, and the device leg of the manual matrix.
 
 ## The goal changed (2026-07-15)
 

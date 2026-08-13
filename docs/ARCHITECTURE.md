@@ -15,7 +15,9 @@ One React file (`biosphere.jsx`), default-exported `App`, running in the Claude 
 7. **Views** — `BioTile`+`HomeView`, `ImmersionView`, `NightView`, `JournalView`, `StatsView`, `SettingsView`, `Onboard`.
 8. **App root** — state, effects, routing (contract below).
 
-Dependency direction is strictly downward; views never touch `store` or `AUDIO` state directly except via props/callbacks (`AUDIO.chime()` inside ImmersionView is the one sanctioned direct call).
+9. **Native bridge** (M7) — `src/native/bridge.ts`, the only place the app touches the device: haptics and the focus-timer notification (FEATURE_SPEC §3.11). It imports nothing statically; native is detected through the global Capacitor injects, and plugins load via dynamic `import()` only once we are certain we are on a device. Consequently neither the web bundle nor the artifact carries Capacitor — the web build code-splits it into a chunk that is never fetched, and `build-artifact.mjs` marks `@capacitor/*` external so the specifiers survive only inside unreachable code.
+
+Dependency direction is strictly downward; views never touch `store` or `AUDIO` state directly except via props/callbacks (`AUDIO.chime()` inside ImmersionView is the one sanctioned direct call, joined by `haptic()` and the timer-notification calls beside it).
 
 ## State ownership
 

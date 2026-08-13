@@ -29,7 +29,11 @@ await build({
   format: "esm",
   target: "es2020",
   jsx: "transform",
-  external: ["react"],
+  // The sandbox is never a native platform, so src/native/bridge.ts short-circuits
+  // before its dynamic imports ever run. Marking the plugins external keeps ~68 KB
+  // of unreachable Capacitor out of the single file; the specifiers survive only
+  // inside code that cannot execute here, so nothing is ever resolved.
+  external: ["react", "@capacitor/*"],
   // The sandbox cannot serve bundled font files — this target keeps the CDN
   // import (src/ui/style.ts); the local @font-face block is dropped here.
   define: { __ARTIFACT_BUILD__: "true" },

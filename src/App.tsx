@@ -14,6 +14,7 @@ import { computeSched } from "./domain/schedule";
 import type { Biosphere, Habit, Journal, JournalEntry, ViewState } from "./domain/types";
 import { store } from "./storage/adapter";
 import { AUDIO } from "./audio/engine";
+import { haptic } from "./native/bridge";
 import { MUSIC } from "./audio/music";
 import { STYLE } from "./ui/style";
 import { Splash } from "./ui/Splash";
@@ -264,6 +265,7 @@ export default function App() {
         store.set(JOURNAL_KEY, nj);
         return nj;
       });
+      haptic("medium"); // the day closing — the one moment worth feeling
       say("Day sealed ✦");
     },
     [now, say]

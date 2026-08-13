@@ -28,6 +28,14 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [ ] Manual matrix — **device half**, needs the iPhone: OS-level reduced-motion, the silent switch, backgrounding and interruptions, `-webkit-touch-callout` (a WebKit property Chrome does not implement), real-hardware scroll and tap feel.
 - [ ] Fold in owner playthrough findings.
 
+## Milestone M7 — native platform work
+
+- [x] Native bridge, timer-completion notification (scheduled on start), haptics on timer close and seal — written and tested 2026-08-08 (FEATURE_SPEC §3.11). Behaviour on a device is unverified until the Mac.
+- [ ] `AVAudioSession` playback category (survive the silent switch), background audio, interruption handling — needs Xcode and `ios/`.
+- [ ] `npm run ios:add`, then the first real build and TestFlight.
+- [ ] Device leg of the manual matrix (see PROJECT_STATUS) and scene-loop profiling on hardware.
+- [ ] Privacy policy, store listing copy, screenshots.
+
 ## Parking
 
 See BACKLOG.md — nothing there starts without an explicit go.

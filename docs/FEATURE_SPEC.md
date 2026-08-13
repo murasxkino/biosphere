@@ -91,6 +91,14 @@ Ambience and soundtrack are **independent layers**: each has its own toggle (imm
 
 **Layer level sliders** — hovering (or keyboard-focusing into) either immersion toggle reveals a vertical slider beneath it in a small glass panel: the layer's listening level (0–1, step 0.05), persisted globally (`soundLevel`/`musicLevel`). Defaults are the owner's by-ear blend from the M4 session — **ambience 0.45, soundtrack 1** (`DEFAULT_SOUND_LEVEL`/`DEFAULT_MUSIC_LEVEL` in `domain/constants.ts`): the world sits back, the soundtrack carries. The toggle stays the hard gate; the slider sets where "open" sits, gliding live (τ 0.15 s). The panels live inside the dissolving chrome and are invisible until sought. On touch devices hover does not exist, so the sliders stay tucked away — Settings' master volume remains the touch-side level control.
 
+### 3.11 The device (native builds only)
+
+Two native affordances, both enhancement and neither required — off native, or wherever the platform declines, the app is exactly the app it was (`src/native/bridge.ts`).
+
+**A local notification when a focus timer closes.** iOS freezes JavaScript timers the moment the app leaves the foreground, so a running timer cannot ring itself from the background. The notification is therefore **scheduled when the timer starts**, at the moment it will end, and cancelled if the timer is stopped, if it closes while the app is watching, or if the user leaves the biosphere (timers are ephemeral by design — FR-6). Permission is requested the first time a timer is actually started, never at launch, so the prompt arrives attached to something the user just chose to do; refusal costs nothing but the notification. The copy is the habit's name and *your window has closed* — the timer is an aid and never claims the habit itself is done. **This is the only notification BIOSPHERE will ever send** (PRODUCT_REQUIREMENTS non-requirements; BACKLOG permanent refusals).
+
+**Haptics at the two moments already marked by a chime**: a light tap when a focus timer closes, and a medium one when the day is sealed. Nothing else in the app vibrates — a buzz for anything ordinary would be the dopamine mechanic DESIGN_PHILOSOPHY refuses.
+
 ## 4. System behaviors
 
 - **Sound toggle** (everywhere): flips the ambience layer inside the user gesture; if Web Audio is unsupported, toast *Audio isn't available in this browser*. The **soundtrack toggle** does the same for the music layer (§3.10).

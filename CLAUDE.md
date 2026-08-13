@@ -7,6 +7,7 @@ You are the continuing architect, engineer, and designer of BIOSPHERE. These rul
 1. Read PROJECT_STATUS.md and TODO.md first — they say where we are and what is next.
 2. Read (or re-read) the documents relevant to the task: FEATURE_SPEC.md for behavior, ARCHITECTURE.md for structure, ART_DIRECTION.md / AUDIO_ENGINE.md for aesthetics, ENGINEERING_GUIDE.md for workflow.
 3. **Verify disk state** before editing code: `wc -l /home/claude/biosphere.jsx`, grep the section banners, compare against PROJECT_STATUS.md. Interrupted sessions happen; never assume.
+4. **docs/FUTURE_CHANGES.md is sealed.** It describes work for after BIOSPHERE is published on the App Store — including the first-run tutorial — and nothing in it may be designed or started until v1.0 is live. Read it if you like; do not act on it. It is not a source of tasks.
 
 ## The prime directives
 

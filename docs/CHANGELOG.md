@@ -4,7 +4,16 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 
 ## [Unreleased]
 
-Nothing yet — the next entries belong to M7 (native platform work).
+### Milestone M7 — native platform work (in progress)
+
+#### Added
+- **The native bridge** (`src/native/bridge.ts`, FEATURE_SPEC §3.11) — the only place the app touches the device. It imports nothing statically: native is detected through the global Capacitor injects, and plugins load by dynamic `import()` only once we know we are on a device. The web build code-splits them into a chunk it never fetches, and the artifact marks `@capacitor/*` external, so **every top-level import in the single file is still `react` alone**.
+- **A local notification when a focus timer closes.** iOS freezes JS timers in the background, so it is **scheduled when the timer starts** and cancelled if the timer is stopped, closes in the foreground, or is abandoned by leaving the biosphere. Permission is asked the first time a timer is started rather than at launch. Copy is the habit's name and *your window has closed* — the timer never claims the habit is done. The only notification the app will ever send.
+- **Haptics** at the two moments already marked by a chime: light when a timer closes, medium when the day is sealed. Nothing else vibrates.
+- 10 bridge tests (native detection incl. a malformed global, no-op behaviour off native, id stability and range, refusal to schedule in the past). Suite: **119 green**.
+
+#### Documentation
+- **`docs/FUTURE_CHANGES.md`** — a sealed post-publication constitution, not to be acted on until v1.0 is live on the App Store; CLAUDE.md carries the seal so it binds every session. It records what changes once real people depend on the app (resets stop being harmless, schema changes become one-way doors, releases are gated, feature requests are not mandates, and we still refuse to measure) and opens the post-launch queue with the **first-run tutorial** — the problem it solves, the conventional answers the constitution forbids, and the constraint that the world must teach rather than the interface.
 
 ## [0.4.0] — 2026-08-08
 
