@@ -87,6 +87,8 @@ Building and submitting an iOS app requires macOS and Xcode. The owner develops 
 
 **Regardless of route, a physical iPhone is required** — simulator audio behaviour differs from hardware, and audio is this app's soul.
 
+**Decided 2026-08-13: the owner is buying a Mac.** Assessed for this project specifically — a **MacBook Neo** (A18 Pro, announced March 2026 at $599) is sufficient: BIOSPHERE is ~6,500 lines that Vite builds in seconds, and the iOS side is a thin Capacitor shell, so the "large codebase" Xcode benchmarks that reviewers penalise the machine for are not our workload. Two caveats recorded so they are not rediscovered later: take the **$699 / 512 GB** model, because Xcode is ~40 GB and storage is not upgradeable afterwards; and **8 GB of RAM is a permanent hardware cap**, so Xcode, the Simulator, a dev server and a browser should not run together — our device-first workflow mostly avoids the Simulator anyway. Day-one instructions live in **MAC_SETUP.md**.
+
 ## 9. Consequences for the constitution
 
 PRODUCT_REQUIREMENTS.md was written for the artifact sandbox and has been amended alongside this document: FR-11 and NFR-5 no longer claim "no audio files" (superseded by ADR-8), NFR-3 tightens to *zero* runtime network calls, the platform constraints now describe three delivery targets, and local timer notifications leave the non-requirements list. ROADMAP.md gains milestones M6–M8 for the phases above.

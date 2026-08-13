@@ -32,7 +32,7 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 
 - [x] Native bridge, timer-completion notification (scheduled on start), haptics on timer close and seal — written and tested 2026-08-08 (FEATURE_SPEC §3.11). Behaviour on a device is unverified until the Mac.
 - [ ] `AVAudioSession` playback category (survive the silent switch), background audio, interruption handling — needs Xcode and `ios/`.
-- [ ] `npm run ios:add`, then the first real build and TestFlight.
+- [ ] `npm run ios:add`, then the first real build and TestFlight — **follow MAC_SETUP.md**, written ahead of the move so day one is spent building.
 - [ ] Device leg of the manual matrix (see PROJECT_STATUS) and scene-loop profiling on hardware.
 - [ ] Privacy policy, store listing copy, screenshots.
 
