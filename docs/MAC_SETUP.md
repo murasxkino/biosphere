@@ -12,12 +12,14 @@ Everything up to here has been done on Windows: the app, the tests, the Capacito
 
 | What | How | Notes |
 |---|---|---|
-| **Xcode** | Mac App Store | ~40 GB with simulators. Launch it once and accept the licence, or every CLI step fails with a confusing error. |
-| **Command Line Tools** | `xcode-select --install` | |
-| **Node LTS** | [nodejs.org](https://nodejs.org) or Homebrew | The repo needs Node ≥ 20 (`engines` in package.json). |
+| **Xcode** | Mac App Store | Launch it once and accept the licence, or every CLI step fails with a confusing error. |
+| **iOS platform** | `xcodebuild -downloadPlatform iOS` | **Xcode no longer ships it.** Several GB, and nothing — not even a device build — will compile without it: destinations come back "iOS *n* is not installed". Start it early; it is the longest single wait of the day. |
+| **Command Line Tools** | `xcode-select --install` | Installing them *repoints* `xcode-select` at the CLT. Put it back, or every native step fails: `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`. |
+| **Node 22** | `brew install node@22` | Match CI (`.github/workflows/ci.yml`), do not just take "current". `engines` says ≥ 20, but on **Node 26 eighteen tests fail** — it ships an experimental global `localStorage` that returns `undefined` without `--localstorage-file` and shadows jsdom's real one. The app is fine; the toolchain is too new. node@22 is keg-only, so put `/opt/homebrew/opt/node@22/bin` first in `PATH`. |
 | **Claude Code** | `npm install -g @anthropic-ai/claude-code` | |
 | **GitHub CLI** | `brew install gh`, then `gh auth login` | Same account as the Windows machine: **murasxkino**. |
-| **CocoaPods** | `sudo gem install cocoapods` | Capacitor uses it to link native plugins. |
+
+**CocoaPods is not needed.** Capacitor 8 links native plugins through Swift Package Manager: there is no `Podfile` and no `.xcworkspace`. (If you ever do need it, `brew install cocoapods` — macOS system Ruby is 2.6 and far too old for `sudo gem install cocoapods`.)
 
 On a **MacBook Neo (8 GB, not upgradeable)**: do not run Xcode, the iOS Simulator, a Vite dev server, and a browser at once. Most of our work uses a physical iPhone rather than the Simulator, which is the heaviest of those — prefer the device.
 
@@ -39,8 +41,10 @@ If those pass, the move is clean and any later failure belongs to the native lay
 ```
 npm run ios:add      # cap add ios — needs macOS; this is why the Mac exists
 npm run ios:sync     # builds the web app and copies it into ios/
-npm run ios:open     # opens the workspace in Xcode
+npm run ios:open     # opens App.xcodeproj in Xcode
 ```
+
+Capacitor 8 uses Swift Package Manager, so what opens is a **project, not a workspace**, and the plugins arrive as resolved packages (`capacitor-swift-pm`) rather than pods.
 
 `ios/` is generated, arrives with its own `.gitignore`, and **should be committed** — Capacitor treats it as project source, and it is where the native configuration below lives.
 
@@ -54,9 +58,11 @@ Left unconfigured, **the ring/silent switch mutes the entire app**. For an ambie
 
 The app needs the `playback` category, which declares the audio as intentional content rather than an alert, and it needs the `audio` background mode so a soundscape and a focus timer survive the screen locking.
 
-- In Xcode: target **App** → *Signing & Capabilities* → **+ Capability** → **Background Modes** → tick **Audio, AirPlay, and Picture in Picture**. This writes `UIBackgroundModes` into `Info.plist`.
-- Setting the `AVAudioSession` category itself has no first-party Capacitor plugin. Two routes: a community plugin, or a ~15-line Swift addition to `AppDelegate.swift` calling `AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)` and `setActive(true)`. **Prefer the Swift shim** — it is smaller than a dependency, does exactly one thing, and cannot rot.
-- Also handle **interruptions** (a call, another app taking the session): observe `AVAudioSession.interruptionNotification` and resume on `.ended`, or the world goes quiet after a phone call and never returns.
+- `UIBackgroundModes: [audio]` in `Info.plist`. Xcode writes it for you via target **App** → *Signing & Capabilities* → **+ Capability** → **Background Modes** → **Audio, AirPlay, and Picture in Picture**; editing the plist directly does the same thing and arrives as a reviewable diff instead of a click.
+- Setting the `AVAudioSession` category itself has no first-party Capacitor plugin. Two routes: a community plugin, or a small Swift addition to `AppDelegate.swift`. **Prefer the Swift shim** — it is smaller than a dependency, does exactly one thing, and cannot rot.
+- **Set the category, but do not activate the session at launch** (decided 2026-08-16). This corrects the original instruction to call `setActive(true)` alongside `setCategory`. Sound only ever begins on a tap (FEATURE_SPEC §4, *Autoplay restore*), and both layers off is a supported way to use the app — so activating at launch would cut off whatever the user was already listening to before BIOSPHERE had made a sound of its own. The silent switch is governed by the *category*; iOS activates the session implicitly when audio actually starts, which is exactly when it should.
+- Also handle **interruptions** (a call, another app taking the session): observe `AVAudioSession.interruptionNotification` and reactivate on `.ended`, but only when the payload carries `.shouldResume` — resuming without it is how an app talks over a call still in progress. Without any of this the world goes quiet after a phone call and never returns.
+- **Watch for WebKit re-asserting its own category.** The shim configures the app's session, but the sound comes from a `WKWebView`, and WebKit sets a category of its own for web audio. The silent-switch test on hardware is the acceptance criterion, not the fact that the Swift compiled. Note too that reactivating the *session* need not wake a suspended `AudioContext`: `audio/engine.ts` only calls `resume()` inside the user-gesture start path, so if the soundscape stays dead after an interruption the remaining fix is in `src/`, not in `ios/`.
 
 ### 4b. Verify what was written blind
 
@@ -81,10 +87,12 @@ Then profile the scene loop on hardware against the ENGINEERING_GUIDE budgets �
 
 ```
 npm i -D @capacitor/assets
-npx capacitor-assets generate --ios
+npm run ios:assets
 ```
 
-A `splash.png` (2732²) does not exist yet — see `assets/README.md`. Until it does, check what the launch screen actually shows; `capacitor.config.ts` sets the background to `#05070b` so any gap should read as the app's own dark rather than a white flash.
+**Always the script, never `npx capacitor-assets generate` by hand** (done 2026-08-16). With no `splash.png` to work from, the generator derives both appearances from the icon and applies *its own* defaults — `#ffffff` light, `#111111` dark — ignoring `capacitor.config.ts` completely. Since iOS serves the light variant to any device not in dark mode, the ordinary case was the white flash the background colour exists to prevent. `ios:assets` pins both appearances to `#05070b`; the colours live in `package.json` beside the other `ios:*` scripts so the correct command is the easy one. Omitting `--ios` also scatters PWA output (`icons/`, `public/manifest.webmanifest`) that nothing here wants.
+
+A `splash.png` (2732²) still does not exist — see `assets/README.md`. Derived from the app icon, the launch screen reads as a small tile floating on the dark, because the icon carries its own panel edge; it no longer flashes white, but it is not artwork that belongs to the background.
 
 ## 6. Signing and submission
 
