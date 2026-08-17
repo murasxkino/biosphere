@@ -1,4 +1,5 @@
 import UIKit
+import AVFoundation
 import Capacitor
 
 @UIApplicationMain
@@ -7,8 +8,75 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        configureAudioSession()
+        observeAudioInterruptions()
         return true
+    }
+
+    /* ------------------------------ audio session ----------------------------- */
+
+    /*  BIOSPHERE's soundscape is content, not an alert. Left unconfigured, iOS
+        treats web audio as ambient and the ring/silent switch mutes the entire
+        app — fatal for an ambient app, and the reason APP_STORE_ROADMAP lists
+        this as a release blocker rather than a polish item. The `playback`
+        category declares the audio intentional: it survives the silent switch,
+        and together with the `audio` background mode in Info.plist it lets a
+        soundscape and a focus timer outlive the screen locking.
+
+        We set the category but deliberately do not activate the session here.
+        Sound only ever begins on a tap (FEATURE_SPEC §4, Autoplay restore), and
+        a whole session can be lived through silent — both layers off is a
+        supported way to use the app. Activating at launch would cut off
+        whatever the user was already listening to before BIOSPHERE had made a
+        sound of its own. iOS activates the session implicitly when audio
+        actually starts, which is precisely when we want it.                     */
+    private func configureAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+        } catch {
+            /* Enhancement, never requirement: the app is still the app, it will
+               simply obey the silent switch as a web page would.                */
+        }
+    }
+
+    /*  A call, an alarm, or another app taking the session stops us, and iOS
+        resumes nothing on its own. Without this the world goes quiet after a
+        phone call and never comes back.                                        */
+    private func observeAudioInterruptions() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(audioSessionInterrupted(_:)),
+            name: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance()
+        )
+    }
+
+    @objc private func audioSessionInterrupted(_ notification: Notification) {
+        guard
+            let info = notification.userInfo,
+            let rawType = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSession.InterruptionType(rawValue: rawType)
+        else { return }
+
+        switch type {
+        case .began:
+            /* The system has already silenced us; there is nothing to do but
+               wait to be told it is over.                                       */
+            break
+
+        case .ended:
+            /*  `.shouldResume` is the system's permission to speak again.
+                Reactivating without it is how an app talks over a call that is
+                still in progress.                                               */
+            guard
+                let rawOptions = info[AVAudioSessionInterruptionOptionKey] as? UInt,
+                AVAudioSession.InterruptionOptions(rawValue: rawOptions).contains(.shouldResume)
+            else { return }
+            try? AVAudioSession.sharedInstance().setActive(true)
+
+        @unknown default:
+            break
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
