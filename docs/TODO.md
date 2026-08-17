@@ -31,8 +31,9 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 ## Milestone M7 — native platform work
 
 - [x] Native bridge, timer-completion notification (scheduled on start), haptics on timer close and seal — written and tested 2026-08-08 (FEATURE_SPEC §3.11). Behaviour on a device is unverified until the Mac.
-- [ ] `AVAudioSession` playback category (survive the silent switch), background audio, interruption handling — needs Xcode and `ios/`.
-- [ ] `npm run ios:add`, then the first real build and TestFlight — **follow MAC_SETUP.md**, written ahead of the move so day one is spent building.
+- [~] `AVAudioSession` playback category (survive the silent switch), background audio, interruption handling — **written 2026-08-16**: `playback` set at launch, the session left to activate implicitly, interruption recovery gated on `.shouldResume`. It compiles and the app runs, but every claim it makes is a device test — **unverified until the iPhone**. Watch for WebKit re-asserting its own category for WKWebView audio.
+- [x] `npm run ios:add` — done 2026-08-16, `ios/` committed; icon and launch screen (§5) done in the same session.
+- [ ] First build on **real hardware**, then TestFlight. Blocked on the owner: an Apple ID in Xcode → Settings → Accounts (free provisioning, 7-day certificate), and Developer Program enrolment before TestFlight is reachable at all.
 - [ ] Device leg of the manual matrix (see PROJECT_STATUS) and scene-loop profiling on hardware.
 - [x] Privacy policy and store listing copy drafted 2026-08-13 — PRIVACY_POLICY.md and STORE_LISTING.md. Four owner decisions still open at the foot of STORE_LISTING (public support email, price, name availability, effective date).
 - [ ] Screenshots — need a real device; the five shots and capture conditions are specified in STORE_LISTING.
