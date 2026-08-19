@@ -31,9 +31,10 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 ## Milestone M7 — native platform work
 
 - [x] Native bridge, timer-completion notification (scheduled on start), haptics on timer close and seal — written and tested 2026-08-08 (FEATURE_SPEC §3.11). Behaviour on a device is unverified until the Mac.
-- [~] `AVAudioSession` playback category (survive the silent switch), background audio, interruption handling — **written 2026-08-16**: `playback` set at launch, the session left to activate implicitly, interruption recovery gated on `.shouldResume`. It compiles and the app runs, but every claim it makes is a device test — **unverified until the iPhone**. Watch for WebKit re-asserting its own category for WKWebView audio.
+- [x] Audio on hardware — **verified on the owner's iPhone 2026-08-19**: silent switch, background audio, interruption self-recovery, and the soundtrack all pass. WebKit did override the AppDelegate category; the fix is the engine's native media-element sink plus a recovery watchdog, and the soundtrack loader now accepts Capacitor's status-0 media responses (PROJECT_STATUS § Hardware verdicts).
 - [x] `npm run ios:add` — done 2026-08-16, `ios/` committed; icon and launch screen (§5) done in the same session.
-- [ ] First build on **real hardware**, then TestFlight. Blocked on the owner: an Apple ID in Xcode → Settings → Accounts (free provisioning, 7-day certificate), and Developer Program enrolment before TestFlight is reachable at all.
+- [x] First build on real hardware — done 2026-08-19, free provisioning as `com.murasxkino.biosphere.dev` (certificate expires 2026-08-24; re-sign by rebuilding). TestFlight still blocked on Developer Program enrolment (the owner's friend will enrol; note in PROJECT_STATUS that the account holder legally owns the app).
+- [ ] §4b on hardware: the timer notification (permission prompt on first timer start, background firing, the three cancel paths) and both haptics. The audio half of §4b is done; this is what the next device session starts with.
 - [ ] Device leg of the manual matrix (see PROJECT_STATUS) and scene-loop profiling on hardware.
 - [x] Privacy policy and store listing copy drafted 2026-08-13 — PRIVACY_POLICY.md and STORE_LISTING.md. Four owner decisions still open at the foot of STORE_LISTING (public support email, price, name availability, effective date).
 - [ ] Screenshots — need a real device; the five shots and capture conditions are specified in STORE_LISTING.

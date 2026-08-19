@@ -1,6 +1,6 @@
 # PROJECT STATUS
 
-**Updated:** 2026-08-16 · **Version:** 0.4.0 (tagged `v0.4.0`) · **Current milestone:** **M7 — native platform work, on the Mac.** `ios/` now exists and the app runs correctly on iOS. Written but unverified on hardware: the audio session. Still untouched: everything needing a physical iPhone — the silent switch, haptics, the timer notification, and TestFlight.
+**Updated:** 2026-08-19 · **Version:** 0.4.0 (tagged `v0.4.0`) · **Current milestone:** **M7 — native platform work; the audio layer is verified on hardware.** The app runs on the owner's iPhone; silent switch, background audio, interruption recovery, and the soundtrack all pass on the device. Remaining in M7: the timer notification and haptics (§4b), the device matrix (§4c), profiling, and TestFlight (blocked on Developer Program enrolment).
 
 ## The Mac session (2026-08-16) — branch `m7-native-ios`
 
@@ -15,7 +15,9 @@ Working copy moved to a real clone at `~/biosphere`: the handoff had been unzipp
 
 **Verified on the iOS Simulator** (iPhone 17 Pro, iOS 26.5): compiles, installs, runs. Onboarding, Enter, Home with correct wall-clock resolution, and Settings all render; portrait lock and safe-area insets correct; the built bundle carries the 8.4 MB soundtrack. IndexedDB and localStorage both work under `capacitor://localhost` — checked directly with a probe, because the boot path was briefly suspected and turned out innocent.
 
-**Not verified — needs the iPhone and an Apple ID in Xcode:** the silent switch, and whether WebKit re-asserts its own category over ours (the real acceptance criterion for §4a); background audio; interruption recovery; the timer notification and haptics written blind on Windows (§4b); the rest of the device matrix (§4c). No Developer Program membership yet, so TestFlight is out of reach and free provisioning means a 7-day certificate.
+**Hardware verdicts (owner's iPhone 16 "DARCY", iOS 26.6, free provisioning as `com.murasxkino.biosphere.dev`):** WebKit did re-assert its own `ambient` category over the AppDelegate shim, exactly as feared — silent mode muted the app and locking killed the sound. Fixed in the engine, not the shim: on native, master routes through a MediaStreamAudioDestinationNode into a hidden `<audio>` element, so the same synthesized sound arrives as media playback and earns `playback` (AUDIO_ENGINE § Native output sink). Two further device bugs found and fixed: interruptions left the world silent until the sound toggle was flipped twice (a 2 s watchdog now automates that recovery), and the soundtrack never played — Capacitor's iOS asset handler serves media files as status-0 responses with the body intact, which the loader had been declining; it also chokes on the `?v=` cache-buster, now stripped on native. **All re-verified by ear on the device: silent switch, screen lock, hands-off call recovery, and the soundtrack in immersion — pass (2026-08-19).**
+
+**Still to verify on hardware (§4b/§4c):** the timer notification (permission prompt timing, firing from background, the three cancel paths), the two haptics, OS-level reduced motion, `-webkit-touch-callout`, scroll and tap feel, safe-area against the notch, and scene-loop profiling. No Developer Program membership yet, so TestFlight is out of reach and free provisioning means a 7-day certificate (expires 2026-08-24; re-sign by rebuilding).
 
 **Open, none blocking:** iPad ships by default (`TARGETED_DEVICE_FAMILY = "1,2"`) with all four orientations and no layout ever seen there; `MARKETING_VERSION` is `1.0` against `package.json`'s `0.4.0`; `UIRequiredDeviceCapabilities` still says `armv7`; real splash artwork still undrawn.
 
