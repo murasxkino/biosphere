@@ -132,6 +132,42 @@ describe("capability gating", () => {
   });
 });
 
+describe("the native output sink", () => {
+  /* On native iOS, WebKit grants the `playback` session category only to
+     media-element audio; pure Web Audio gets `ambient` and dies on the silent
+     switch (hardware, 2026-08-17). The engine therefore routes master through
+     a media-stream sink there — and only there. */
+  it("routes master through a media-stream sink on native, never the bare destination", () => {
+    (window as any).Capacitor = { isNativePlatform: () => true };
+    (MockCtx.prototype as any).createMediaStreamDestination = function (this: MockCtx) {
+      const n: any = new MockNode(this, "mediaStreamDestination");
+      n.stream = { kind: "stream" };
+      return n;
+    };
+    try {
+      const e = new AudioEngine();
+      e.ensure();
+      const ctx = ctxOf(e);
+      const sink: any = (ctx.created.mediaStreamDestination || [])[0];
+      expect(sink).toBeTruthy();
+      expect((e.master as any).outputs).toContain(sink);
+      expect((e.master as any).outputs).not.toContain(ctx.destination);
+      expect(e.sinkEl).toBeTruthy();
+      expect((e.sinkEl as any).srcObject).toBe(sink.stream);
+      e.stop();
+    } finally {
+      delete (window as any).Capacitor;
+      delete (MockCtx.prototype as any).createMediaStreamDestination;
+    }
+  });
+
+  it("keeps the plain destination off native — web and artifact are untouched", () => {
+    engine.ensure();
+    expect((engine.master as any).outputs).toContain(ctxOf(engine).destination);
+    expect(engine.sinkEl).toBeNull();
+  });
+});
+
 describe("master chain and lifecycle", () => {
   it("lazily creates master (volume) + per-layer buses (gated 0 while off) wired to destination", () => {
     engine.ensure();

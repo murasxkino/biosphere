@@ -6,10 +6,13 @@
 /*                                                                            */
 /*  Graph: scenes → sceneBus ─┐                                               */
 /*         music  → musicBus ─┼→ master (volume) → destination                */
+/*         (native: master → media-stream sink instead — see                  */
+/*          connectMasterToOutput for why WKWebView demands it)               */
 /*  Each layer is gated by its own bus; master carries only the volume.       */
 /* ========================================================================== */
 
 import { DEFAULT_SOUND_LEVEL, DEFAULT_MUSIC_LEVEL } from "../domain/constants";
+import { isNative } from "../native/bridge";
 
 export interface SceneHandle {
   name: string;
@@ -35,6 +38,16 @@ interface GustTarget {
   peak: number;
 }
 
+
+/* play() returns a promise in browsers and nothing in jsdom; a refusal (or a
+   missing implementation) is never worth more than silence. */
+const tryPlay = (el: HTMLAudioElement) => {
+  try {
+    const p = el.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  } catch (e) {}
+};
+
 export class AudioEngine {
   ctx: AudioContext | null;
   master: GainNode | null;
@@ -49,6 +62,7 @@ export class AudioEngine {
   current: SceneHandle | null;
   buffers: Record<string, AudioBuffer>;
   passagePending: boolean;
+  sinkEl: HTMLAudioElement | null;
 
   constructor() {
     this.ctx = null;
@@ -64,6 +78,7 @@ export class AudioEngine {
     this.current = null;
     this.buffers = {};
     this.passagePending = false;
+    this.sinkEl = null;
   }
 
   supported() {
@@ -77,7 +92,7 @@ export class AudioEngine {
       this.ctx = new AC();
       this.master = this.ctx!.createGain();
       this.master.gain.value = this.volume;
-      this.master.connect(this.ctx!.destination);
+      this.connectMasterToOutput();
       this.sceneBus = this.ctx!.createGain();
       this.sceneBus.gain.value = this.enabled ? this.sceneLevel : 0;
       this.sceneBus.connect(this.master);
@@ -90,7 +105,49 @@ export class AudioEngine {
         this.ctx!.resume();
       } catch (e) {}
     }
+    // an interruption can leave the sink paused with no pause event we saw;
+    // every ensure() runs inside a user gesture, the one place iOS always
+    // lets media start again
+    if (this.sinkEl && this.sinkEl.paused) tryPlay(this.sinkEl);
     return true;
+  }
+
+  /* WebKit picks the iOS audio-session category by the KIND of audio a page
+     produces: media elements get `playback`, pure Web Audio gets `ambient` —
+     which obeys the silent switch and stops when the screen locks. Observed
+     on hardware 2026-08-17: it overrides the category AppDelegate sets, so
+     the shim alone cannot save the soundscape. Routing the master bus into a
+     hidden <audio> element makes the same synthesized sound arrive as media
+     playback; WebKit then grants `playback`, and with the `audio` background
+     mode the world survives both the switch and the lock. Only native needs
+     this; everywhere else the plain destination is the simpler, lower-latency
+     truth, and any failure here falls back to it. */
+  connectMasterToOutput() {
+    const ctx = this.ctx!;
+    if (isNative() && typeof (ctx as any).createMediaStreamDestination === "function") {
+      try {
+        const sink = (ctx as any).createMediaStreamDestination();
+        const el = document.createElement("audio");
+        (el as any).srcObject = sink.stream;
+        el.setAttribute("playsinline", "");
+        // media paused by the OS (a call, another app) does not resume itself;
+        // one quiet retry covers the common case, the next tap covers the rest
+        el.onpause = () => {
+          setTimeout(() => {
+            if ((this.enabled || this.musicEnabled) && document.visibilityState !== "hidden") tryPlay(el);
+          }, 300);
+        };
+        el.style.display = "none";
+        document.body.appendChild(el);
+        this.master!.connect(sink);
+        this.sinkEl = el;
+        tryPlay(el);
+        return;
+      } catch (e) {
+        /* fall through to the direct path */
+      }
+    }
+    this.master!.connect(ctx.destination);
   }
 
   noise(type: string) {
