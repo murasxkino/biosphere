@@ -8,6 +8,7 @@
 
 import { AUDIO, AudioEngine } from "./engine";
 import { MUSIC_TRACKS } from "./tracks";
+import { isNative } from "../native/bridge";
 import type { Track } from "./tracks";
 
 const SEAM_MAX_S = 3; // seconds of tail/head overlap hiding the loop seam
@@ -70,12 +71,31 @@ export class MusicPlayer {
       this.cache.set(arch, buf);
     } else {
       try {
-        const res = await fetch(entry.url);
-        if (!res.ok) return;
+        /* The ?v= cache-buster serves the web target, where HTTP caches
+           outlive re-encoded tracks. WKWebView's scheme handler answers a
+           query-carrying asset URL with status 0 (observed on device,
+           2026-08-17) — and the app bundle needs no busting: every build
+           ships its own files. */
+        const url = isNative() ? entry.url.split("?")[0] : entry.url;
+        const res = await fetch(url);
+        /* Capacitor's iOS asset handler serves media extensions through a
+           plain URLResponse — fetch() reports that as status 0, ok false,
+           body intact (observed on device, 2026-08-17: every m4a "failed"
+           with 0 while sitting in the bundle). A real failure rejects the
+           fetch instead, and a same-origin fetch is never opaque, so 0 here
+           means "served, statusless" — never "failed". */
+        if (!res.ok && res.status !== 0) {
+          console.warn("soundtrack: fetch failed", res.status, url);
+          return;
+        }
         const bytes = await res.arrayBuffer();
         buf = await this.engine.ctx!.decodeAudioData(bytes);
       } catch (e) {
-        return; // silent by design — the world simply stays unscored
+        // silent to the listener by design — the world simply stays unscored —
+        // but never to the console: a swallowed error here cost a device
+        // debugging session (2026-08-17)
+        console.warn("soundtrack: unavailable", entry.url, (e as any)?.name, (e as any)?.message);
+        return;
       }
       this.cache.set(arch, buf); // even a superseded load keeps its decode
       const keys = Array.from(this.cache.keys());

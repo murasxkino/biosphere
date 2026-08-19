@@ -63,6 +63,7 @@ export class AudioEngine {
   buffers: Record<string, AudioBuffer>;
   passagePending: boolean;
   sinkEl: HTMLAudioElement | null;
+  sinkWatchdog: ReturnType<typeof setInterval> | null;
 
   constructor() {
     this.ctx = null;
@@ -79,6 +80,7 @@ export class AudioEngine {
     this.buffers = {};
     this.passagePending = false;
     this.sinkEl = null;
+    this.sinkWatchdog = null;
   }
 
   supported() {
@@ -141,6 +143,19 @@ export class AudioEngine {
         document.body.appendChild(el);
         this.master!.connect(sink);
         this.sinkEl = el;
+        // a phone call can end with no event this page ever sees — observed on
+        // hardware 2026-08-17: the world stayed silent until the sound toggle
+        // was flipped twice. This watchdog is that double-tap, automated: while
+        // a layer is open and the app is visible, a paused sink is always a
+        // mistake to undo, never a state to respect.
+        this.sinkWatchdog = setInterval(() => {
+          if (!(this.enabled || this.musicEnabled)) return;
+          if (typeof document !== "undefined" && document.visibilityState === "hidden") return;
+          try {
+            if (this.ctx && this.ctx.state !== "running") this.ctx.resume();
+          } catch (e) {}
+          if (el.paused) tryPlay(el);
+        }, 2000);
         tryPlay(el);
         return;
       } catch (e) {

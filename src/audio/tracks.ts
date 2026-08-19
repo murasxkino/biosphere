@@ -5,7 +5,9 @@
 /*  audio-masters/, outside every build. To swap or add a track: put the      */
 /*  master there, encode it (AUDIO_ENGINE § The soundtrack layer), drop the   */
 /*  .m4a in public/music/ and point the archetype's entry at it — bumping     */
-/*  the ?v= query so cached listeners hear the new one.                       */
+/*  the ?v= query so cached listeners hear the new one. Web only: native     */
+/*  strips the query (the bundle is its own version, and WKWebView's scheme   */
+/*  handler rejects queried asset URLs — see music.ts).                        */
 /*  null = that world is unscored and shows no music toggle.                  */
 /*  `level` is the by-ear trim of the piece against the scene's beds —       */
 /*  the M4 tuning knob. Full guidance: docs/AUDIO_ENGINE.md.                  */

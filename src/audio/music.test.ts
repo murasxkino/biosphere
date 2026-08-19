@@ -120,6 +120,22 @@ describe("availability", () => {
 });
 
 describe("playback", () => {
+  it("accepts a statusless response — Capacitor serves media as status 0 with the body intact", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 0, arrayBuffer: async () => new ArrayBuffer(8) });
+    await player.play("tundra");
+    expect(player.current).toBeTruthy();
+  });
+
+  it("strips the ?v= cache-buster on native — WKWebView rejects queried asset URLs", async () => {
+    (window as any).Capacitor = { isNativePlatform: () => true };
+    try {
+      await player.play("tundra");
+      expect(fetchMock).toHaveBeenCalledWith("/music/tundra.m4a");
+    } finally {
+      delete (window as any).Capacitor;
+    }
+  });
+
   it("fetches the manifest URL, decodes once, and wires source → gain → track → musicBus", async () => {
     await player.play("tundra");
     expect(fetchMock).toHaveBeenCalledWith("/music/tundra.m4a?v=1");
