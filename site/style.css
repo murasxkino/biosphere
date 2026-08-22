@@ -1,0 +1,47 @@
+/* BIOSPHERE — the public pages. The app's own dark, so the policy reads as
+   part of the world rather than as a legal annex bolted to it. */
+:root {
+  --bg: #05070b;
+  --ink: #e8ecf2;
+  --dim: #98a3b3;
+  --line: rgba(232, 236, 242, 0.12);
+  --accent: #b9c6dc;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 300 17px/1.65 "Outfit", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  padding: 0 20px 96px;
+}
+.wrap { max-width: 42rem; margin: 0 auto; }
+header { padding: 72px 0 8px; }
+.mark {
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  display: inline-block;
+}
+h1 {
+  font: 500 clamp(2rem, 7vw, 2.75rem)/1.15 "Cormorant Garamond", ui-serif, Georgia, serif;
+  margin: 28px 0 6px;
+  letter-spacing: 0.01em;
+}
+h2 {
+  font: 500 clamp(1.25rem, 4.5vw, 1.5rem)/1.3 "Cormorant Garamond", ui-serif, Georgia, serif;
+  margin: 48px 0 10px;
+}
+.meta { color: var(--dim); font-size: 15px; margin: 0 0 8px; }
+.lede { color: var(--ink); font-size: 19px; }
+ul { padding-left: 1.1em; }
+li { margin: 0.5em 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 56px 0 28px; }
+footer { color: var(--dim); font-size: 14px; }
+footer a { color: var(--dim); }
+.tk { color: #f0c674; border-bottom: 1px dotted #f0c674; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
