@@ -111,9 +111,15 @@ Capture with reduced motion off, sound on, and a journal with a few real days in
 
 ## URLs
 
-- **Support URL** — required. A single page is enough; a public GitHub repo README or a static page will do.
-- **Privacy policy URL** — required, even collecting nothing. See PRIVACY_POLICY.md.
-- **Marketing URL** — optional; skip for the first release.
+**Live 2026-08-22** — served by GitHub Pages from the separate public repo `murasxkino/biosphere-site`; the app repo stays private. Source of the pages is `site/` in this repo, mirrored across.
+
+| Field | URL |
+|---|---|
+| **Privacy policy URL** (required) | `https://murasxkino.github.io/biosphere-site/privacy.html` |
+| **Support URL** (required) | `https://murasxkino.github.io/biosphere-site/support.html` |
+| **Marketing URL** (optional) | `https://murasxkino.github.io/biosphere-site/` — or leave blank for the first release |
+
+To change a page: edit `site/` here first (and `docs/PRIVACY_POLICY.md` if the policy itself changes — it remains the source of truth), then copy into the public repo and push.
 
 **Hosting note:** GitHub Pages will not serve from a private repository on a free plan, and `murasxkino/biosphere` is private and should stay that way. Publish the policy from a separate small public repo, or a free static host. Do not make the app repository public to solve this.
 

@@ -39,7 +39,7 @@ Owner critiques delivered: automatic **passage between biospheres** (10 s countd
 - [ ] Device leg of the manual matrix (see PROJECT_STATUS) and scene-loop profiling on hardware.
 - [x] Privacy policy and store listing copy drafted 2026-08-13 — PRIVACY_POLICY.md and STORE_LISTING.md. Four owner decisions still open at the foot of STORE_LISTING (public support email, price, name availability, effective date).
 - [x] Screenshots — **done 2026-08-22**, `assets/screenshots/6.9-inch/` at 1320 × 2868. Taken on the 6.9" simulator, not the phone: an iPhone 16 is 6.1" and cannot produce the required size. Journal seeded (28 days) so Stillness photographs as lived-in; method in `assets/screenshots/README.md`.
-- [ ] Publish the privacy policy at a public URL (GitHub Pages will not serve a private repo on a free plan — use a separate public repo or a static host; do **not** make the app repo public).
+- [x] Publish the privacy policy at a public URL — **done 2026-08-22.** Separate public repo `murasxkino/biosphere-site` with Pages enabled; the app repo stays private as required. Privacy and support URLs recorded in STORE_LISTING § URLs. Page source lives in `site/`.
 
 ## Parking
 
