@@ -19,6 +19,19 @@ Working copy moved to a real clone at `~/biosphere`: the handoff had been unzipp
 
 **Hardware verdicts (owner's iPhone 16 "DARCY", iOS 26.6, free provisioning as `com.murasxkino.biosphere.dev`):** WebKit did re-assert its own `ambient` category over the AppDelegate shim, exactly as feared — silent mode muted the app and locking killed the sound. Fixed in the engine, not the shim: on native, master routes through a MediaStreamAudioDestinationNode into a hidden `<audio>` element, so the same synthesized sound arrives as media playback and earns `playback` (AUDIO_ENGINE § Native output sink). Two further device bugs found and fixed: interruptions left the world silent until the sound toggle was flipped twice (a 2 s watchdog now automates that recovery), and the soundtrack never played — Capacitor's iOS asset handler serves media files as status-0 responses with the body intact, which the loader had been declining; it also chokes on the `?v=` cache-buster, now stripped on native. **All re-verified by ear on the device: silent switch, screen lock, hands-off call recovery, and the soundtrack in immersion — pass (2026-08-19).**
 
+**Scene-loop profiling (DARCY, iPhone 16 @ 60 Hz, 2026-08-22)** — the M4 item that was never possible on Windows, now measured rather than felt. 10,732 frames over ~3 minutes across the app, ending on Volcanic, the heaviest scene by particle count, confirmed on screen by the owner.
+
+| Measure | Result | ENGINEERING_GUIDE budget |
+|---|---|---|
+| Frame rate | **60.1 fps**, gaps pinned at 17 ms | the device's 60 Hz |
+| Time inside `scene.draw` | **~1 ms typical, 4 ms worst seen** | 16.7 ms — using ~6% of it |
+| Frames over 20 ms | 24 of 10,732 (**0.22%**) | — |
+| Frames over 33 ms | 8 of 10,732 (**0.07%**) | — |
+| Concurrent rAF loops | **1** | 1 per mounted canvas ✅ |
+| Canvases mounted | **1** | ≤ 1 visible ✅ |
+
+Measured with a profiler injected into the *built* `.app` — never `src/`, never committed — wrapping `requestAnimationFrame` to time each callback. Two caveats, both making the numbers pessimistic rather than flattering: this was a **Debug build carrying that instrumentation**, so release is faster; and WebKit coarsens `performance.now()` to ~1 ms as a Spectre mitigation, so `draw_p50 = 0` means "below timer resolution", not zero. Neither weakens the conclusion — the loop is nowhere near its budget, and **the particle ceilings need no adjustment**. Volcanic specifically ran at 60.09 fps with a 1 ms draw and zero late frames.
+
 **Still to verify on hardware (§4b/§4c):** the timer notification (permission prompt timing, firing from background, the three cancel paths), the two haptics, OS-level reduced motion, `-webkit-touch-callout`, scroll and tap feel, safe-area against the notch, and scene-loop profiling. No Developer Program membership yet, so TestFlight is out of reach and free provisioning means a 7-day certificate (expires 2026-08-24; re-sign by rebuilding).
 
 **Open, none blocking:** iPad ships by default (`TARGETED_DEVICE_FAMILY = "1,2"`) with all four orientations and no layout ever seen there; `MARKETING_VERSION` is `1.0` against `package.json`'s `0.4.0`; `UIRequiredDeviceCapabilities` still says `armv7`; real splash artwork still undrawn.
