@@ -43,6 +43,9 @@ export function ImmersionView({
   onExit: () => void;
 }) {
   const A = ARCH[bio.archetype] || ARCH.night;
+  // The window's hours are one thing and must never break across lines — a
+  // stranded "PM" reads as a mistake rather than a line wrap.
+  const hours = (fmtTime(bio.start) + " – " + fmtTime(end)).replace(/ /g, "\u00A0");
   const [ui, setUi] = useState(true);
   const hideT = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const poke = useCallback(() => {
@@ -153,18 +156,25 @@ export function ImmersionView({
             gap: 10,
           }}
         >
-          <button
-            className="bsIcon"
-            onClick={(e) => {
-              e.stopPropagation();
-              onExit();
-            }}
-            title="Leave"
-            aria-label="Leave biosphere"
-          >
-            <Ic name="back" size={18} />
-          </button>
-          <div style={{ textAlign: "center", marginTop: 2, minWidth: 0 }}>
+          {/* The two side groups are held to the same width so the title sits on
+              the true centre of the screen. The right side carries two icons and
+              the left only one, and without this the name drifts 26 px left on a
+              phone — enough to read as crooked. 90px = two 40px icons + the 10px
+              gap; widen both together if a third control is ever added. */}
+          <div style={{ flex: "0 0 90px", display: "flex", justifyContent: "flex-start" }}>
+            <button
+              className="bsIcon"
+              onClick={(e) => {
+                e.stopPropagation();
+                onExit();
+              }}
+              title="Leave"
+              aria-label="Leave biosphere"
+            >
+              <Ic name="back" size={18} />
+            </button>
+          </div>
+          <div style={{ flex: "1 1 auto", textAlign: "center", marginTop: 2, minWidth: 0 }}>
             <div
               style={{ fontSize: 11, letterSpacing: "0.32em", color: A.accent, textTransform: "uppercase" }}
             >
@@ -185,10 +195,10 @@ export function ImmersionView({
               className="serif"
               style={{ fontStyle: "italic", fontSize: 15, color: "rgba(255,255,255,0.78)" }}
             >
-              {(bio.purpose || A.tagline) + "  ·  " + fmtTime(bio.start) + " – " + fmtTime(end)}
+              {(bio.purpose || A.tagline) + "  ·  " + hours}
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, flex: "none" }}>
+          <div style={{ display: "flex", gap: 10, flex: "0 0 90px", justifyContent: "flex-end" }}>
             {musicAvailable && (
               <div className="bsLayer">
                 <button
