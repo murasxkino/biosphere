@@ -10,6 +10,8 @@ The single source of truth for color, type, surface, and the composition of each
 | Interface / wayfinding | Outfit 200–500 | Body 300; labels letterspaced caps |
 | Wordmark | Outfit 300, 0.42 em tracking | `BIOSPHERE`; splash variant 200 @ 0.5 em |
 
+Both families are SIL Open Font License 1.1 and bundled with the app; the licence texts ship beside the `woff2` files in `public/fonts/`, as the OFL requires. Provenance and terms for every third-party asset: `THIRD_PARTY_NOTICES.md`.
+
 Base text `#f2f4f7` on near-black `#05070b`. Muted tiers: 0.78 / 0.6–0.65 / 0.45–0.55 alpha white.
 
 ## Archetype palettes
