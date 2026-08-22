@@ -119,7 +119,7 @@ Capture with reduced motion off, sound on, and a journal with a few real days in
 
 ## Decisions still owned by the owner
 
-1. **The support email that will appear publicly.** App Store Connect requires one and the privacy policy needs the same address. A dedicated address is worth considering rather than a personal one, since it goes on a public page permanently.
+1. ~~**The support email that will appear publicly.**~~ **Decided 2026-08-22: `biospheresupport@gmail.com`** — a dedicated mailbox rather than a personal one. Live in `site/privacy.html`, `site/support.html` and `docs/PRIVACY_POLICY.md`; use the same address in App Store Connect.
 2. **Price** — free, or one-time paid. Subscriptions and advertising are refused by DESIGN_PHILOSOPHY, so this is a two-way choice.
 3. **App name availability**, per the Name section above.
-4. **The exact effective date** on the privacy policy — the release date.
+4. ~~**The exact effective date** on the privacy policy.~~ **Decided 2026-08-22:** phrased as *from the first public release* rather than a calendar date — accurate whenever the app ships, and one less thing to remember on submission day.

@@ -1,7 +1,7 @@
 # Privacy Policy — BIOSPHERE
 
-**Effective:** _[date of first App Store release]_
-**Contact:** _[support email — see STORE_LISTING.md §Decisions]_
+**Effective:** from the first public release of BIOSPHERE on the App Store.
+**Contact:** biospheresupport@gmail.com
 
 ## The short version
 
@@ -38,8 +38,8 @@ BIOSPHERE is distributed through the App Store. Apple collects its own informati
 
 ## Changes to this policy
 
-If the app ever changes in a way that affects this policy, the policy will change with it and the effective date above will be updated. Given the design of the app, we do not expect this.
+If the app ever changes in a way that affects this policy, the policy will change with it, and the date of that change will be recorded here. Given the design of the app, we do not expect this.
 
 ## Contact
 
-Questions about privacy in BIOSPHERE can go to the address at the top of this document.
+Questions about privacy in BIOSPHERE can go to biospheresupport@gmail.com.

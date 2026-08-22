@@ -20,15 +20,14 @@ not serve from a private repo on a free plan. These files are therefore mirrored
 to a **separate public repo** with Pages enabled. Copy the directory across and
 push; nothing here depends on the app repo.
 
-## Before publishing
+## Settled 2026-08-22
 
-Replace both placeholders, in `privacy.html` and `support.html`:
+- **Support address:** `biospheresupport@gmail.com` — a dedicated mailbox, not a
+  personal one, because it goes on a permanently public page and into App Store
+  Connect. Use the same address in both places.
+- **Effective date:** phrased as *from the first public release*, rather than a
+  guessed calendar date. It is accurate whenever the app ships and removes a
+  decision that would otherwise have to be revisited on submission day. If the
+  policy ever changes after release, record the date of that change.
 
-| Placeholder | Value |
-|---|---|
-| `TKTK_SUPPORT_EMAIL` | The public support address (STORE_LISTING § Decisions 1) |
-| `TKTK_EFFECTIVE_DATE` | The release date (STORE_LISTING § Decisions 4) |
-
-`grep -r TKTK site/` returns nothing when they are all filled. The address goes
-on a permanently public page and into App Store Connect, so a dedicated one is
-worth more than a personal one.
+`grep -r TKTK site/` should stay empty.
