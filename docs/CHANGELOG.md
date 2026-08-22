@@ -8,9 +8,21 @@ Format follows Keep a Changelog; versions follow SemVer once released. Dates are
 
 #### Added
 - **The native bridge** (`src/native/bridge.ts`, FEATURE_SPEC §3.11) — the only place the app touches the device. It imports nothing statically: native is detected through the global Capacitor injects, and plugins load by dynamic `import()` only once we know we are on a device. The web build code-splits them into a chunk it never fetches, and the artifact marks `@capacitor/*` external, so **every top-level import in the single file is still `react` alone**.
-- **A local notification when a focus timer closes.** iOS freezes JS timers in the background, so it is **scheduled when the timer starts** and cancelled if the timer is stopped, closes in the foreground, or is abandoned by leaving the biosphere. Permission is asked the first time a timer is started rather than at launch. Copy is the habit's name and *your window has closed* — the timer never claims the habit is done. The only notification the app will ever send.
+- **A local notification when a focus timer closes.** iOS freezes JS timers in the background, so it is **scheduled when the timer starts** and cancelled if the timer is stopped, closes in the foreground, or is abandoned by leaving the biosphere. Permission is asked the first time a timer is started rather than at launch. Copy is the habit's name and *Your window has closed* — the timer never claims the habit is done. The only notification the app will ever send.
 - **Haptics** at the two moments already marked by a chime: light when a timer closes, medium when the day is sealed. Nothing else vibrates.
 - 10 bridge tests (native detection incl. a malformed global, no-op behaviour off native, id stability and range, refusal to schedule in the past). Suite: **119 green**.
+
+#### Fixed — found only on hardware (2026-08-17 → 22, owner's iPhone 16, iOS 26.6)
+- **The silent switch muted the whole app, and locking the screen killed the sound** — the release blocker, exactly as APP_STORE_ROADMAP predicted. WebKit assigns the iOS audio-session category by the *kind* of audio a page makes: media elements get `playback`, pure Web Audio gets `ambient`. The whole soundscape is synthesized Web Audio, so WebKit overrode the category `AppDelegate` sets. Fixed in the engine, not the shim: on native, `master` routes through a `MediaStreamAudioDestinationNode` into a hidden `<audio>` element, so the same synthesized sound arrives as media playback and earns `playback` (AUDIO_ENGINE § Native output sink).
+- **The world stayed silent after a phone call** until the sound toggle was flipped twice — the only code reviving a paused sink lived in that tap. A 2 s watchdog now performs that recovery automatically while a layer is open and the app is visible.
+- **The soundtrack never played on device.** Two layers: Capacitor's iOS asset handler serves media through a statusless response (`status 0`, `ok: false`, body intact) which the loader was declining, and it rejects query-carrying asset URLs, so the manifest's `?v=` cache-buster is stripped on native. Every soundtrack failure now logs — the silent catch that hid this cost a full device session.
+- **Notification copy** sentence-cased to *Your window has closed*: lowercase is the house voice *inside the world*, but a notification sits in OS chrome where it reads as a typo.
+- The immersion title's 26 px drift and the wrapping subtitle hours (fixed on `main`, `3f1f2e9`; verified on device here).
+
+#### Verified on hardware
+Silent switch · background audio through screen lock · hands-off recovery after a call · soundtrack in immersion · timer notification firing from background · all three cancel paths silent (stopped, completed in foreground, biosphere abandoned) · light tap at timer close · medium tap at seal. Suite: **123 green**; all three targets green.
+
+Not verified: the permission-prompt *timing* (permission was already granted before it could be watched — needs a fresh install to observe), §4c's device matrix, and scene-loop profiling.
 
 #### Fixed
 - Settings' sound caption said soundscapes are synthesized "in your browser" — true of the web build, wrong the moment the app is native. Now "on your device", which is accurate in all three targets.

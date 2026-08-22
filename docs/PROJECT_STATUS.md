@@ -1,6 +1,8 @@
 # PROJECT STATUS
 
-**Updated:** 2026-08-19 · **Version:** 0.4.0 (tagged `v0.4.0`) · **Current milestone:** **M7 — native platform work; the audio layer is verified on hardware.** The app runs on the owner's iPhone; silent switch, background audio, interruption recovery, and the soundtrack all pass on the device. Remaining in M7: the timer notification and haptics (§4b), the device matrix (§4c), profiling, and TestFlight (blocked on Developer Program enrolment).
+**Updated:** 2026-08-22 · **Version:** 0.4.0 (tagged `v0.4.0`) · **Current milestone:** **M7 — §4a and §4b both verified on the owner's iPhone.** Audio (silent switch, background, interruptions, soundtrack), the timer notification with all three cancel paths, and both haptics all pass on hardware. The owner paused feature testing 2026-08-22: the app is "well enough" and further bugs are post-1.0 unless they block submission.
+
+**What still stands between here and the App Store** — two of these are hard submission requirements, not polish: **screenshots** (need the device; the five shots are specified in STORE_LISTING), **the privacy policy at a public URL** (App Store Connect requires a reachable link), Developer Program **enrolment** and a TestFlight build, plus the four open decisions at the foot of STORE_LISTING. Optional but unmeasured: §4c's device matrix and scene-loop profiling (IMMERSION_PRINCIPLES 12 makes performance an immersion question, and it has never been measured on hardware).
 
 ## The Mac session (2026-08-16) — branch `m7-native-ios`
 
