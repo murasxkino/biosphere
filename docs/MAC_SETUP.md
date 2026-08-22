@@ -69,7 +69,7 @@ The app needs the `playback` category, which declares the audio as intentional c
 The bridge, the timer notification, and the haptics were written on Windows and have **never run on a device**. They are tested only to the extent that they do nothing, safely, off-native. On the first device build, confirm:
 
 - Starting a focus timer prompts for notification permission **once**, at that moment — not at launch.
-- Backgrounding the app and waiting out a short timer fires a notification reading *your window has closed*.
+- Backgrounding the app and waiting out a short timer fires a notification reading *Your window has closed*.
 - Stopping the timer, letting it complete in the foreground, or leaving the biosphere all **cancel** the pending notification (no ghost notification later).
 - A light tap when a timer closes; a medium one when a day is sealed. Nothing else vibrates.
 

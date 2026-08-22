@@ -40,7 +40,10 @@ export async function haptic(weight: "light" | "medium" = "light"): Promise<void
     const { Haptics, ImpactStyle } = await import("@capacitor/haptics");
     await Haptics.impact({ style: weight === "medium" ? ImpactStyle.Medium : ImpactStyle.Light });
   } catch (e) {
-    /* a device without a taptic engine is not a problem to report */
+    /* A device without a taptic engine is not a problem to report to the
+       listener — but never swallow it entirely: a silent catch around an
+       absent soundtrack cost a whole device session (2026-08-19). */
+    console.warn("haptic: unavailable", weight, (e as any)?.name, (e as any)?.message);
   }
 }
 
@@ -79,7 +82,7 @@ export async function scheduleTimerEnd(habitId: string, habitName: string, at: D
           id: notificationId(habitId),
           title: habitName,
           // the timer is an aid; it never claims the habit itself is done
-          body: "your window has closed",
+          body: "Your window has closed",
           schedule: { at: at, allowWhileIdle: true },
         },
       ],
