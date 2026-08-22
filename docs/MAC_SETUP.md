@@ -72,6 +72,7 @@ The bridge, the timer notification, and the haptics were written on Windows and 
 - Backgrounding the app and waiting out a short timer fires a notification reading *Your window has closed*.
 - Stopping the timer, letting it complete in the foreground, or leaving the biosphere all **cancel** the pending notification (no ghost notification later).
 - A light tap when a timer closes; a medium one when a day is sealed. Nothing else vibrates.
+  - **Check Settings › Sounds & Haptics › System Haptics on the phone first.** With it off, iOS silently declines every haptic — no exception reaches the app, so the code cannot detect or report it, and `haptic()`'s warn stays quiet. Cost an hour on 2026-08-22; suspect the device before the bridge.
 
 Use a 1-minute timer on a habit in Settings for this rather than waiting out 50 minutes.
 
