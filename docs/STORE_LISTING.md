@@ -99,7 +99,7 @@ The first release.
 
 ## Screenshots — required, not yet made
 
-Needed at 6.9" and 6.5" iPhone sizes (Apple derives the rest). Take them on a real device once it runs. Suggested five, in this order:
+**Taken 2026-08-22 — `assets/screenshots/6.9-inch/`, 1320 × 2868.** Two corrections to what this section assumed: only the **6.9" set is required** (Apple derives the rest, 6.5" is no longer asked for), and they could **not** be taken on the owner's phone — an iPhone 16 is a 6.1" device and cannot produce that size. They were captured on the iPhone 16 Pro Max simulator, running the same build verified on hardware. See `assets/screenshots/README.md` for how, including the seeded journal behind them. The five, in this order:
 
 1. **Home** at mid-morning — the timeline over a living Tundra, one tile reading NOW.
 2. **Immersion** — a biosphere with its chrome dissolved, habits floating.
@@ -107,7 +107,7 @@ Needed at 6.9" and 6.5" iPhone sizes (Apple derives the rest). Take them on a re
 4. **The sealed night** — *reflected — 4 of 5 fulfilled*, with a written reflection visible.
 5. **Stillness** — the 28-day rhythm strips, whispering.
 
-Capture with reduced motion off, sound on, and a journal with a few real days in it — an empty app photographs as an empty app.
+Capture with reduced motion off, sound on, and a journal with a few real days in it — an empty app photographs as an empty app. (Done: 28 seeded days with deliberate gaps, today walked and sealed live for shots 3 and 4.)
 
 ## URLs
 
