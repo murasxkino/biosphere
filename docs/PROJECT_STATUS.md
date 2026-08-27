@@ -38,6 +38,10 @@ One real defect found, fixed and re-verified: **long-pressing anywhere raised iO
 
 Safe area: bottom and long-scroll behaviour confirmed on device; top clearance against the Dynamic Island is evidenced by the 6.9" store screenshots rather than an explicit device check — worth a glance next time the phone is in hand, though nothing has ever suggested it is wrong.
 
+**Bundle identifier: settled 2026-08-27.** `com.murasxkino.biosphere` registered cleanly under the friend's new paid team, with no conflict — despite this Mac's free personal team (`WP23JLX429`) having auto-provisioned the same string on 2026-08-19. **An identifier auto-provisioned by a free personal team does not lock out a real team.** Recorded because the opposite was asserted twice during M7, in both directions, before anyone tested it; the test took under a minute and should have come first.
+
+The Debug-only `com.murasxkino.biosphere.dev` split was therefore an unnecessary precaution. It stays, for a reason that is actually true: it lets a development build and a TestFlight build sit on the same phone at once. Release keeps the real identifier.
+
 **Free provisioning renews weekly.** The profile lapsed 2026-08-24 and the app showed *"BIOSPHERE is no longer available"*; a rebuild mints a fresh 7-day profile and iOS then asks to trust the developer again. The *certificate* is valid to August 2027 — it is the profile, not the certificate, that expires. This recurs until Developer Program enrolment; TestFlight builds last 90 days and need no trust step.
 
 **The one hardware claim still unproven:** the notification permission prompt's *timing* — that it is asked at the first timer start and never at launch. Permission had already been granted before anyone thought to watch for it, so this rests on the code path and the bridge tests. A delete-and-reinstall would settle it.
