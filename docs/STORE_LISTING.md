@@ -7,10 +7,14 @@ Nothing here may promise a feature the app does not have; Apple rejects for that
 ## Name — 30 char limit
 
 ```
-BIOSPHERE
+BIOSPHERE: Improve in Nature
 ```
 
-*9 characters.* **Must be checked for availability** before the app record is created — a collision is plausible. If taken, the fallback keeps the tagline doing the work: `BIOSPHERE: One Day in Nature` (28).
+*28 characters.* **Decided 2026-08-27.** Plain `BIOSPHERE` was mostly available but the owner chose the longer, more specific form. Fits the limit with two characters to spare.
+
+**The on-device name stays `BIOSPHERE`.** `CFBundleDisplayName` in `ios/App/App/Info.plist` is deliberately not changed to match: the home screen truncates at roughly twelve characters, so the long form would render as *BIOSPHERE:…*. Apple permits the store name and the home-screen name to differ, and they should here.
+
+**Open, and worth a decision before the listing is written:** the subtitle below is *"One day, lived in nature."* With `Nature` now in the name, the product page says nature twice in its first two lines. Apple indexes name, subtitle and keywords separately, so the repetition also spends the subtitle on a word already covered. Either the subtitle earns its 30 characters on something else, or the name reverts to plain `BIOSPHERE` and the tagline keeps carrying the meaning.
 
 ## Subtitle — 30 char limit
 
@@ -126,6 +130,6 @@ To change a page: edit `site/` here first (and `docs/PRIVACY_POLICY.md` if the p
 ## Decisions still owned by the owner
 
 1. ~~**The support email that will appear publicly.**~~ **Decided 2026-08-22: `biospheresupport@gmail.com`** — a dedicated mailbox rather than a personal one. Live in `site/privacy.html`, `site/support.html` and `docs/PRIVACY_POLICY.md`; use the same address in App Store Connect.
-2. **Price** — free, or one-time paid. Subscriptions and advertising are refused by DESIGN_PHILOSOPHY, so this is a two-way choice.
-3. **App name availability**, per the Name section above.
+2. ~~**Price** — free, or one-time paid.~~ **Decided 2026-08-27: completely free.** No in-app purchases, no subscriptions, no advertising — the last two were already permanent refusals in DESIGN_PHILOSOPHY. Practical consequence: only **Schedule 1** of the Developer Program agreement applies, so the account holder needs **no bank account and no tax forms** — just the Free Apps agreement showing Active in App Store Connect.
+3. ~~**App name availability.**~~ **Decided 2026-08-27:** `BIOSPHERE: Improve in Nature` — see the Name section, including the open subtitle question it creates.
 4. ~~**The exact effective date** on the privacy policy.~~ **Decided 2026-08-22:** phrased as *from the first public release* rather than a calendar date — accurate whenever the app ships, and one less thing to remember on submission day.
