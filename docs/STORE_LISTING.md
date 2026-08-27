@@ -7,10 +7,10 @@ Nothing here may promise a feature the app does not have; Apple rejects for that
 ## Name — 30 char limit
 
 ```
-BIOSPHERE: Improve in Nature
+BIOSPHERE: Flourish in Nature
 ```
 
-*28 characters.* **Decided 2026-08-27.** Plain `BIOSPHERE` was mostly available but the owner chose the longer, more specific form. Fits the limit with two characters to spare.
+*29 characters.* **Decided 2026-08-27**, and this is the name on the App Store Connect record — the authority if this document ever disagrees again. Plain `BIOSPHERE` was mostly available; the owner chose the longer, more specific form. One character to spare.
 
 **The on-device name stays `BIOSPHERE`.** `CFBundleDisplayName` in `ios/App/App/Info.plist` is deliberately not changed to match: the home screen truncates at roughly twelve characters, so the long form would render as *BIOSPHERE:…*. Apple permits the store name and the home-screen name to differ, and they should here.
 
@@ -127,6 +127,17 @@ To change a page: edit `site/` here first (and `docs/PRIVACY_POLICY.md` if the p
 
 **Hosting note:** GitHub Pages will not serve from a private repository on a free plan, and `murasxkino/biosphere` is private and should stay that way. Publish the policy from a separate small public repo, or a free static host. Do not make the app repository public to solve this.
 
+## EU trader status — a decision, not a form
+
+The Digital Services Act requires Apple to publish trader details for anyone distributing commercially in the EU, and App Store Connect will not accept a submission for EU distribution until the **Account Holder** declares one way or the other. It forks sharply and there is no third option:
+
+- **Trader** — the account holder's **name, address, phone number and email are published on the App Store product page** in the EU, and Apple verifies them. Not a form field that disappears: it is public contact information attached permanently to the listing.
+- **Non-trader** — **the app is not distributed in the EU at all.** Every other territory is unaffected.
+
+For BIOSPHERE the honest reading is that a free app with no purchases, no advertising and no revenue of any kind is not a trade, craft, business or profession, which is what "trader" means in the DSA. That points to non-trader, at the cost of the EU. It is the account holder's declaration to make about his own circumstances, and it can be revisited if the app ever earns money — at which point trader becomes the correct answer and the address becomes public.
+
+**Where:** App Store Connect → **Business**, as the Account Holder. It is an account-level declaration, not per-app.
+
 ## Versions — two numbers, deliberately different
 
 **`MARKETING_VERSION = 1.0`** in the Xcode project is the version the App Store shows. Confirmed by the owner 2026-08-27; it was already 1.0 and stays there for the first release.
@@ -139,5 +150,5 @@ To change a page: edit `site/` here first (and `docs/PRIVACY_POLICY.md` if the p
 
 1. ~~**The support email that will appear publicly.**~~ **Decided 2026-08-22: `biospheresupport@gmail.com`** — a dedicated mailbox rather than a personal one. Live in `site/privacy.html`, `site/support.html` and `docs/PRIVACY_POLICY.md`; use the same address in App Store Connect.
 2. ~~**Price** — free, or one-time paid.~~ **Decided 2026-08-27: completely free.** No in-app purchases, no subscriptions, no advertising — the last two were already permanent refusals in DESIGN_PHILOSOPHY. Practical consequence: only **Schedule 1** of the Developer Program agreement applies, so the account holder needs **no bank account and no tax forms** — just the Free Apps agreement showing Active in App Store Connect.
-3. ~~**App name availability.**~~ **Decided 2026-08-27:** `BIOSPHERE: Improve in Nature` — see the Name section, including the open subtitle question it creates.
+3. ~~**App name availability.**~~ **Decided 2026-08-27:** `BIOSPHERE: Flourish in Nature` — see the Name section, including the open subtitle question it creates.
 4. ~~**The exact effective date** on the privacy policy.~~ **Decided 2026-08-22:** phrased as *from the first public release* rather than a calendar date — accurate whenever the app ships, and one less thing to remember on submission day.
