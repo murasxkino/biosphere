@@ -127,6 +127,14 @@ To change a page: edit `site/` here first (and `docs/PRIVACY_POLICY.md` if the p
 
 **Hosting note:** GitHub Pages will not serve from a private repository on a free plan, and `murasxkino/biosphere` is private and should stay that way. Publish the policy from a separate small public repo, or a free static host. Do not make the app repository public to solve this.
 
+## Versions — two numbers, deliberately different
+
+**`MARKETING_VERSION = 1.0`** in the Xcode project is the version the App Store shows. Confirmed by the owner 2026-08-27; it was already 1.0 and stays there for the first release.
+
+**`package.json` stays at `0.4.0`** and moves to `1.0.0` when the app actually ships, alongside a `v1.0.0` tag. The two track different things — one is the product's public version, the other is the codebase's, and CLAUDE.md's convention is that repo versions follow SemVer *once released*. Bumping the repo to 1.0.0 before submission would claim a release that has not happened.
+
+**`CURRENT_PROJECT_VERSION = 1`** is the build number. It must increase on **every** upload to App Store Connect, even for a rejected or replaced build; reusing one is rejected outright. Expect to bump it per upload while `MARKETING_VERSION` stays at 1.0.
+
 ## Decisions still owned by the owner
 
 1. ~~**The support email that will appear publicly.**~~ **Decided 2026-08-22: `biospheresupport@gmail.com`** — a dedicated mailbox rather than a personal one. Live in `site/privacy.html`, `site/support.html` and `docs/PRIVACY_POLICY.md`; use the same address in App Store Connect.
