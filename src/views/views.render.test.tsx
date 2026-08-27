@@ -252,6 +252,15 @@ describe("JournalView", () => {
     expect(screen.getByText("1 OF 2 FULFILLED")).toBeTruthy();
     expect(screen.getByText("a clear morning")).toBeTruthy();
   });
+
+  /* The world is unselectable by default (ui/style.ts) so a long press does not
+     raise iOS selection handles over the chrome. A reflection is the user's own
+     words and must opt back in — losing that would cost someone the ability to
+     copy what they wrote, silently. Pinned here rather than trusted. */
+  it("leaves a reflection selectable, so the user can still copy their own words", () => {
+    render(<JournalView journal={journalFixture} onBack={noop} />);
+    expect(screen.getByText("a clear morning").className).toContain("bsUserText");
+  });
 });
 
 describe("StatsView", () => {

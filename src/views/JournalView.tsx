@@ -99,7 +99,7 @@ export function JournalView({ journal, onBack }: { journal: Journal; onBack: () 
                       </div>
                       {e.note ? (
                         <div
-                          className="serif"
+                          className="serif bsUserText"
                           style={{
                             fontStyle: "italic",
                             fontSize: 15,

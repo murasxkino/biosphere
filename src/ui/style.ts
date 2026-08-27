@@ -93,11 +93,28 @@ body {
 }
 button { font-family: inherit; }
 /* Chrome is for operating, not for selecting — but never touch the user's own
-   words: journal entries and reflections stay selectable and copyable. */
-.bsIcon, .bsBtn, [role="button"] {
+   words: journal entries and reflections stay selectable and copyable.
+
+   The default is inverted deliberately. Naming the chrome instead (buttons and
+   icons only) left every title, tagline and habit name selectable, so a long
+   press anywhere on the world raised iOS selection handles — the plainest "this
+   is a web page" tell there is, and invisible in a desktop browser where
+   selecting text with a mouse is simply normal. Found on device, 2026-08-22.
+
+   So: the world is not selectable, and the user's own words opt back in below.
+   Anything added later is silently unselectable, which is the safe direction —
+   a missed opt-out is invisible, a missed opt-in loses somebody their words. */
+.bsRoot {
   -webkit-user-select: none; user-select: none;
+}
+.bsIcon, .bsBtn, [role="button"] {
   /* removes the double-tap zoom delay on taps */
   touch-action: manipulation;
+}
+/* The user's own words, and anywhere they type. Inputs must be listed: a
+   textarea inheriting user-select:none cannot be edited at all. */
+.bsUserText, input, textarea {
+  -webkit-user-select: text; user-select: text;
 }
 :focus-visible { outline: 2px solid rgba(255,255,255,0.55); outline-offset: 2px; }
 .bsRoot {

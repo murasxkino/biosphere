@@ -192,7 +192,7 @@ export function NightView({
                       </div>
                       {e.note ? (
                         <div
-                          className="serif"
+                          className="serif bsUserText"
                           style={{
                             fontStyle: "italic",
                             fontSize: 15,
