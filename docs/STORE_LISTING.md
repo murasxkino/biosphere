@@ -103,7 +103,7 @@ The first release.
 
 ## Screenshots — required, not yet made
 
-**Taken 2026-08-22 — `assets/screenshots/6.9-inch/`, 1320 × 2868.** Two corrections to what this section assumed: only the **6.9" set is required** (Apple derives the rest, 6.5" is no longer asked for), and they could **not** be taken on the owner's phone — an iPhone 16 is a 6.1" device and cannot produce that size. They were captured on the iPhone 16 Pro Max simulator, running the same build verified on hardware. See `assets/screenshots/README.md` for how, including the seeded journal behind them. The five, in this order:
+**Taken 2026-08-22 — `assets/screenshots/6.9-inch/` at 1320 × 2868 and `assets/screenshots/6.5-inch/` at 1284 × 2778.** **Both sets are required**; App Store Connect rejects 6.9" files uploaded to the 6.5" slot, which takes only 1242 × 2688 or 1284 × 2778 (or their landscape forms). This section previously claimed the 6.9" set alone sufficed — it does not. They could also **not** be taken on the owner's phone — an iPhone 16 is a 6.1" device and cannot produce that size. They were captured on the iPhone 16 Pro Max simulator, running the same build verified on hardware. See `assets/screenshots/README.md` for how, including the seeded journal behind them. The five, in this order:
 
 1. **Home** at mid-morning — the timeline over a living Tundra, one tile reading NOW.
 2. **Immersion** — a biosphere with its chrome dissolved, habits floating.

@@ -2,9 +2,24 @@
 
 Five shots per STORE_LISTING § Screenshots, captured 2026-08-22.
 
-`6.9-inch/` — **1320 × 2868**, the size App Store Connect requires for iPhone.
-Apple derives the smaller sizes from these; a separate 6.5" set is no longer
-required, which is why STORE_LISTING's "6.9" and 6.5"" line has been amended.
+`6.9-inch/` — **1320 × 2868**.
+`6.5-inch/` — **1284 × 2778**, derived from the 6.9" set (see below).
+
+**Both sets are needed.** An earlier note here claimed Apple derives the smaller
+sizes and that a 6.5" set was obsolete. That was wrong: App Store Connect
+rejected the 1320 × 2868 files outright when uploaded to the 6.5" slot, which
+accepts only 1242 × 2688, 2688 × 1242, 1284 × 2778 or 2778 × 1284.
+
+The 6.5" set was **not** re-shot. The two aspect ratios differ by 0.42%
+(0.46025 against 0.46220), so each image was scaled to the exact target width
+and then had **12 px taken off the bottom** — never stretched, because
+distorted typography is obvious in a store listing and these shots are mostly
+type. The crop comes entirely off the bottom so the status bar and header
+geometry stay pixel-identical to the 6.9" set; the removed strip is dark
+background in every shot (verified by sampling it, mean RGB 12–43).
+
+Regenerate with the snippet in this repo's history, or re-derive: scale to
+width 1284, `extract` from top 0 to height 2778.
 
 | File | Shot |
 |---|---|
