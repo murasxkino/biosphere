@@ -50,7 +50,9 @@ The Debug-only `com.murasxkino.biosphere.dev` split was therefore an unnecessary
 
 **Nothing on the device is unproven any more.** The last open claim — that the notification permission prompt is asked at the first timer start and never at launch — was settled 2026-08-30 by deleting the app, reinstalling from TestFlight and starting a timer: the prompt appeared at that moment, as FEATURE_SPEC §3.11 specifies. Every behaviour in the native bridge, written blind on Windows, has now been observed working on hardware.
 
-**Open, none blocking:** iPad ships by default (`TARGETED_DEVICE_FAMILY = "1,2"`) with all four orientations and no layout ever seen there; `MARKETING_VERSION` is `1.0` against `package.json`'s `0.4.0`; `UIRequiredDeviceCapabilities` still says `armv7`; real splash artwork still undrawn.
+**iPad: seen at last, and it holds up (2026-08-30).** The app was run on an iPad Pro 13-inch for the first time to take store screenshots. The chrome centres into a readable column rather than stretching, the scenes fill the width, and the entire day fits in one view — Tundra through Grey Night without scrolling, which the phone cannot do. Nothing was changed to achieve it. Shipping to iPad is therefore a reasonable default rather than an unexamined one, and the screenshots are in `assets/screenshots/13-inch-ipad/`.
+
+**Open, none blocking:** iPad still allows all four orientations via the untouched `~ipad` key (only landscape on iPhone was restricted); `MARKETING_VERSION` is `1.0` against `package.json`'s `0.4.0`; `UIRequiredDeviceCapabilities` still says `armv7`; real splash artwork still undrawn.
 
 ## The goal changed (2026-07-15)
 

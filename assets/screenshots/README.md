@@ -4,6 +4,15 @@ Five shots per STORE_LISTING § Screenshots, captured 2026-08-22.
 
 `6.9-inch/` — **1320 × 2868**.
 `6.5-inch/` — **1284 × 2778**, derived from the 6.9" set (see below).
+`13-inch-ipad/` — **2064 × 2752**, shot natively on an iPad Pro 13-inch (M5).
+
+## The iPad set, and what it settled
+
+Taken 2026-08-30. `TARGETED_DEVICE_FAMILY` is `"1,2"`, so **iPad is enabled and a reviewer will open the app there**, but no layout had ever been designed or seen at that size — PROJECT_STATUS carried it as an open risk for a fortnight.
+
+**It holds up.** The chrome centres into a readable column instead of stretching, the scenes fill the width, and the whole day fits in one view — Tundra through Grey Night with no scrolling, which the phone cannot do. The immersion subtitle that wraps to two lines on a phone fits on one here. Nothing was changed to achieve this; the layout simply survives the size.
+
+Four shots: `01-home` (the full day at once, the iPad's own argument), plus Volcanic, Forest and Mountain.
 
 **Both sets are needed.** An earlier note here claimed Apple derives the smaller
 sizes and that a 6.5" set was obsolete. That was wrong: App Store Connect
