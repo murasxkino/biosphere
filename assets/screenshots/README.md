@@ -30,8 +30,11 @@ width 1284, `extract` from top 0 to height 2778.
 | `05-stillness.png` | Stillness — 26 nights, 112 habits, 28 days of rhythm |
 | `06-volcanic.png` | Volcanic at its hour — two habits, both timed |
 | `07-forest.png` | Forest out of hours — light shafts, and *a quiet window* |
+| `08-mountain.png` | Mountain at its hour — the moon up, spiritual practice |
 
 `06` and `07` were added 2026-08-30 at the owner's request, to show more than one world. The habits in them are **the owner's own**: Volcanic carries *Push Workout*, *Cardio* and *Ab Routine*; Forest carries *Reach out to friends*, *Talk to her* and *Spend time with family*. An earlier pass used names invented here as placeholders; they were replaced, because words on an App Store page should be the owner's. They live in the screenshot seed only, never in `DEFAULT_HABITS` — the shipped defaults are unchanged.
+
+`08` (added 2026-08-30) carries the owner's own *Pray*, *Scripture study* and *Meditate*. **The owner wrote "Mediate"; it was shot as "Meditate"** — beside Pray and Scripture study in a biosphere whose purpose is *Spiritual practice*, the intent is unmistakable, and a typo on a public App Store page is worse than an unasked question. Say the word and it changes back.
 
 Forest was shot deliberately out of hours, so its header reads `BIOSPHERE` rather than `NOW` and its footer reads *a quiet window* instead of a countdown. Between the two, they show that a biosphere is somewhere you can step into whether or not it is your hour.
 
