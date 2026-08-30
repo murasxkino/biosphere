@@ -28,6 +28,10 @@ width 1284, `extract` from top 0 to height 2778.
 | `03-night-question.png` | *Did you complete this today?* — the one that explains the product |
 | `04-sealed.png` | The sealed night: *Reflected*, 4 of 5, two reflections visible |
 | `05-stillness.png` | Stillness — 26 nights, 112 habits, 28 days of rhythm |
+| `06-volcanic.png` | Volcanic at its hour — two habits, both timed |
+| `07-forest.png` | Forest out of hours — light shafts, and *a quiet window* |
+
+`06` and `07` were added 2026-08-30 at the owner's request, to show more than one world. Their seed gives Volcanic and Forest a **second habit each** — *The hard thing, first* and *Write to someone* — because one habit photographs as an empty world. **Those two names are props, not product**: they exist only in the screenshot seed, never in `DEFAULT_HABITS`, and should be changed if they do not sound like the owner. Forest was shot deliberately out of hours, so its footer reads *a quiet window* rather than a countdown.
 
 Extras, not part of the five: `extra-day-complete.png` (*The day is complete* —
 an alternative to 04) and `03-night-question-empty.png` (the question with an
