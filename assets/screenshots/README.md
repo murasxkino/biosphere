@@ -31,7 +31,9 @@ width 1284, `extract` from top 0 to height 2778.
 | `06-volcanic.png` | Volcanic at its hour — two habits, both timed |
 | `07-forest.png` | Forest out of hours — light shafts, and *a quiet window* |
 
-`06` and `07` were added 2026-08-30 at the owner's request, to show more than one world. Their seed gives Volcanic and Forest a **second habit each** — *The hard thing, first* and *Write to someone* — because one habit photographs as an empty world. **Those two names are props, not product**: they exist only in the screenshot seed, never in `DEFAULT_HABITS`, and should be changed if they do not sound like the owner. Forest was shot deliberately out of hours, so its footer reads *a quiet window* rather than a countdown.
+`06` and `07` were added 2026-08-30 at the owner's request, to show more than one world. The habits in them are **the owner's own**: Volcanic carries *Push Workout*, *Cardio* and *Ab Routine*; Forest carries *Reach out to friends*, *Talk to her* and *Spend time with family*. An earlier pass used names invented here as placeholders; they were replaced, because words on an App Store page should be the owner's. They live in the screenshot seed only, never in `DEFAULT_HABITS` — the shipped defaults are unchanged.
+
+Forest was shot deliberately out of hours, so its header reads `BIOSPHERE` rather than `NOW` and its footer reads *a quiet window* instead of a countdown. Between the two, they show that a biosphere is somewhere you can step into whether or not it is your hour.
 
 Extras, not part of the five: `extra-day-complete.png` (*The day is complete* —
 an alternative to 04) and `03-night-question-empty.png` (the question with an
