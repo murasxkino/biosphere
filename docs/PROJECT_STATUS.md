@@ -48,7 +48,7 @@ The Debug-only `com.murasxkino.biosphere.dev` split was therefore an unnecessary
 
 **Free provisioning renews weekly.** The profile lapsed 2026-08-24 and the app showed *"BIOSPHERE is no longer available"*; a rebuild mints a fresh 7-day profile and iOS then asks to trust the developer again. The *certificate* is valid to August 2027 — it is the profile, not the certificate, that expires. This recurs until Developer Program enrolment; TestFlight builds last 90 days and need no trust step.
 
-**The one hardware claim still unproven:** the notification permission prompt's *timing* — that it is asked at the first timer start and never at launch. Permission had already been granted before anyone thought to watch for it, so this rests on the code path and the bridge tests. A delete-and-reinstall would settle it.
+**Nothing on the device is unproven any more.** The last open claim — that the notification permission prompt is asked at the first timer start and never at launch — was settled 2026-08-30 by deleting the app, reinstalling from TestFlight and starting a timer: the prompt appeared at that moment, as FEATURE_SPEC §3.11 specifies. Every behaviour in the native bridge, written blind on Windows, has now been observed working on hardware.
 
 **Open, none blocking:** iPad ships by default (`TARGETED_DEVICE_FAMILY = "1,2"`) with all four orientations and no layout ever seen there; `MARKETING_VERSION` is `1.0` against `package.json`'s `0.4.0`; `UIRequiredDeviceCapabilities` still says `armv7`; real splash artwork still undrawn.
 
